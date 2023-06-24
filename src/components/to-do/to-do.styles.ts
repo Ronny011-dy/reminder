@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 
 export const ReminderStyling = styled.div`
-  .chip {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  .tags {
+    overflow-x: auto;
+  }
+  .important {
+    margin-top: 7.5px;
   }
 `;

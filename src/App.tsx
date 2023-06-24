@@ -1,6 +1,6 @@
-import ReminderApp from './components/reminder/reminder-app';
+import { ReminderApp } from './components/reminder-app/reminder-app';
 
-import * as React from 'react';
+import React from 'react';
 
 import './App.css';
 
@@ -12,4 +12,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

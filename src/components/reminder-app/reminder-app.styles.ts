@@ -10,12 +10,15 @@ export const GlobalStyles = createGlobalStyle`
   }
   .secondary{
     opacity: 55%;
-    font-size: small !important;
-    font-weight: 700 !important;
+  
+  }
+  .text{
+      font-size: small !important;
+      font-weight: 700 !important;
   }
 `;
 
-export const WrapperDiv = styled.div`
+export const AppWrapper = styled.div`
   border: 2px solid rgb(198, 198, 198);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,

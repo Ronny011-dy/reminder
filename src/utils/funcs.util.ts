@@ -1,18 +1,7 @@
-const getCookieValue = (cookieName: string): string | null => {
-  // filters cookies
-  const cookie = document.cookie
-    .split(';')
-    .filter((cookie) => cookie.trim().startsWith(`${cookieName}=`))[0];
-  // returns value of cookie if exists
-  return cookie
-    ? decodeURIComponent(cookie.substring(cookieName.length + 2))
-    : null;
-};
+import { v1 as uuidv1 } from 'uuid';
 
-const setCookie = (cookieName: string, cookieValue: string) => {
-  // set cookie only if it doesn't exist already
-  getCookieValue(cookieName) ||
-    (document.cookie = `${cookieName}=${cookieValue}`);
-};
+const idGenerator = () => uuidv1();
 
-export { getCookieValue, setCookie };
+const dateParser = (date: number) => new Date(date).toLocaleDateString('de-DE');
+
+export { idGenerator, dateParser };

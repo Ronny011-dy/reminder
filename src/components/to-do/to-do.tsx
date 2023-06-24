@@ -1,28 +1,29 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import React from 'react';
+import { useState } from 'react';
 
 import type { Reminder } from './types';
 import { ReminderStyling } from './to-do.styles';
 
-import TextInput from '../text-input/text-input';
+import { TextInput } from '../text-input/text-input';
 
-import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import IconButton from '@mui/material/IconButton';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Radio from '@mui/material/Radio';
-import ListItemText from '@mui/material/ListItemText';
-// import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
-import Stack from '@mui/material/Stack';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
-type TagData = {
-  key: number;
-  label: string;
-};
+import {
+  Chip,
+  Tooltip,
+  ButtonGroup,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  Radio,
+  Stack,
+} from '@mui/material';
+
+import { idGenerator } from '../../utils/funcs.util';
+import { DatePicker } from '../date-picker/date-picker';
 
 const Todo: React.FC<Reminder> = ({
   done,
@@ -33,14 +34,16 @@ const Todo: React.FC<Reminder> = ({
   date,
   important,
 }) => {
-  const [tagData, setTagData] = React.useState<TagData[]>([
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
+  const [isAdding, setIsAdding] = useState(false);
 
-  const handleDelete = (tagToDelete: TagData) => () => {
-    setTagData((tags) => tags.filter((tag) => tag.key !== tagToDelete.key));
+  const addTagHandler = () => setIsAdding(true);
+  const acceptTagHandler = () => {
+    setIsAdding(false);
+  };
+
+  const handleTagDelete = (tagToDelete: number) => () => {
+    // setTagData((tags) => tags.filter((tag) => tag.key !== tagToDelete.key));
+    //TODO
   };
 
   const reminderDeleteHandler = () => {
@@ -58,9 +61,23 @@ const Todo: React.FC<Reminder> = ({
         secondaryAction={
           <ButtonGroup>
             <Tooltip
+              title={important ? 'Unmark as important' : 'Mark as important'}
+              followCursor
+              enterDelay={650}
+              leaveDelay={200}
+            >
+              <IconButton>
+                {important ? (
+                  <ErrorRoundedIcon />
+                ) : (
+                  <ErrorOutlineRoundedIcon className="secondary" />
+                )}
+              </IconButton>
+            </Tooltip>
+            <Tooltip
               title="Add sub-reminder"
               followCursor
-              enterDelay={500}
+              enterDelay={650}
               leaveDelay={200}
             >
               <IconButton>
@@ -70,14 +87,11 @@ const Todo: React.FC<Reminder> = ({
             <Tooltip
               title="Delete reminder"
               followCursor
-              enterDelay={500}
+              enterDelay={650}
               leaveDelay={200}
             >
-              <IconButton>
-                <DeleteRoundedIcon
-                  className="delete-reminder"
-                  onClick={reminderDeleteHandler}
-                />
+              <IconButton onClick={reminderDeleteHandler}>
+                <DeleteRoundedIcon className="delete-reminder" />
               </IconButton>
             </Tooltip>
           </ButtonGroup>
@@ -86,24 +100,42 @@ const Todo: React.FC<Reminder> = ({
         <ListItemIcon>
           <Radio checked={done} onChange={reminderCompleteHandler} />
         </ListItemIcon>
-        <TextInput title={title} />
-        <TextInput title={description} secondary />
-        <Stack direction="row" spacing={0.8}>
-          {tagData.map((data) => {
+        <TextInput title={title} isTag placeholder="Enter reminder" />
+        <TextInput
+          title={description}
+          secondary
+          isTag
+          placeholder="Enter description"
+        />
+        <Stack className="tags" direction="row" spacing={0.6}>
+          <Chip
+            label="Add tag"
+            variant="outlined"
+            size="small"
+            onClick={addTagHandler}
+          />
+          {isAdding && (
+            <TextInput
+              title=""
+              placeholder="Enter tag"
+              accept={acceptTagHandler}
+            />
+          )}
+          {tags.map((tag, index) => {
             return (
-              <ListItem key={data.key} className="chip">
-                <Chip
-                  label={data.label}
-                  onDelete={handleDelete(data)}
-                  size="small"
-                />
-              </ListItem>
+              <Chip
+                key={idGenerator()}
+                label={tag}
+                onDelete={handleTagDelete(index)}
+                size="small"
+              />
             );
           })}
+          <DatePicker date={date} />
         </Stack>
       </ListItem>
     </ReminderStyling>
   );
 };
 
-export default Todo;
+export { Todo };
