@@ -5,9 +5,14 @@ import { useState } from 'react';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { dateParser } from '../../utils/funcs.util';
+type DatePickerProps = {
+  date?: number;
+  done?: boolean;
+};
 
-const DatePicker = ({ date }) => {
+const dateParser = (date: number) => new Date(date).toLocaleDateString('de-DE');
+
+const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
   //popover logic
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   //?event: React.MouseEvent<HTMLDivElement>
@@ -21,14 +26,15 @@ const DatePicker = ({ date }) => {
   const open = Boolean(anchorEl);
   return (
     <>
-      {date ? (
+      {date && (
         <Chip
           label={`Due: ${dateParser(date)}`}
           variant="outlined"
           size="small"
           onClick={openCalendarHandler}
         />
-      ) : (
+      )}
+      {!done && (
         <Chip
           size="small"
           label="Add date"
@@ -36,6 +42,7 @@ const DatePicker = ({ date }) => {
           onClick={openCalendarHandler}
         />
       )}
+
       <Popover
         open={open}
         anchorEl={anchorEl}

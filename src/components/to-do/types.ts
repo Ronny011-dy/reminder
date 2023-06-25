@@ -5,6 +5,6 @@ export type Reminder = {
   tags: Array<string>;
   createdDate?: number;
   date?: number;
-  important: boolean; // can be used to color the radio accordingly
+  important: boolean;
   parentID?: number;
 };

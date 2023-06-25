@@ -1,11 +1,16 @@
 import React from 'react';
+import { ReactNode } from 'react';
 
 import { useMemo } from 'react';
 import { useMediaQuery, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GlobalStyles } from '../reminder-app/reminder-app.styles';
 
-const Theme = ({ children }) => {
+type ThemeProps = {
+  children: ReactNode;
+};
+
+const Theme: React.FC<ThemeProps> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = useMemo(
     () =>

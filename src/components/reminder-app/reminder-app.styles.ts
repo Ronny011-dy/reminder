@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 
+//TODO: need to conform to CSS isolation
 export const GlobalStyles = createGlobalStyle`
  .action {
     opacity: 25%;
@@ -18,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export const AppWrapper = styled.div`
+export const Root = styled.div`
   border: 2px solid rgb(198, 198, 198);
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
