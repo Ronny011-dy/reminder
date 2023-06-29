@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 
 export const Root = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  overflow-x: auto;
+  margin-bottom: 20px;
   .tags {
-    overflow-x: auto;
   }
-  .important {
-    margin-top: 7.5px;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .padding {
+    width: 56px;
   }
 `;

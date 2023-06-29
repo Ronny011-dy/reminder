@@ -1,23 +1,4 @@
 import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
-
-//TODO: need to conform to CSS isolation
-export const GlobalStyles = createGlobalStyle`
- .action {
-    opacity: 25%;
-    &:hover {
-      opacity: 100%;
-    }
-  }
-  .secondary{
-    opacity: 55%;
-  
-  }
-  .text{
-      font-size: small !important;
-      font-weight: 700 !important;
-  }
-`;
 
 export const Root = styled.div`
   border: 2px solid rgb(198, 198, 198);
@@ -41,6 +22,13 @@ export const Root = styled.div`
     .add-reminder {
       margin-left: 5px;
       transition: all 0.15s ease-in-out;
+    }
+
+    .action {
+      opacity: 25%;
+      &:hover {
+        opacity: 100%;
+      }
     }
   }
 `;

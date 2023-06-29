@@ -34,7 +34,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
           onClick={openCalendarHandler}
         />
       )}
-      {!done && (
+      {!done && !date && (
         <Chip
           size="small"
           label="Add date"

@@ -15,6 +15,7 @@ type TextInputProps = {
   placeholder: string;
   accept?: () => void;
   done?: boolean;
+  autoFocus?: boolean;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -24,6 +25,7 @@ const TextInput: React.FC<TextInputProps> = ({
   placeholder,
   accept,
   done,
+  autoFocus,
 }) => {
   const [textInput, setTextInput] = useState(title);
 
@@ -32,20 +34,21 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <Root>
+    <Root textInput={textInput} secondary={secondary}>
       <Input
         className={`input${done ? ' done' : ''}${
-          secondary ? ' secondary text' : ''
+          secondary ? ' secondary' : ''
         }`}
         type="text"
         onChange={textInputChangeHandler}
         placeholder={placeholder}
         value={textInput}
-        style={{ width: `${textInput ? textInput.length : `15`}ch` }}
-        disableUnderline={isTag}
+        disableUnderline
+        disabled={done}
+        autoFocus={autoFocus}
         endAdornment={
           !isTag ? (
-            <IconButton className="add-tag" onClick={accept}>
+            <IconButton className="add-tag" onClick={accept} disableRipple>
               <ArrowCircleRightIcon className="secondary" />
             </IconButton>
           ) : (

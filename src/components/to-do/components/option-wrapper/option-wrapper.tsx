@@ -17,7 +17,12 @@ const OptionWrapper: React.FC<OptionWrapperProps> = ({
   done,
 }) => {
   return (
-    <Tooltip title={title} followCursor enterDelay={650} leaveDelay={200}>
+    <Tooltip
+      title={title}
+      enterDelay={650}
+      leaveDelay={200}
+      enterNextDelay={650}
+    >
       <IconButton onClick={onClick} disabled={done}>
         {children}
       </IconButton>

@@ -8,7 +8,7 @@ import { TextInput } from './components/text-input/text-input';
 
 import { ReminderOptions } from './components/reminder-options/reminder-options';
 
-import { ListItem, ListItemIcon, Radio } from '@mui/material';
+import { ListItem, ListItemIcon, Radio, Stack } from '@mui/material';
 
 const Todo: React.FC<Reminder> = ({
   done,
@@ -33,23 +33,30 @@ const Todo: React.FC<Reminder> = ({
         disablePadding
         secondaryAction={<ReminderOptions important={important} done={done} />}
       >
-        <ListItemIcon>
-          <Radio checked={done} onChange={reminderCompleteHandler} />
-        </ListItemIcon>
-        <TextInput
-          title={title}
-          isTag
-          placeholder="Enter reminder"
-          done={done}
-        />
-        <TextInput
-          title={description}
-          secondary
-          isTag
-          placeholder="Enter description"
-          done={done}
-        />
-        <Tags date={date} tags={tags} done={done} />
+        <Stack direction="column">
+          <Stack direction="row" className="row">
+            <ListItemIcon>
+              <Radio checked={done} onChange={reminderCompleteHandler} />
+            </ListItemIcon>
+            <TextInput
+              title={title}
+              isTag
+              placeholder="Enter reminder"
+              done={done}
+            />
+            <Tags date={date} tags={tags} done={done} />
+          </Stack>
+          <div className="description-wrapper row">
+            <div className="padding" />
+            <TextInput
+              title={description}
+              secondary
+              isTag
+              placeholder="•••"
+              done={done}
+            />
+          </div>
+        </Stack>
       </ListItem>
     </Root>
   );
