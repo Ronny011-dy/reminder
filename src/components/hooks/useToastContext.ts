@@ -1,13 +1,15 @@
 import { useContext } from 'react';
-import { ToastContextType } from '../toast-wrapper/types';
-import { ToastContext } from '../toast-wrapper/toast-wrapper';
+import type { ToastContextType } from '../toast-provider/types';
+import { ToastContext } from '../toast-provider/toast-provider';
 
-export const useToastContext = (): ToastContextType => {
+const useToastContext = (): ToastContextType => {
   const context = useContext(ToastContext);
 
   if (!context) {
-    throw new Error('useToastContext must be used within ToastWrapper');
+    throw new Error('useToastContext must be used within ToastProvider');
   }
 
   return context;
 };
+
+export { useToastContext };

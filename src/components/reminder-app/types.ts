@@ -1,6 +1,6 @@
 import type { Reminder } from '../to-do/types';
 
-export type DBReminder = Pick<
+type DBReminder = Pick<
   Reminder,
   | 'done'
   | 'title'
@@ -13,3 +13,5 @@ export type DBReminder = Pick<
   id: string;
   tags: string;
 };
+
+export type { DBReminder };

@@ -1,7 +1,6 @@
-import { Popover, Chip } from '@mui/material';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
+import { Popover, Chip } from '@mui/material';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -15,14 +14,14 @@ const dateParser = (date: number) => new Date(date).toLocaleDateString('de-DE');
 const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
   //popover logic
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  //?event: React.MouseEvent<HTMLDivElement>
   const openCalendarHandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    // console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
+
   const closeCalendarHandler = () => {
     setAnchorEl(null);
   };
+
   const open = Boolean(anchorEl);
   return (
     <>
@@ -37,7 +36,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
       {!done && !date && (
         <Chip
           size="small"
-          label="Add date"
+          label="Add due date"
           variant="outlined"
           onClick={openCalendarHandler}
         />

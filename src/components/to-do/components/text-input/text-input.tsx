@@ -12,7 +12,7 @@ type TextInputProps = {
   completed?: boolean;
   secondary?: boolean;
   placeholder: string;
-  // tag adder is the only element with True
+  // tag adder field is the only element with isTag=True
   isTag?: boolean;
   accept?: () => void;
   done?: boolean;

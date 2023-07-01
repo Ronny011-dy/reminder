@@ -19,14 +19,6 @@ const Todo: React.FC<Reminder> = ({
   date,
   important,
 }) => {
-  const reminderDeleteHandler = () => {
-    // props.deleteHandler(props.id);
-  };
-
-  const reminderCompleteHandler = () => {
-    // props.done || props.completeHandler(props.id);
-  };
-
   return (
     <Root>
       <ListItem
@@ -36,7 +28,7 @@ const Todo: React.FC<Reminder> = ({
         <Stack direction="column">
           <Stack direction="row" className="row">
             <ListItemIcon>
-              <Radio checked={done} onChange={reminderCompleteHandler} />
+              <Radio checked={done} onChange={() => console.log('done')} />
             </ListItemIcon>
             <TextInput title={title} placeholder="Enter reminder" done={done} />
             <Tags date={date} tags={tags} done={done} />

@@ -1,25 +1,26 @@
 import { ReactNode } from 'react';
 
-export type ToastWrapperProps = {
+type ToastWrapperProps = {
   children: ReactNode;
 };
 
-export type ToastStateType = {
+type ToastStateType = {
   isOpen: boolean;
   isError: boolean;
   message: string;
 };
 
-export type ToastContextType = {
+type ToastContextType = {
   state: ToastStateType;
   dispatch: React.Dispatch<Action>;
 };
 
-export enum ActionType {
+enum ActionType {
   Create = 'create',
-  ErrorCreating = 'error-creating',
+  ErrorOnCreate = 'error-creating',
   Delete = 'delete',
-  ErrorDeleting = 'error-deleting',
+  ErrorOnDelete = 'error-deleting',
+  ErrorOnUpdate = 'error-updating',
   Reset = 'reset',
 }
 
@@ -28,7 +29,7 @@ interface CreateAction {
 }
 
 interface ErrorCreatingAction {
-  type: ActionType.ErrorCreating;
+  type: ActionType.ErrorOnCreate;
 }
 
 interface DeleteAction {
@@ -36,16 +37,24 @@ interface DeleteAction {
 }
 
 interface ErrorDeletingAction {
-  type: ActionType.ErrorDeleting;
+  type: ActionType.ErrorOnDelete;
+}
+
+interface ErrorUpdatingAction {
+  type: ActionType.ErrorOnUpdate;
 }
 
 interface ResetAction {
   type: ActionType.Reset;
 }
 
-export type Action =
+type Action =
   | CreateAction
   | ErrorCreatingAction
   | DeleteAction
   | ErrorDeletingAction
-  | ResetAction;
+  | ResetAction
+  | ErrorUpdatingAction;
+
+export type { ToastWrapperProps, ToastStateType, ToastContextType, Action };
+export { ActionType };

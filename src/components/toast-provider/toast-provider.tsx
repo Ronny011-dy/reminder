@@ -1,5 +1,4 @@
-import React, { Reducer } from 'react';
-import { createContext, useReducer } from 'react';
+import React, { Reducer, createContext, useReducer } from 'react';
 
 import { Toast } from './ components/toast/toast';
 import type {
@@ -40,6 +39,13 @@ const toastReducer: Reducer<ToastStateType, Action> = (
         message: 'Error deleting reminder',
       };
     }
+    case 'error-updating': {
+      return {
+        isOpen: true,
+        isError: true,
+        message: 'Error updating reminder',
+      };
+    }
     case 'reset': {
       return { ...state, isOpen: false };
     }
@@ -49,9 +55,7 @@ const toastReducer: Reducer<ToastStateType, Action> = (
   }
 };
 
-export const ToastContext = createContext<ToastContextType | undefined>(
-  undefined
-);
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 const ToastWrapper: React.FC<ToastWrapperProps> = ({ children }) => {
   const [state, dispatch] = useReducer(toastReducer, initialState);
@@ -64,4 +68,4 @@ const ToastWrapper: React.FC<ToastWrapperProps> = ({ children }) => {
   );
 };
 
-export { ToastWrapper };
+export { ToastContext, ToastWrapper };

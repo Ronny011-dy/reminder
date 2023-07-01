@@ -1,4 +1,4 @@
-export type Reminder = {
+type Reminder = {
   done: boolean;
   title: string;
   description: string;
@@ -8,3 +8,5 @@ export type Reminder = {
   important: boolean;
   parentID?: string;
 };
+
+export type { Reminder };

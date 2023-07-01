@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { useState, createContext, useContext } from 'react';
-
 import { useQuery } from 'react-query';
 
 import { List } from '@mui/material';
@@ -10,19 +8,14 @@ import { fetchRemindersDB } from '../../api/functions.api';
 
 import { Todo } from '../to-do/to-do';
 import { LoadingSkeleton } from './components/loading-skeleton/loading-skeleton';
-import { Toast } from '../toast-wrapper/ components/toast/toast';
-import { ToastWrapper } from '../toast-wrapper/toast-wrapper';
+import { ToastWrapper } from '../toast-provider/toast-provider';
 import { CreateReminder } from './components/create-reminder/create-reminder';
+import { IdProvider } from '../to-do/components/id-provider/id-provider';
 
 import { Root } from './reminder-app.styles.js';
 import { Theme } from '../theme/theme';
 
 const ReminderApp: React.FC = () => {
-  // toast
-  const [openToast, setOpenToast] = useState(false);
-  const [isToastError, setIsToastError] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-
   // * CRUDs
 
   //read
@@ -40,7 +33,7 @@ const ReminderApp: React.FC = () => {
   }
   //add - has a dedicated component
 
-  //delete
+  //delete - will have a dedicated component
 
   //TODO:
   //* reminders:
@@ -59,17 +52,19 @@ const ReminderApp: React.FC = () => {
               data.map(
                 (reminder) =>
                   !reminder.parentID && (
-                    <Todo
-                      key={reminder.id}
-                      done={Boolean(reminder.done)}
-                      title={reminder.title}
-                      description={reminder.description}
-                      tags={JSON.parse(reminder.tags)}
-                      createdDate={reminder.createdDate}
-                      date={reminder.date}
-                      important={reminder.important}
-                      parentID={reminder.parentID}
-                    />
+                    <IdProvider id={reminder.id}>
+                      <Todo
+                        key={reminder.id}
+                        done={Boolean(reminder.done)}
+                        title={reminder.title}
+                        description={reminder.description}
+                        tags={JSON.parse(reminder.tags)}
+                        createdDate={reminder.createdDate}
+                        date={reminder.date}
+                        important={reminder.important}
+                        parentID={reminder.parentID}
+                      />
+                    </IdProvider>
                   )
               )}
           </List>
