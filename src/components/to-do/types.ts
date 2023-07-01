@@ -6,5 +6,5 @@ export type Reminder = {
   createdDate?: number;
   date?: number;
   important: boolean;
-  parentID?: number;
+  parentID?: string;
 };

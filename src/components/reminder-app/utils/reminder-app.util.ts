@@ -1,13 +1,3 @@
-// fetch wrapper
-import ky from 'ky';
-
-import type { DBReminder } from '../types';
-
-//API
-const fetchRemindersList = async (): Promise<DBReminder[]> => {
-  return await ky.get('/api/read', {}).json();
-};
-
 const getCookieValue = (cookieName: string): string | null => {
   // filters cookies
   const cookie = document.cookie
@@ -25,4 +15,4 @@ const setCookie = (cookieName: string, cookieValue: string) => {
     (document.cookie = `${cookieName}=${cookieValue}`);
 };
 
-export { getCookieValue, setCookie, fetchRemindersList };
+export { getCookieValue, setCookie };

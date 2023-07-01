@@ -38,12 +38,7 @@ const Todo: React.FC<Reminder> = ({
             <ListItemIcon>
               <Radio checked={done} onChange={reminderCompleteHandler} />
             </ListItemIcon>
-            <TextInput
-              title={title}
-              isTag
-              placeholder="Enter reminder"
-              done={done}
-            />
+            <TextInput title={title} placeholder="Enter reminder" done={done} />
             <Tags date={date} tags={tags} done={done} />
           </Stack>
           <div className="description-wrapper row">
@@ -51,7 +46,6 @@ const Todo: React.FC<Reminder> = ({
             <TextInput
               title={description}
               secondary
-              isTag
               placeholder="•••"
               done={done}
             />

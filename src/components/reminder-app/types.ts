@@ -10,6 +10,6 @@ export type DBReminder = Pick<
   | 'important'
   | 'parentID'
 > & {
-  id: number;
+  id: string;
   tags: string;
 };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 
 import Input from '@mui/material/Input';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import IconButton from '@mui/material/IconButton';
 
 import { Root } from './text-input.styles';
@@ -11,8 +11,9 @@ type TextInputProps = {
   title: string;
   completed?: boolean;
   secondary?: boolean;
-  isTag?: boolean;
   placeholder: string;
+  // tag adder is the only element with True
+  isTag?: boolean;
   accept?: () => void;
   done?: boolean;
   autoFocus?: boolean;
@@ -34,10 +35,10 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <Root textInput={textInput} secondary={secondary}>
+    <Root textInput={textInput} secondary={secondary} isTag={isTag} done={done}>
       <Input
-        className={`input${done ? ' done' : ''}${
-          secondary ? ' secondary' : ''
+        className={`input${secondary ? ' secondary' : ''}${
+          done ? ' done' : ''
         }`}
         type="text"
         onChange={textInputChangeHandler}
@@ -47,9 +48,9 @@ const TextInput: React.FC<TextInputProps> = ({
         disabled={done}
         autoFocus={autoFocus}
         endAdornment={
-          !isTag ? (
+          isTag ? (
             <IconButton className="add-tag" onClick={accept} disableRipple>
-              <ArrowCircleRightIcon className="secondary" />
+              <AddRoundedIcon className="secondary" />
             </IconButton>
           ) : (
             ''

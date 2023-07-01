@@ -16,13 +16,11 @@ const OptionWrapper: React.FC<OptionWrapperProps> = ({
   onClick,
   done,
 }) => {
+  done &&
+    console.log('The tolltip being disabled is actually intended behavior');
+
   return (
-    <Tooltip
-      title={title}
-      enterDelay={650}
-      leaveDelay={200}
-      enterNextDelay={650}
-    >
+    <Tooltip title={title} enterDelay={650} enterNextDelay={650}>
       <IconButton onClick={onClick} disabled={done}>
         {children}
       </IconButton>

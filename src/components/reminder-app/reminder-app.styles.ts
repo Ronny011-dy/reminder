@@ -19,16 +19,5 @@ export const Root = styled.div`
       font-size: 35px;
       font-weight: bold;
     }
-    .add-reminder {
-      margin-left: 5px;
-      transition: all 0.15s ease-in-out;
-    }
-
-    .action {
-      opacity: 25%;
-      &:hover {
-        opacity: 100%;
-      }
-    }
   }
 `;

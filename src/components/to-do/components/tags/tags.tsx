@@ -1,17 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
 
-import { v1 as uuidv1 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
-import { Stack, Chip, Collapse, IconButton } from '@mui/material';
+import { Stack, Chip, Collapse } from '@mui/material';
 
 import { DatePicker } from '../date-picker/date-picker';
 import { TextInput } from '../text-input/text-input';
+import { OptionWrapper } from '../option-wrapper/option-wrapper';
 
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
-import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
-
-const idGenerator = () => uuidv1();
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 type TagsProps = {
   date?: number;
@@ -31,8 +30,6 @@ const Tags: React.FC<TagsProps> = ({ date, tags, done }) => {
   };
 
   const addTagHandler = () => setIsAdding(!isAdding);
-
-  // const addTagHandler = () => setIsAdding(!isAdding);
 
   const handleTagDelete = (tagToDelete: number) => () => {
     // setTagData((tags) => tags.filter((tag) => tag.key !== tagToDelete.key));
@@ -57,15 +54,16 @@ const Tags: React.FC<TagsProps> = ({ date, tags, done }) => {
               placeholder="Enter tag"
               accept={addTagHandler}
               autoFocus
+              isTag
             />
           </Collapse>
 
           {tags.map((tag, i) => {
             return done ? (
-              <Chip key={idGenerator()} label={tag} size="small" />
+              <Chip key={uuidv4()} label={tag} size="small" />
             ) : (
               <Chip
-                key={idGenerator()}
+                key={uuidv4()}
                 label={tag}
                 onDelete={handleTagDelete(i)}
                 size="small"
@@ -75,9 +73,12 @@ const Tags: React.FC<TagsProps> = ({ date, tags, done }) => {
           <DatePicker date={date} done={done} />
         </Stack>
       </Collapse>
-      <IconButton onClick={handleExpander}>
-        {open ? <NavigateBeforeRoundedIcon /> : <NavigateNextRoundedIcon />}
-      </IconButton>
+      <OptionWrapper
+        title={`${open ? 'Minimize' : 'Show more'}`}
+        onClick={handleExpander}
+      >
+        {open ? <NavigateBeforeRoundedIcon /> : <MoreVertRoundedIcon />}
+      </OptionWrapper>
     </>
   );
 };
