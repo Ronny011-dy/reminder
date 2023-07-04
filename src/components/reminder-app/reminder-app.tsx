@@ -8,17 +8,16 @@ import { fetchRemindersDB } from '../../api/functions.api';
 
 import { Todo } from '../to-do/to-do';
 import { LoadingSkeleton } from './components/loading-skeleton/loading-skeleton';
-import { ToastWrapper } from '../toast-provider/toast-provider';
+import { ToastProvider } from '../toast-provider/toast-provider';
 import { CreateReminder } from './components/create-reminder/create-reminder';
-import { IdProvider } from '../to-do/components/id-provider/id-provider';
+import { IdProvider } from './components/id-provider/id-provider';
 
 import { Root } from './reminder-app.styles.js';
 import { Theme } from '../theme/theme';
 
 const ReminderApp: React.FC = () => {
-  // * CRUDs
-
-  //read
+  let parentId = '';
+  //read. add, edit and delete have dedicated components
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ['reminders'],
     queryFn: fetchRemindersDB,
@@ -31,30 +30,24 @@ const ReminderApp: React.FC = () => {
   if (isError) {
     return <div>Error occurred while fetching data</div>;
   }
-  //add - has a dedicated component
-
-  //delete - will have a dedicated component
-
-  //TODO:
-  //* reminders:
-  //* add, delete, edit, create,add sub-reminder
 
   return (
     <Theme>
       <Root>
-        <ToastWrapper>
+        <ToastProvider>
           <div className="main-title-wrapper">
             <div className="main-title">reminder</div>
             <CreateReminder />
           </div>
           <List className="reminders-list">
             {data &&
-              data.map(
-                (reminder) =>
-                  !reminder.parentID && (
-                    <IdProvider id={reminder.id}>
+              data.map((reminder) => {
+                if (!reminder.parentId) {
+                  parentId = reminder.id;
+                  console.log(reminder.title, reminder.parentId);
+                  return (
+                    <IdProvider id={reminder.id} key={reminder.id}>
                       <Todo
-                        key={reminder.id}
                         done={Boolean(reminder.done)}
                         title={reminder.title}
                         description={reminder.description}
@@ -62,13 +55,32 @@ const ReminderApp: React.FC = () => {
                         createdDate={reminder.createdDate}
                         date={reminder.date}
                         important={reminder.important}
-                        parentID={reminder.parentID}
+                        parentID={reminder.parentId}
                       />
                     </IdProvider>
-                  )
-              )}
+                  );
+                }
+                if (reminder.parentId === parentId)
+                  return (
+                    <div className="child-reminder">
+                      <IdProvider id={reminder.id} key={reminder.id}>
+                        <Todo
+                          done={Boolean(reminder.done)}
+                          title={reminder.title}
+                          description={reminder.description}
+                          tags={JSON.parse(reminder.tags)}
+                          createdDate={reminder.createdDate}
+                          date={reminder.date}
+                          important={reminder.important}
+                          parentID={reminder.parentId}
+                        />
+                      </IdProvider>
+                    </div>
+                  );
+              })}
+            {/* {data && data.map((reminder) => reminde)} */}
           </List>
-        </ToastWrapper>
+        </ToastProvider>
       </Root>
     </Theme>
   );

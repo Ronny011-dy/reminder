@@ -5,6 +5,11 @@ import Input from '@mui/material/Input';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import IconButton from '@mui/material/IconButton';
 
+import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
+import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+import { updateReminderDB } from '../../../../api/functions.api';
+
 import { Root } from './text-input.styles';
 
 type TextInputProps = {
@@ -15,8 +20,8 @@ type TextInputProps = {
   // tag adder field is the only element with isTag=True
   isTag?: boolean;
   accept?: () => void;
-  done?: boolean;
   autoFocus?: boolean;
+  setTagText?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -25,31 +30,49 @@ const TextInput: React.FC<TextInputProps> = ({
   isTag,
   placeholder,
   accept,
-  done,
   autoFocus,
+  setTagText,
 }) => {
+  const id = useReminderIdContext();
+  const done = useReminderDoneContext();
+  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   const [textInput, setTextInput] = useState(title);
+
+  const acceptHandler = () => {
+    // clear field in UI when clicking 'add tag'
+    setTextInput('');
+    accept && accept();
+  };
 
   const textInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTextInput(e.target.value);
+    !isTag &&
+      !secondary &&
+      mutation.mutate({ id, req: { title: e.target.value } });
+    !isTag &&
+      secondary &&
+      mutation.mutate({ id, req: { description: e.target.value } });
+    // tags have their own logic in the parent component
+    isTag && setTagText && setTagText(e.target.value);
   };
 
   return (
     <Root textInput={textInput} secondary={secondary} isTag={isTag} done={done}>
       <Input
-        className={`input${secondary ? ' secondary' : ''}${
-          done ? ' done' : ''
-        }`}
+        className="input"
         type="text"
         onChange={textInputChangeHandler}
         placeholder={placeholder}
         value={textInput}
-        disableUnderline
         disabled={done}
         autoFocus={autoFocus}
         endAdornment={
           isTag ? (
-            <IconButton className="add-tag" onClick={accept} disableRipple>
+            <IconButton
+              className="add-tag"
+              onClick={acceptHandler}
+              disableRipple
+            >
               <AddRoundedIcon className="secondary" />
             </IconButton>
           ) : (

@@ -3,7 +3,7 @@ import React from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
 import { ActionType } from '../../types';
-import { useToastContext } from '../../../hooks/useToastContext';
+import { useToastContext } from '../../../../hooks/useToastContext';
 
 const Toast: React.FC = () => {
   const { state, dispatch } = useToastContext();

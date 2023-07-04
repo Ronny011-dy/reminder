@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    // The replaceAll method is defined inside lib.es2021.string.d.ts
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,

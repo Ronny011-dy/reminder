@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { Popover, Chip } from '@mui/material';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
+import { updateReminderDB } from '../../../../api/functions.api';
+
 type DatePickerProps = {
   date?: number;
-  done?: boolean;
 };
 
-const dateParser = (date: number) => new Date(date).toLocaleDateString('de-DE');
+const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
+  const id = useReminderIdContext();
+  const done = useReminderDoneContext();
+  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
+  // initializes with current date or saved date if exists
+  const tempVal = date ? dayjs.unix(date) : dayjs();
+  const [dateValue, setDateValue] = React.useState<Dayjs | null>(tempVal);
 
-const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
   //popover logic
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const openCalendarHandler = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -22,15 +32,22 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
     setAnchorEl(null);
   };
 
+  const dateChangeHandler = (newDate: dayjs.Dayjs | null) => {
+    setAnchorEl(null);
+    setDateValue(newDate);
+    mutation.mutate({ id, req: { date: newDate?.unix() } });
+  };
+
   const open = Boolean(anchorEl);
   return (
     <>
       {date && (
         <Chip
-          label={`Due: ${dateParser(date)}`}
+          label={`Due ${dateValue?.format('DD/MM/YYYY')}`}
           variant="outlined"
           size="small"
           onClick={openCalendarHandler}
+          disabled={done}
         />
       )}
       {!done && !date && (
@@ -53,7 +70,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, done }) => {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           {' '}
-          <DateCalendar />{' '}
+          <DateCalendar
+            autoFocus
+            value={dateValue}
+            onChange={(newValue) => {
+              dateChangeHandler(newValue);
+            }}
+          />{' '}
         </LocalizationProvider>
       </Popover>
     </>

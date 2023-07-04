@@ -12,11 +12,20 @@ const strikeThrough = css`
 `;
 
 const tagAdder = ({ textInput }: WrapperProps) => css`
-  width: ${textInput ? textInput.length : '11'}ch;
+  width: ${textInput ? textInput.length + 5 : '12'}ch;
 `;
 
 const mainTitle = ({ textInput }: WrapperProps) => css`
+  margin-right: 10px;
   width: ${textInput ? textInput.length : '13'}ch;
+`;
+
+const description = ({ textInput }: WrapperProps) => css`
+  width: ${textInput ? textInput.length + 5 : '2'}ch;
+  opacity: 55%;
+  font-size: small;
+  font-weight: 700;
+  height: fit-content;
 `;
 
 export const Root = styled.div<WrapperProps>(
@@ -27,20 +36,10 @@ export const Root = styled.div<WrapperProps>(
     overflow-y: hidden;
 
     .input {
-      /* width: ${textInput ? textInput.length : '14'}ch; */
+      ${isTag && tagAdder}
+      ${!isTag && mainTitle}
+      ${secondary && description}
       ${done && strikeThrough}
-      ${isTag ? tagAdder : mainTitle}
-    }
-
-    /* .done {
-      text-decoration: line-through;
-    } */
-
-    .secondary {
-      opacity: 55%;
-      font-size: small;
-      font-weight: 700;
-      height: fit-content;
     }
   `
 );

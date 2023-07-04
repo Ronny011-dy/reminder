@@ -1,14 +1,9 @@
 import { useMutation, useQueryClient } from 'react-query';
 
 import { useToastContext } from './useToastContext';
-import { ActionType } from '../toast-provider/types';
-import type { DBReminder } from '../reminder-app/types';
-import type { Reminder } from '../to-do/types';
-
-type MutationVariables = {
-  id?: string;
-  req?: Partial<Reminder>;
-};
+import { ActionType } from '../components/toast-provider/types';
+import type { DBReminder } from '../components/reminder-app/types';
+import type { MutationVariables } from '../api/types';
 
 const useQueryClientAndMutation = (
   dbQueryFunction:
@@ -34,4 +29,3 @@ const useQueryClientAndMutation = (
 };
 
 export { useQueryClientAndMutation };
-export type { MutationVariables };

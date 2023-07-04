@@ -9,10 +9,10 @@ const LoadingSkeleton: React.FC = () => {
     <Root>
       <div className="title">
         <Skeleton animation="wave" height={50} width="20%" />
-      </div>{' '}
+      </div>
       <div className="reminder">
         <Skeleton variant="circular" width={20} height={20} animation="wave" />
-        <Skeleton animation="wave" height={30} width="70%" className="text" />
+        <Skeleton animation="wave" height={30} width="50%" className="text" />
         <Skeleton
           animation="wave"
           height={30}
@@ -20,10 +20,15 @@ const LoadingSkeleton: React.FC = () => {
           className="options"
         />
       </div>
+      <Skeleton
+        animation="wave"
+        height={20}
+        width="20%"
+        className="bottom-text"
+      />
       <div className="reminder">
-        {' '}
         <Skeleton variant="circular" width={20} height={20} animation="wave" />
-        <Skeleton animation="wave" height={30} width="70%" className="text" />
+        <Skeleton animation="wave" height={30} width="50%" className="text" />
         <Skeleton
           animation="wave"
           height={30}
@@ -31,6 +36,12 @@ const LoadingSkeleton: React.FC = () => {
           className="options"
         />
       </div>
+      <Skeleton
+        animation="wave"
+        height={20}
+        width="20%"
+        className="bottom-text"
+      />
     </Root>
   );
 };

@@ -3,25 +3,27 @@ import { ReactNode } from 'react';
 
 import { Tooltip, IconButton } from '@mui/material';
 
+import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+
 type OptionWrapperProps = {
   title: string;
   children?: ReactNode;
   onClick?: () => void;
-  done?: boolean;
+  dontDisable?: boolean;
 };
 
 const OptionWrapper: React.FC<OptionWrapperProps> = ({
   children,
   title,
   onClick,
-  done,
+  dontDisable,
 }) => {
-  done &&
-    console.log('The tolltip being disabled is actually intended behavior');
+  const done = useReminderDoneContext();
+  done && console.log('The tolltip being disabled is intended behavior');
 
   return (
     <Tooltip title={title} enterDelay={650} enterNextDelay={650}>
-      <IconButton onClick={onClick} disabled={done}>
+      <IconButton onClick={onClick} disabled={dontDisable ? false : done}>
         {children}
       </IconButton>
     </Tooltip>

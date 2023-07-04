@@ -4,11 +4,11 @@ import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 import { OptionWrapper } from '../option-wrapper/option-wrapper';
-import { useQueryClientAndMutation } from '../../../hooks/useQueryClientAndMutation';
-import { useReminderIdContext } from '../../../hooks/useReminderIdContext';
+import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
+import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
 import { updateReminderDB } from '../../../../api/functions.api';
 
-import { Root } from '../important-toggle/important-toggle.styles';
+import { Root } from './important-toggle.styles';
 
 type ImportantToggleProps = { important: boolean; done?: boolean };
 
@@ -23,7 +23,6 @@ const ImportantToggle: React.FC<ImportantToggleProps> = ({
     <Root>
       <OptionWrapper
         title={important ? 'Unmark as important' : 'Mark as important'}
-        done={done}
         onClick={() => mutation.mutate({ id, req: { important: !important } })}
       >
         {important ? (

@@ -1,6 +1,9 @@
 import React, { createContext, ReactNode } from 'react';
 
-type IdProviderProps = { children: ReactNode; id: string };
+type IdProviderProps = {
+  children: ReactNode;
+  id: string;
+};
 
 const IdContext = createContext<string | undefined>(undefined);
 

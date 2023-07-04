@@ -15,10 +15,13 @@ export const Root = styled.div`
     align-items: center;
   }
   .text {
-    margin-left: 20px;
+    margin-left: 45px;
   }
 
   .options {
-    margin-left: 70px;
+    margin-left: 30%;
+  }
+  .bottom-text {
+    margin-left: 75px;
   }
 `;

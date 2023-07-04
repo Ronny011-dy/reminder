@@ -4,7 +4,7 @@ import { Toast } from './ components/toast/toast';
 import type {
   ToastContextType,
   ToastStateType,
-  ToastWrapperProps,
+  ToastProviderProps,
   Action,
 } from './types';
 
@@ -57,7 +57,7 @@ const toastReducer: Reducer<ToastStateType, Action> = (
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-const ToastWrapper: React.FC<ToastWrapperProps> = ({ children }) => {
+const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(toastReducer, initialState);
 
   return (
@@ -68,4 +68,4 @@ const ToastWrapper: React.FC<ToastWrapperProps> = ({ children }) => {
   );
 };
 
-export { ToastContext, ToastWrapper };
+export { ToastContext, ToastProvider };

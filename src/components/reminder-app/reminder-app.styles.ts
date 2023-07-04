@@ -20,4 +20,8 @@ export const Root = styled.div`
       font-weight: bold;
     }
   }
+
+  .child-reminder {
+    margin-left: 50px;
+  }
 `;

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-type ToastWrapperProps = {
+type ToastProviderProps = {
   children: ReactNode;
 };
 
@@ -56,5 +56,5 @@ type Action =
   | ResetAction
   | ErrorUpdatingAction;
 
-export type { ToastWrapperProps, ToastStateType, ToastContextType, Action };
+export type { ToastProviderProps, ToastStateType, ToastContextType, Action };
 export { ActionType };

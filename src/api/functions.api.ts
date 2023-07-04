@@ -2,13 +2,15 @@ import ky from 'ky';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { DBReminder } from '../components/reminder-app/types';
-import type { MutationVariables } from '../components/hooks/useQueryClientAndMutation';
+import type { MutationVariables } from './types';
 
 const fetchRemindersDB = async (): Promise<DBReminder[]> => {
   return await ky.get('/api/read', {}).json();
 };
-
-const addNewReminderDB = async (): Promise<DBReminder[]> => {
+// supports both reminders and sub reminders
+const addNewReminderDB = async (
+  obj?: MutationVariables
+): Promise<DBReminder[]> => {
   return await ky
     .post('/api/insert', {
       json: {
@@ -20,7 +22,7 @@ const addNewReminderDB = async (): Promise<DBReminder[]> => {
         createdDate: Date.now(),
         date: null,
         important: false,
-        parentId: null,
+        parentId: obj?.id || null,
       },
     })
     .json();
