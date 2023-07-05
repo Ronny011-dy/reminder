@@ -25,26 +25,37 @@ const Todo: React.FC<Reminder> = ({
   createdDate,
   date,
   important,
+  parentID,
 }) => {
+  const [subReminders, setSubReminders] = useState<string[]>([]);
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   const id = useReminderIdContext();
-  const [isDone, setIsDone] = useState(done);
 
   const doneHandler = () => {
-    mutation.mutate({ id, req: { done: boolToNumber(!isDone) } });
-    setIsDone(!isDone);
+    subReminders &&
+      subReminders.map((sub) =>
+        mutation.mutate({ id: sub, req: { done: boolToNumber(!done) } })
+      );
+    mutation.mutate({ id, req: { done: boolToNumber(!done) } });
   };
   return (
     <Root>
-      <DoneProvider done={isDone}>
+      <DoneProvider done={done}>
         <ListItem
           disablePadding
-          secondaryAction={<ReminderOptions important={important} />}
+          secondaryAction={
+            <ReminderOptions
+              important={important}
+              subState={subReminders}
+              subSetter={setSubReminders}
+              isChild={parentID !== null}
+            />
+          }
         >
           <Stack direction="column">
             <Stack direction="row" className="row">
               <ListItemIcon>
-                <Radio checked={isDone} onClick={doneHandler} />
+                <Radio checked={done} onClick={doneHandler} />
               </ListItemIcon>
               <TextInput title={title} placeholder="Enter reminder" />
               <Tags date={date} tags={tags} />

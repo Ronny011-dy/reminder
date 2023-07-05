@@ -9,18 +9,16 @@ import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext
 import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../../../api/functions.api';
-
-type DatePickerProps = {
-  date?: number;
-};
+import type { DatePickerProps } from './types';
 
 const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
   const id = useReminderIdContext();
   const done = useReminderDoneContext();
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   // initializes with current date or saved date if exists
-  const tempVal = date ? dayjs.unix(date) : dayjs();
-  const [dateValue, setDateValue] = React.useState<Dayjs | null>(tempVal);
+  const [dateValue, setDateValue] = React.useState<Dayjs | null>(
+    date ? dayjs.unix(date) : dayjs()
+  );
 
   //popover logic
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -38,6 +36,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
     mutation.mutate({ id, req: { date: newDate?.unix() } });
   };
 
+  const deleteDateHandler = () => {
+    mutation.mutate({ id, req: { date: null } });
+  };
+
   const open = Boolean(anchorEl);
   return (
     <>
@@ -48,6 +50,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
           size="small"
           onClick={openCalendarHandler}
           disabled={done}
+          onDelete={deleteDateHandler}
         />
       )}
       {!done && !date && (
@@ -58,7 +61,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
           onClick={openCalendarHandler}
         />
       )}
-
       <Popover
         open={open}
         anchorEl={anchorEl}

@@ -44,7 +44,6 @@ const ReminderApp: React.FC = () => {
               data.map((reminder) => {
                 if (!reminder.parentId) {
                   parentId = reminder.id;
-                  console.log(reminder.title, reminder.parentId);
                   return (
                     <IdProvider id={reminder.id} key={reminder.id}>
                       <Todo
@@ -53,7 +52,9 @@ const ReminderApp: React.FC = () => {
                         description={reminder.description}
                         tags={JSON.parse(reminder.tags)}
                         createdDate={reminder.createdDate}
-                        date={reminder.date}
+                        date={
+                          reminder.date === null ? undefined : reminder.date
+                        }
                         important={reminder.important}
                         parentID={reminder.parentId}
                       />
@@ -63,14 +64,16 @@ const ReminderApp: React.FC = () => {
                 if (reminder.parentId === parentId)
                   return (
                     <div className="child-reminder">
-                      <IdProvider id={reminder.id} key={reminder.id}>
+                      <IdProvider id={reminder.id} key={reminder.parentId}>
                         <Todo
                           done={Boolean(reminder.done)}
                           title={reminder.title}
                           description={reminder.description}
                           tags={JSON.parse(reminder.tags)}
                           createdDate={reminder.createdDate}
-                          date={reminder.date}
+                          date={
+                            reminder.date === null ? undefined : reminder.date
+                          }
                           important={reminder.important}
                           parentID={reminder.parentId}
                         />
@@ -78,7 +81,6 @@ const ReminderApp: React.FC = () => {
                     </div>
                   );
               })}
-            {/* {data && data.map((reminder) => reminde)} */}
           </List>
         </ToastProvider>
       </Root>

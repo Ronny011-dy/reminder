@@ -23,5 +23,9 @@ export const Root = styled.div`
 
   .child-reminder {
     margin-left: 50px;
+    border-style: none none none solid;
+    /* border-radius: 15px; */
+    border-color: rgba(198, 198, 198, 0.6);
+    border-width: 1px;
   }
 `;
