@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
-export const Root = styled.div`
+const Root = styled.div`
   .secondary {
     opacity: 55%;
   }
 `;
+
+export { Root };

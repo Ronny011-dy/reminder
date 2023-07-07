@@ -1,4 +1,4 @@
-import { DBReminder } from '../components/reminder-app/types';
+import { DBReminder } from '../components/reminder-wrapper/types';
 
 type MutationVariables = {
   id: string;

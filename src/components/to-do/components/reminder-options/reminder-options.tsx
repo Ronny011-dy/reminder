@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ButtonGroup } from '@mui/material';
 
 import { DeleteReminder } from '../delete-reminder/delete-reminder';

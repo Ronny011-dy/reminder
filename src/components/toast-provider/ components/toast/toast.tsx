@@ -27,7 +27,7 @@ const Toast: React.FC = () => {
       onClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
-      <Alert severity={`${isError ? 'error' : 'success'}`} variant="outlined">
+      <Alert severity={`${isError ? 'error' : 'success'}`} variant="filled">
         {message}
       </Alert>
     </Snackbar>

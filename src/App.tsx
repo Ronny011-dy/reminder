@@ -1,15 +1,17 @@
-import { ReminderApp } from './components/reminder-app/reminder-app';
+import { Root } from './App.styles';
+import { ReminderWrapper } from './components/reminder-wrapper/reminder-wrapper';
+import { Theme } from './components/theme/theme';
 
-import React from 'react';
-
-import './App.css';
-
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="app">
-      <ReminderApp />
-    </div>
+    <Root>
+      <Theme>
+        <header>Header</header>
+        <ReminderWrapper />
+        <footer>Footer</footer>
+      </Theme>
+    </Root>
   );
-}
+};
 
 export { App };

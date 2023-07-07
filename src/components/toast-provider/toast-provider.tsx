@@ -1,4 +1,4 @@
-import React, { Reducer, createContext, useReducer } from 'react';
+import { Reducer, createContext, useReducer } from 'react';
 
 import { Toast } from './ components/toast/toast';
 import type {
@@ -19,9 +19,6 @@ const toastReducer: Reducer<ToastStateType, Action> = (
   action: Action
 ): ToastStateType => {
   switch (action.type) {
-    case 'create': {
-      return { isOpen: true, isError: false, message: 'Reminder Created!' };
-    }
     case 'error-creating': {
       return {
         isOpen: true,
@@ -29,9 +26,7 @@ const toastReducer: Reducer<ToastStateType, Action> = (
         message: 'Error creating reminder',
       };
     }
-    case 'delete': {
-      return { isOpen: true, isError: false, message: 'Reminder deleted' };
-    }
+
     case 'error-deleting': {
       return {
         isOpen: true,

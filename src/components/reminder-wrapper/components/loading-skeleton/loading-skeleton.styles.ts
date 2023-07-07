@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Root = styled.div`
+const Root = styled.div`
   margin-top: 15px;
   .title {
     display: flex;
@@ -25,3 +25,5 @@ export const Root = styled.div`
     margin-left: 75px;
   }
 `;
+
+export { Root };

@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-import type { DBReminder } from '../components/reminder-app/types';
+import type { DBReminder } from '../components/reminder-wrapper/types';
 import type { MutationVariables } from './types';
 
 const fetchRemindersDB = async (): Promise<DBReminder[]> => {

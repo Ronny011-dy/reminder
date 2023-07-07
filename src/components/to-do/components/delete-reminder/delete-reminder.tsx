@@ -1,5 +1,3 @@
-import React from 'react';
-
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 import { OptionWrapper } from '../option-wrapper/option-wrapper';

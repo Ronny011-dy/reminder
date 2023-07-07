@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import React from 'react';
 
 import Input from '@mui/material/Input';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';

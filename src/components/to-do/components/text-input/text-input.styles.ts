@@ -28,7 +28,7 @@ const description = ({ textInput }: WrapperProps) => css`
   height: fit-content;
 `;
 
-export const Root = styled.div<WrapperProps>(
+const Root = styled.div<WrapperProps>(
   ({ textInput, secondary, isTag, done }) => css`
     height: ${secondary ? '13' : '24'}px;
     display: flex;
@@ -43,3 +43,5 @@ export const Root = styled.div<WrapperProps>(
     }
   `
 );
+
+export { Root };

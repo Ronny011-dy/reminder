@@ -16,24 +16,14 @@ type ToastContextType = {
 };
 
 enum ActionType {
-  Create = 'create',
   ErrorOnCreate = 'error-creating',
-  Delete = 'delete',
   ErrorOnDelete = 'error-deleting',
   ErrorOnUpdate = 'error-updating',
   Reset = 'reset',
 }
 
-interface CreateAction {
-  type: ActionType.Create;
-}
-
 interface ErrorCreatingAction {
   type: ActionType.ErrorOnCreate;
-}
-
-interface DeleteAction {
-  type: ActionType.Delete;
 }
 
 interface ErrorDeletingAction {
@@ -49,12 +39,10 @@ interface ResetAction {
 }
 
 type Action =
-  | CreateAction
   | ErrorCreatingAction
-  | DeleteAction
   | ErrorDeletingAction
-  | ResetAction
-  | ErrorUpdatingAction;
+  | ErrorUpdatingAction
+  | ResetAction;
 
 export type { ToastProviderProps, ToastStateType, ToastContextType, Action };
 export { ActionType };

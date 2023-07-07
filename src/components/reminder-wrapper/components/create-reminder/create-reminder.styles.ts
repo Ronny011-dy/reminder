@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Root = styled.div`
+const Root = styled.div`
   .add {
     transition: all 0.15s ease-in-out;
     opacity: 25%;
@@ -12,3 +12,5 @@ export const Root = styled.div`
     height: 25px;
   }
 `;
+
+export { Root };

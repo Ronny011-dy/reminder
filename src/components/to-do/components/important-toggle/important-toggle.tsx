@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 

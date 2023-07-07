@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { IdContext } from '../components/reminder-app/components/id-provider/id-provider';
+import { IdContext } from '../components/reminder-wrapper/components/id-provider/id-provider';
 
 const useReminderIdContext = (): string => {
   const context = useContext(IdContext);

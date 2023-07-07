@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Skeleton } from '@mui/material';
 
 import { Root } from './loading-skeleton.styles';

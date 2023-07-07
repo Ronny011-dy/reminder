@@ -10,7 +10,7 @@ import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const CreateReminder: React.FC = () => {
-  const mutation = useQueryClientAndMutation(addNewReminderDB, 'Create', true);
+  const mutation = useQueryClientAndMutation(addNewReminderDB, 'Create');
 
   return (
     <Root>
