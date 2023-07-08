@@ -2,7 +2,7 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
 import { OptionWrapper } from '../option-wrapper/option-wrapper';
 import { deleteReminderDB } from '../../../../api/functions.api';
-import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../reminder-wrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 
 type DeleteReminderProps = {

@@ -8,7 +8,7 @@ const Root = styled.div`
   }
 `;
 
-const MainTitleWrapeprStyle = styled.div`
+const MainTitleWrapperStyle = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,9 +17,8 @@ const MainTitleWrapeprStyle = styled.div`
 `;
 
 const MainTitleStyle = styled.h1`
-  font-family: 'Pacifico', cursive;
   font-size: 35px;
   font-weight: bold;
 `;
 
-export { Root, MainTitleStyle, MainTitleWrapeprStyle };
+export { Root, MainTitleStyle, MainTitleWrapperStyle };

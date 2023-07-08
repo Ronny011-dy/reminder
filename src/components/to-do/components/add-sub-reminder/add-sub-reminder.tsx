@@ -4,7 +4,7 @@ import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
 import { OptionWrapper } from '../option-wrapper/option-wrapper';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { addNewReminderDB } from '../../../../api/functions.api';
-import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../reminder-wrapper/hooks/useReminderIdContext';
 
 type AddSubReminderProps = {
   subSetter: React.Dispatch<React.SetStateAction<string[]>>;

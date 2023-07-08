@@ -7,9 +7,9 @@ import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../date-picker/date-picker';
 import { TextInput } from '../text-input/text-input';
 import { OptionWrapper } from '../option-wrapper/option-wrapper';
-import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../reminder-wrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { updateReminderDB } from '../../../../api/functions.api';
 
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';

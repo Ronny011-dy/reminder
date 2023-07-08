@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Tooltip, IconButton } from '@mui/material';
 
-import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 
 type OptionWrapperProps = {
   title: string;
@@ -18,7 +18,6 @@ const OptionWrapper: React.FC<OptionWrapperProps> = ({
   dontDisable,
 }) => {
   const done = useReminderDoneContext();
-  done && console.log('The tolltip being disabled is intended behavior');
 
   return (
     <Tooltip title={title} enterDelay={650} enterNextDelay={650}>

@@ -5,8 +5,8 @@ import { Popover, Chip } from '@mui/material';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
-import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
+import { useReminderIdContext } from '../../../reminder-wrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../../../api/functions.api';
 import type { DatePickerProps } from './types';

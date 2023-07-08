@@ -15,12 +15,10 @@ const CreateReminder: React.FC = () => {
   return (
     <Root>
       <IconButton
-        className="add"
         disableRipple
         onClick={() => mutation.mutate({ id: uuidv4() })}
       >
-        {' '}
-        <AddIcon className="plus" />
+        <AddIcon />
       </IconButton>
     </Root>
   );

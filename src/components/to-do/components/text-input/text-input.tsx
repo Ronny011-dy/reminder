@@ -4,9 +4,9 @@ import Input from '@mui/material/Input';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import IconButton from '@mui/material/IconButton';
 
-import { useReminderIdContext } from '../../../../hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../reminder-wrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { useReminderDoneContext } from '../../../../hooks/useReminderDoneContext';
+import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { updateReminderDB } from '../../../../api/functions.api';
 
 import { Root } from './text-input.styles';

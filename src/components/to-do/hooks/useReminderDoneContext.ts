@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { DoneContext } from '../components/to-do/components/done-provider/done-provider';
+import { DoneContext } from '../components/done-provider/done-provider';
 
 const useReminderDoneContext = (): boolean => {
   const context = useContext(DoneContext);

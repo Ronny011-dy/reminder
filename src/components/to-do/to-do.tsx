@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { Reminder } from './types';
-import { Root } from './to-do.styles';
+import { Root, ChildReminders, Inset, AlignedStack } from './to-do.styles';
 import { Tags } from './components/tags/tags';
 
 import { TextInput } from './components/text-input/text-input';
@@ -12,7 +12,8 @@ import { ReminderList } from '../reminder-wrapper/components/reminder-list/remin
 import { ListItem, ListItemIcon, Radio, Stack } from '@mui/material';
 import { useQueryClientAndMutation } from '../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../api/functions.api';
-import { useReminderIdContext } from '../../hooks/useReminderIdContext';
+import { useReminderIdContext } from '../reminder-wrapper/hooks/useReminderIdContext';
+import { useRemindersDataContext } from '../reminder-wrapper/hooks/useRemindersDataContext';
 
 const boolToNumber = (bool: boolean): number => {
   return bool ? 1 : 0;
@@ -31,6 +32,8 @@ const Todo: React.FC<Reminder> = ({
   const [subReminders, setSubReminders] = useState<string[]>([]);
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   const id = useReminderIdContext();
+  const allData = useRemindersDataContext();
+  const subData = allData.filter((reminder) => reminder.parentId === id);
 
   const doneHandler = () => {
     subReminders &&
@@ -54,22 +57,24 @@ const Todo: React.FC<Reminder> = ({
           }
         >
           <Stack direction="column">
-            <Stack direction="row" className="row">
+            <AlignedStack direction="row">
               <ListItemIcon>
                 <Radio checked={done} onClick={doneHandler} />
               </ListItemIcon>
               <TextInput title={title} placeholder="Enter reminder" />
               <Tags date={date} tags={tags} />
-            </Stack>
+            </AlignedStack>
             <div className="description-wrapper row">
-              <div className="padding" />
+              <Inset />
               <TextInput title={description} secondary placeholder="•••" />
             </div>
           </Stack>
         </ListItem>
-        {/* //TODO Add a recursive call to the reminders list to render all children under the parent reminder*/}
-        {/* //TODO: Use parentID to ID comparison, existing providers and styped components styling like a prop for RemindersList or a wrapper in the current component */}
-        {/* <ReminderList/> */}
+        {subData.length > 0 && (
+          <ChildReminders>
+            <ReminderList data={subData} />
+          </ChildReminders>
+        )}
       </DoneProvider>
     </Root>
   );
