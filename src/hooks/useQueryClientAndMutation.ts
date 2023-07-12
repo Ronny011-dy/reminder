@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 
 import { useToastContext } from './useToastContext';
-import { ActionType } from '../components/toast-provider/types';
-import type { DBReminder } from '../components/reminder-wrapper/types';
+import { ActionType } from '../components/ToastProvider/ToastProvider.types';
+import type { DBReminder } from '../components/ReminderWrapper/ReminderWrapper.types';
 import type { MutationVariables } from '../api/types';
 
 type ActionTypeString = 'Create' | 'Delete' | 'Update';

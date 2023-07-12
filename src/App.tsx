@@ -1,6 +1,6 @@
 import { Root } from './App.styles';
-import { ReminderWrapper } from './components/reminder-wrapper/reminder-wrapper';
-import { Theme } from './components/theme/theme';
+import { ReminderWrapper } from './components/ReminderWrapper/ReminderWrapper';
+import { Theme } from './components/Theme/Theme';
 
 const App: React.FC = () => {
   return (
