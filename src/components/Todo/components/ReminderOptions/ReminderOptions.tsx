@@ -19,8 +19,8 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
 }) => {
   return (
     <ButtonGroup>
-      {/* sub reminders can't have sub reminders or 'important' toggles */}
-      <ImportantToggle important={important} isChild={isChild} />
+      {/* sub reminders can't have their own sub reminders */}
+      <ImportantToggle important={important} />
       <AddSubReminder subSetter={subSetter} isChild={isChild} />
       <DeleteReminder subReminders={subState} />
     </ButtonGroup>

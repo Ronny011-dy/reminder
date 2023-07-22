@@ -3,7 +3,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { addNewReminderDB } from '../../../../api/functions.api';
-import { Root } from './CreateReminder.styles';
+import { Root } from './CreateReminder_db.styles';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 
 import { IconButton } from '@mui/material';

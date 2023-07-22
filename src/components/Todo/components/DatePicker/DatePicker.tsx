@@ -37,7 +37,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
   };
 
   const deleteDateHandler = () => {
-    mutation.mutate({ id, req: { date: null } });
+    mutation.mutate({ id, req: { date: undefined } });
   };
 
   const open = Boolean(anchorEl);

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const Root = styled.div`
+  min-height: 80vh;
   width: 1024px;
   // use max width if screen is 1024 pixels wide or smaller
   @media (max-width: 1024px) {

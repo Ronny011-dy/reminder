@@ -4,7 +4,7 @@ import { fetchRemindersDB } from '../../api/functions.api';
 
 // import { LoadingSkeleton } from './components/loading-skeleton/loading-skeleton';
 import { ToastProvider } from '../ToastProvider/ToastProvider';
-import { CreateReminder } from './components/CreateReminder/CreateReminder';
+import { CreateReminder } from './components/CreateReminder_db/CreateReminder_db';
 import { DataProvider } from './components/DataProvider/DataProvider';
 
 import {
@@ -13,8 +13,12 @@ import {
   MainTitleWrapperStyle,
 } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
+import { useState } from 'react';
+import { NewReminder } from './components/NewReminder/NewReminder';
 
 const ReminderWrapper: React.FC = () => {
+  const [hasNewReminder, setHasNewReminder] = useState(false);
+
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ['reminders'],
     queryFn: fetchRemindersDB,
@@ -32,14 +36,11 @@ const ReminderWrapper: React.FC = () => {
       </div>
     );
   // by not returning the first two blocks, we assume data exists
-  const parents = data?.filter((reminder) => reminder.parentId === null);
+  const parents = data?.filter((reminder) => reminder.parentID === null);
   return (
     <Root>
       <ToastProvider>
-        <MainTitleWrapperStyle>
-          <MainTitleStyle>reminder</MainTitleStyle>
-          <CreateReminder />
-        </MainTitleWrapperStyle>
+        <NewReminder />
         {/* //* reminder doesn't have a data/childs property so context is needed. */}
         {/* //* reminder list will get data passed down from reinder - to render childs*/}
         <DataProvider data={data}>

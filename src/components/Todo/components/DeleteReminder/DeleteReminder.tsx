@@ -6,7 +6,7 @@ import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminder
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 
 type DeleteReminderProps = {
-  subReminders?: string[];
+  subReminders: string[];
 };
 
 const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminders }) => {
@@ -15,7 +15,7 @@ const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminders }) => {
 
   const deletehandler = () => {
     // first delete sub reminders
-    subReminders && subReminders.map((sub) => mutation.mutate({ id: sub }));
+    subReminders.forEach((sub) => mutation.mutate({ id: sub }));
     mutation.mutate({ id });
   };
 

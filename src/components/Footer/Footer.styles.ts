@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
 const Root = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  height: 10vh;
+  background-color: black;
 `;
 
 export { Root };

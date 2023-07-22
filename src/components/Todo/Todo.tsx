@@ -15,9 +15,9 @@ import { useReminderIdContext } from '../ReminderWrapper/hooks/useReminderIdCont
 import { useRemindersDataContext } from '../ReminderWrapper/hooks/useRemindersDataContext';
 import { ReminderList } from '../ReminderWrapper/components/ReminderList/ReminderList';
 
-const boolToNumber = (bool: boolean): number => {
-  return bool ? 1 : 0;
-};
+// const boolToNumber = (bool: boolean): number => {
+//   return bool ? 1 : 0;
+// };
 
 const Todo: React.FC<Reminder> = ({
   done,
@@ -33,14 +33,14 @@ const Todo: React.FC<Reminder> = ({
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   const id = useReminderIdContext();
   const allData = useRemindersDataContext();
-  const subData = allData.filter((reminder) => reminder.parentId === id);
+  const subData = allData.filter((reminder) => reminder.parentID === id);
 
   const doneHandler = () => {
     subReminders &&
       subReminders.map((sub) =>
-        mutation.mutate({ id: sub, req: { done: boolToNumber(!done) } })
+        mutation.mutate({ id: sub, req: { done: !done } })
       );
-    mutation.mutate({ id, req: { done: boolToNumber(!done) } });
+    mutation.mutate({ id, req: { done: !done } });
   };
   return (
     <Root isChild={parentID !== null}>

@@ -1,4 +1,3 @@
-import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
@@ -8,16 +7,12 @@ import { updateReminderDB } from '../../../../api/functions.api';
 
 import { ImportantStyled } from './ImportantToggle.styles';
 
-type ImportantToggleProps = { important: boolean; isChild: boolean };
+type ImportantToggleProps = { important: boolean };
 
-const ImportantToggle: React.FC<ImportantToggleProps> = ({
-  important,
-  isChild,
-}) => {
+const ImportantToggle: React.FC<ImportantToggleProps> = ({ important }) => {
   const id = useReminderIdContext();
 
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
-  if (isChild) return null;
   return (
     <OptionWrapper
       title={important ? 'Unmark as important' : 'Mark as important'}

@@ -22,7 +22,7 @@ const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
                 createdDate={reminder.createdDate}
                 date={reminder.date === null ? undefined : reminder.date}
                 important={reminder.important}
-                parentID={reminder.parentId}
+                parentID={reminder.parentID}
               />
             </IdProvider>
           );
