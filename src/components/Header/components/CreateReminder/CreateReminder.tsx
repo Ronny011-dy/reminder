@@ -5,12 +5,16 @@ import { Root, IconWrapper } from './CreateReminder.styles.ts';
 import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-const CreateReminder: React.FC = () => {
+type CreateReminderProps = {
+  onCreate: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const CreateReminder: React.FC<CreateReminderProps> = ({ onCreate }) => {
   return (
     <Root>
       reminder
       <IconWrapper>
-        <IconButton disableRipple onClick={() => console.log()}>
+        <IconButton disableRipple onClick={() => onCreate(true)}>
           <AddIcon />
         </IconButton>
       </IconWrapper>

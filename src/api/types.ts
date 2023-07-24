@@ -3,7 +3,7 @@ import { DBReminder } from '../components/ReminderWrapper/ReminderWrapper.types'
 type MutationVariables = {
   id: string;
   title?: string;
-  parentId?: string;
+  parentID?: string;
   req?: Partial<DBReminder>;
 };
 

@@ -10,7 +10,7 @@ const Root = styled.div<WrapperProps>(
   ({ isChild }) => css`
     overflow-x: auto;
     margin-bottom: ${!isChild ? '20px' : '0'};
-    background-color: ${!isChild && 'rgb(36, 71, 106)'};
+    background-color: ${!isChild && 'rgb(0, 95, 183)'};
     border-radius: 15px;
     padding: 10px;
   `

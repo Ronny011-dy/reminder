@@ -1,12 +1,14 @@
 import { Root } from './Header.styles';
 import { CreateReminder } from './components/CreateReminder/CreateReminder';
 
-type HeaderProps = {};
+type HeaderProps = {
+  onCreate: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({ onCreate }) => {
   return (
     <Root>
-      <CreateReminder />
+      <CreateReminder onCreate={onCreate} />
     </Root>
   );
 };

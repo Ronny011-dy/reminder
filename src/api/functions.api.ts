@@ -21,7 +21,7 @@ const addNewReminderDB = async (
         createdDate: String(Date.now()),
         date: null,
         important: false,
-        parentId: req?.parentId || null,
+        parentID: req?.parentID || null,
       },
     })
     .json();
