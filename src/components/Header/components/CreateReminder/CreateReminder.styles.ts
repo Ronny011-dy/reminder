@@ -5,8 +5,6 @@ const Root = styled.div`
   flex-direction: row;
   font-size: 35px;
   font-weight: bold;
-  margin-top: 5rem;
-  margin-left: 1rem;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 `;
 

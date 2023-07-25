@@ -3,13 +3,15 @@ import { Todo } from '../../../Todo/Todo';
 import { DBReminder } from '../../ReminderWrapper.types';
 import { List } from '@mui/material';
 
+import { Root } from './ReminderList.styles';
+
 type ReminderListProps = {
   data?: DBReminder[];
 };
 
 const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
   return (
-    <List>
+    <Root>
       {data &&
         data.map((reminder) => {
           return (
@@ -27,7 +29,7 @@ const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
             </IdProvider>
           );
         })}
-    </List>
+    </Root>
   );
 };
 

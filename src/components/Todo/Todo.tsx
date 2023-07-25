@@ -8,16 +8,12 @@ import { TextInput } from './components/TextInput/TextInput';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
 
-import { ListItem, ListItemIcon, Radio, Stack } from '@mui/material';
+import { Checkbox, ListItem, ListItemIcon, Stack } from '@mui/material';
 import { useQueryClientAndMutation } from '../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../api/functions.api';
 import { useReminderIdContext } from '../ReminderWrapper/hooks/useReminderIdContext';
 import { useRemindersDataContext } from '../ReminderWrapper/hooks/useRemindersDataContext';
 import { ReminderList } from '../ReminderWrapper/components/ReminderList/ReminderList';
-
-// const boolToNumber = (bool: boolean): number => {
-//   return bool ? 1 : 0;
-// };
 
 const Todo: React.FC<Reminder> = ({
   done,
@@ -59,7 +55,7 @@ const Todo: React.FC<Reminder> = ({
           <Stack direction="column">
             <AlignedStack direction="row">
               <ListItemIcon>
-                <Radio checked={done} onClick={doneHandler} />
+                <Checkbox checked={done} onClick={doneHandler} />
               </ListItemIcon>
               <TextInput title={title} placeholder="Enter reminder" />
               <Tags date={date} tags={tags} />

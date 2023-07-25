@@ -33,7 +33,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
   const dateChangeHandler = (newDate: dayjs.Dayjs | null) => {
     setAnchorEl(null);
     setDateValue(newDate);
-    mutation.mutate({ id, req: { date: newDate?.unix() } });
+    mutation.mutate({ id, req: { date: String(newDate?.unix()) } });
   };
 
   const deleteDateHandler = () => {
