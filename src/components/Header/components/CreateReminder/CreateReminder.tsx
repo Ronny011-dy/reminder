@@ -1,23 +1,20 @@
-import React from 'react';
+import { Root, IconButtonStyled } from './CreateReminder.styles.ts';
 
-import { Root, IconWrapper } from './CreateReminder.styles.ts';
-
-import { IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { useTheme } from '@mui/material';
 
 type CreateReminderProps = {
   onCreate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CreateReminder: React.FC<CreateReminderProps> = ({ onCreate }) => {
+  const theme = useTheme();
   return (
     <Root>
       reminder
-      <IconWrapper>
-        <IconButton disableRipple onClick={() => onCreate(true)}>
-          <AddIcon />
-        </IconButton>
-      </IconWrapper>
+      <IconButtonStyled theme={theme} onClick={() => onCreate(true)}>
+        <AddIcon />
+      </IconButtonStyled>
     </Root>
   );
 };

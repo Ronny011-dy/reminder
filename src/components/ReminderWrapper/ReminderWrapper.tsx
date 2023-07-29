@@ -9,17 +9,17 @@ import ClickAwayListener from '@mui/base/ClickAwayListener';
 
 import { DataProvider } from './components/DataProvider/DataProvider';
 
-import { Root } from './ReminderWrapper.styles';
+import { Root, LeftMenu } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
 
 type ReminderWrapperProps = {
-  hasNewReminder: boolean;
+  addingNewReminder: boolean;
   onNewReminderClickAway: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ReminderWrapper: React.FC<ReminderWrapperProps> = ({
-  hasNewReminder,
+  addingNewReminder,
   onNewReminderClickAway,
 }) => {
   const newReminderRef = useRef<HTMLDivElement | null>(null);
@@ -44,22 +44,25 @@ const ReminderWrapper: React.FC<ReminderWrapperProps> = ({
   const handleClickAway = () => {
     onNewReminderClickAway(false);
   };
+  const isAdding: boolean = addingNewReminder || data?.length === 0;
   return (
     <Root>
       <ToastProvider>
-        {hasNewReminder && (
-          // MUI click-away listener requires access to DOM node, hence the ref
-          <ClickAwayListener onClickAway={handleClickAway}>
-            <NewReminder
-              ref={newReminderRef}
-              onSubmit={onNewReminderClickAway}
-            />
-          </ClickAwayListener>
-        )}
         {/* //* reminder doesn't have a data/childs property so context is needed. */}
-        {/* //* reminder list will get data passed down from reinder - to render childs*/}
+        {/* //* reminder list will get data passed down from reminder - to render childs*/}
         <DataProvider data={data}>
-          <ReminderList data={parents} />
+          <LeftMenu>
+            {isAdding && (
+              // MUI click-away listener requires access to DOM node, hence the ref
+              <ClickAwayListener onClickAway={handleClickAway}>
+                <NewReminder
+                  ref={newReminderRef}
+                  onSubmit={onNewReminderClickAway}
+                />
+              </ClickAwayListener>
+            )}
+            <ReminderList data={parents} isChild={false} />
+          </LeftMenu>
         </DataProvider>
       </ToastProvider>
     </Root>

@@ -10,13 +10,9 @@ import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminder
 
 type AddSubReminderProps = {
   subSetter: React.Dispatch<React.SetStateAction<string[]>>;
-  isChild: boolean;
 };
 
-const AddSubReminder: React.FC<AddSubReminderProps> = ({
-  subSetter,
-  isChild,
-}) => {
+const AddSubReminder: React.FC<AddSubReminderProps> = ({ subSetter }) => {
   const parentID = useReminderIdContext();
   const id = uuidv4();
   // create a reminder and assign it with a parentID
@@ -27,7 +23,6 @@ const AddSubReminder: React.FC<AddSubReminderProps> = ({
     subSetter((current) => [...current, id]);
   };
 
-  if (isChild) return null;
   return (
     <OptionWrapper title="Add sub-reminder" onClick={subAddhandler}>
       <ChecklistRoundedIcon />

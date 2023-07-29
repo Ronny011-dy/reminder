@@ -9,4 +9,15 @@ type Reminder = {
   parentID?: string;
 };
 
-export type { Reminder };
+type ListItemButtonProps = {
+  i: number;
+  onClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number
+  ) => void;
+  selectedIndex: number;
+};
+
+type TodoProps = Reminder & ListItemButtonProps;
+
+export type { Reminder, TodoProps };

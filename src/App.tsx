@@ -12,7 +12,7 @@ const App: React.FC = () => {
       <Theme>
         <Header onCreate={setNewReminderOpen} />
         <ReminderWrapper
-          hasNewReminder={newReminderOpen}
+          addingNewReminder={newReminderOpen}
           onNewReminderClickAway={setNewReminderOpen}
         />
         <Footer />

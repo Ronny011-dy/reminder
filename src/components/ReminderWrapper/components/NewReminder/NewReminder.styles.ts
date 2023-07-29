@@ -1,17 +1,22 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Root = styled.div`
-  margin-top: 20px;
-  border: 3px dashed #005fb7;
-  border-radius: 15px;
-  padding: 10px;
+const Root = styled.div(
+  ({ theme }) => css`
+    margin-top: 20px;
+    border: 3px dashed;
+    border-radius: 15px;
+    border-color: ${theme.palette.mode === 'dark'
+      ? theme.palette.primary.light
+      : theme.palette.primary.main};
+    padding: 10px;
 
-  input {
-    outline: none;
-    border: none;
-    background-color: transparent;
-    font-size: 1rem;
-  }
-`;
+    input {
+      outline: none;
+      border: none;
+      background-color: transparent;
+      font-size: 1rem;
+    }
+  `
+);
 
 export { Root };

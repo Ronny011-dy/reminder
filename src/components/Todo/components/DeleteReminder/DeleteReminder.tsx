@@ -1,4 +1,4 @@
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { deleteReminderDB } from '../../../../api/functions.api';
@@ -20,8 +20,8 @@ const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminders }) => {
   };
 
   return (
-    <OptionWrapper title="Delete reminder" onClick={deletehandler} dontDisable>
-      <DeleteRoundedIcon />
+    <OptionWrapper title="Delete reminder" onClick={deletehandler}>
+      <DeleteTwoToneIcon />
     </OptionWrapper>
   );
 };

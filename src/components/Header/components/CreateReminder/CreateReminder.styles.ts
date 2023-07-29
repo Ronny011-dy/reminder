@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { IconButton } from '@mui/material';
+import styled, { css } from 'styled-components';
 
 const Root = styled.div`
   display: flex;
@@ -8,12 +9,13 @@ const Root = styled.div`
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 `;
 
-const IconWrapper = styled.div`
-  transition: all 0.15s ease-in-out;
-  opacity: 25%;
-  &:hover {
-    opacity: 100%;
-  }
-`;
+const IconButtonStyled = styled(IconButton)(
+  ({ theme }) => css`
+    width: 2rem;
+    height: 2rem;
+    align-self: center;
+    color: ${theme.palette.secondary.main} !important;
+  `
+);
 
-export { Root, IconWrapper };
+export { Root, IconButtonStyled };

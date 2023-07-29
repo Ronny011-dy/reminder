@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import { ListItem, Checkbox, IconButton, Tooltip } from '@mui/material';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import { Root } from './NewReminder.styles';
@@ -13,6 +14,7 @@ type NewReminderProps = {
 
 const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(
   ({ onSubmit }, ref) => {
+    const theme = useTheme();
     const mutation = useQueryClientAndMutation(addNewReminderDB, 'Create');
     const [title, setTitle] = useState('');
 
@@ -26,12 +28,10 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(
       setTitle(event.target.value);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === 'Enter') handleSubmit;
-    };
-
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) =>
+      event.key === 'Enter' && handleSubmit;
     return (
-      <Root ref={ref}>
+      <Root ref={ref} theme={theme}>
         <form onSubmit={handleSubmit}>
           <ListItem
             secondaryAction={
