@@ -2,7 +2,7 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { deleteReminderDB } from '../../../../api/functions.api';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 
 type DeleteReminderProps = {

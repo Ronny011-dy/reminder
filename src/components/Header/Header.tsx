@@ -1,17 +1,17 @@
 import { useTheme } from '@mui/material';
-import { Root } from './Header.styles';
-import { CreateReminder } from './components/CreateReminder/CreateReminder';
+import { Root, Title } from './Header.styles';
+import { OtherOptions } from './components/OtherOptions/OtherOptions';
+import { Link } from 'react-router-dom';
 
-type HeaderProps = {
-  onCreate: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const Header: React.FC<HeaderProps> = ({ onCreate }) => {
+const Header: React.FC = () => {
   const theme = useTheme();
   return (
     <Root theme={theme}>
       <div>
-        <CreateReminder onCreate={onCreate} />
+        <Link to={'/'}>
+          <Title theme={theme}>reminder</Title>
+        </Link>
+        <OtherOptions />
       </div>
     </Root>
   );

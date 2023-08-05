@@ -2,8 +2,6 @@ import { ReactNode } from 'react';
 
 import { Tooltip, IconButton } from '@mui/material';
 
-import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
-
 type OptionWrapperProps = {
   title: string;
   children?: ReactNode;
@@ -17,8 +15,6 @@ const OptionWrapper: React.FC<OptionWrapperProps> = ({
   onClick,
   disabled,
 }) => {
-  const done = useReminderDoneContext();
-
   return (
     <Tooltip title={title} enterDelay={650} enterNextDelay={650}>
       <IconButton onClick={onClick} disabled={disabled}>

@@ -1,5 +1,5 @@
 import { IdProvider } from '../IdProvider/IdProvider';
-import { Todo } from '../../../Todo/Todo';
+import { Todo } from '../../../../components/Todo/Todo';
 import { DBReminder } from '../../ReminderWrapper.types';
 
 import { ClickAwayListener, List } from '@mui/material';
@@ -8,9 +8,17 @@ import { useState } from 'react';
 type ReminderListProps = {
   data?: DBReminder[];
   isChild: boolean;
+  parentID?: string;
 };
 
-const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
+const ReminderList: React.FC<ReminderListProps> = ({
+  data,
+  isChild,
+  parentID,
+}) => {
+  const reminders = isChild
+    ? data
+    : data?.filter((reminder) => reminder.parentID === null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const handleReminderClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -24,8 +32,8 @@ const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <List disablePadding>
-        {data &&
-          data.map((reminder, i) => {
+        {reminders &&
+          reminders.map((reminder, i) => {
             return (
               <IdProvider id={reminder.id} key={reminder.id}>
                 <Todo
@@ -42,6 +50,13 @@ const ReminderList: React.FC<ReminderListProps> = ({ data }) => {
                   i={i}
                   onClick={handleReminderClick}
                   selectedIndex={selectedIndex}
+                  childrenReminders={
+                    isChild
+                      ? undefined
+                      : data?.filter(
+                          (reminder) => reminder.parentID === parentID
+                        )
+                  }
                 />
               </IdProvider>
             );

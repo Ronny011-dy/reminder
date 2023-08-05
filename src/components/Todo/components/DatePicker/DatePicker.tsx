@@ -6,7 +6,7 @@ import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../../../api/functions.api';
 import type { DatePickerProps } from './DatePicker.types';

@@ -1,4 +1,4 @@
-import type { Reminder } from '../Todo/Todo.types';
+import type { Reminder } from '../../components/Todo/Todo.types';
 
 type DBReminder = Pick<
   Reminder,

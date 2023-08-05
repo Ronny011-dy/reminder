@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTheme } from '@mui/material';
-
 import type { TodoProps } from './Todo.types';
 import {
   Root,
@@ -12,15 +11,12 @@ import {
   CheckboxStyled,
 } from './Todo.styles';
 import { Tags } from './components/Tags/Tags';
-
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
-
 import { ListItem, ListItemIcon, Stack } from '@mui/material';
 import { useQueryClientAndMutation } from '../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../api/functions.api';
-import { useReminderIdContext } from '../ReminderWrapper/hooks/useReminderIdContext';
-import { useRemindersDataContext } from '../ReminderWrapper/hooks/useRemindersDataContext';
-import { ReminderList } from '../ReminderWrapper/components/ReminderList/ReminderList';
+import { useReminderIdContext } from '../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { ReminderList } from '../../routes/ReminderWrapper/components/ReminderList/ReminderList';
 import { RightMenu } from './components/RightMenu/RightMenu';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 
@@ -35,13 +31,12 @@ const Todo: React.FC<TodoProps> = ({
   i,
   onClick,
   selectedIndex,
+  childrenReminders,
 }) => {
   const theme = useTheme();
   const [subReminders, setSubReminders] = useState<string[]>([]);
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
   const id = useReminderIdContext();
-  const allData = useRemindersDataContext();
-  const subData = allData.filter((reminder) => reminder.parentID === id);
 
   const doneHandler = () => {
     subReminders &&
@@ -50,6 +45,7 @@ const Todo: React.FC<TodoProps> = ({
       );
     mutation.mutate({ id, req: { done: !done } });
   };
+
   return (
     <Root isChild={parentID !== null} theme={theme}>
       <DoneProvider done={done}>
@@ -87,10 +83,14 @@ const Todo: React.FC<TodoProps> = ({
               </AlignedStack>
               <ListItemTextStyled secondary={description} />
             </Stack>
-            {subData.length > 0 && <Padding />}
-            {subData.length > 0 && (
+            {!parentID && childrenReminders && <Padding />}
+            {!parentID && childrenReminders && (
               <ChildReminder>
-                <ReminderList data={subData} isChild={true} />
+                <ReminderList
+                  data={childrenReminders}
+                  isChild={true}
+                  parentID={id}
+                />
               </ChildReminder>
             )}
             <RightMenu />

@@ -7,7 +7,7 @@ import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { TextInput } from '../TextInput/TextInput';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { updateReminderDB } from '../../../../api/functions.api';

@@ -1,27 +1,19 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { fetchRemindersDB } from '../../api/functions.api';
 
 // import { LoadingSkeleton } from './components/loading-skeleton/loading-skeleton';
-import { ToastProvider } from '../ToastProvider/ToastProvider';
+import { ToastProvider } from '../../components/ToastProvider/ToastProvider';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-
 import { DataProvider } from './components/DataProvider/DataProvider';
-
 import { Root, LeftMenu } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
+import { SubHeader } from './components/SubHeader/SubHeader';
 
-type ReminderWrapperProps = {
-  addingNewReminder: boolean;
-  onNewReminderClickAway: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const ReminderWrapper: React.FC<ReminderWrapperProps> = ({
-  addingNewReminder,
-  onNewReminderClickAway,
-}) => {
+const ReminderWrapper: React.FC = () => {
+  const [newReminderOpen, setNewReminderOpen] = useState(false);
   const newReminderRef = useRef<HTMLDivElement | null>(null);
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ['reminders'],
@@ -40,14 +32,15 @@ const ReminderWrapper: React.FC<ReminderWrapperProps> = ({
       </div>
     );
   // by not returning the first two blocks, we assume data exists
-  const parents = data?.filter((reminder) => reminder.parentID === null);
   const handleClickAway = () => {
-    onNewReminderClickAway(false);
+    setNewReminderOpen(false);
   };
-  const isAdding: boolean = addingNewReminder || data?.length === 0;
+  const isAdding: boolean = newReminderOpen || data?.length === 0;
   return (
     <Root>
       <ToastProvider>
+        <SubHeader onCreate={setNewReminderOpen} />
+        {/* //TODO: remove the entire DataProvider mechanism */}
         {/* //* reminder doesn't have a data/childs property so context is needed. */}
         {/* //* reminder list will get data passed down from reminder - to render childs*/}
         <DataProvider data={data}>
@@ -57,11 +50,11 @@ const ReminderWrapper: React.FC<ReminderWrapperProps> = ({
               <ClickAwayListener onClickAway={handleClickAway}>
                 <NewReminder
                   ref={newReminderRef}
-                  onSubmit={onNewReminderClickAway}
+                  onSubmit={setNewReminderOpen}
                 />
               </ClickAwayListener>
             )}
-            <ReminderList data={parents} isChild={false} />
+            <ReminderList data={data} isChild={false} />
           </LeftMenu>
         </DataProvider>
       </ToastProvider>

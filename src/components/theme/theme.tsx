@@ -31,6 +31,10 @@ const Theme: React.FC<ThemeProps> = ({ children }) => {
           secondary: {
             main: '#00388e',
           },
+          common: {
+            black: 'rgb(30,30,30)',
+            white: 'whitesmoke',
+          },
         },
       }),
     [prefersDarkMode]

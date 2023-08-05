@@ -4,7 +4,7 @@ import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { addNewReminderDB } from '../../../../api/functions.api';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 
 //TODO: add subreminder NewReminder component
 

@@ -1,20 +1,19 @@
-import { Root, IconButtonStyled } from './CreateReminder.styles.ts';
+import { Root } from './CreateReminder.styles.ts';
 
 import AddIcon from '@mui/icons-material/Add';
-import { useTheme } from '@mui/material';
+import { HeaderButton } from '../../../HeaderButton/HeaderButton.tsx';
 
 type CreateReminderProps = {
-  onCreate: React.Dispatch<React.SetStateAction<boolean>>;
+  onCreate?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CreateReminder: React.FC<CreateReminderProps> = ({ onCreate }) => {
-  const theme = useTheme();
   return (
     <Root>
-      reminder
-      <IconButtonStyled theme={theme} onClick={() => onCreate(true)}>
+      <HeaderButton onClick={() => onCreate && onCreate(true)}>
         <AddIcon />
-      </IconButtonStyled>
+        Create a reminder
+      </HeaderButton>
     </Root>
   );
 };

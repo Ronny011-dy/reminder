@@ -1,3 +1,5 @@
+import { DBReminder } from '../../routes/ReminderWrapper/ReminderWrapper.types';
+
 type Reminder = {
   done: boolean;
   title: string;
@@ -18,6 +20,8 @@ type ListItemButtonProps = {
   selectedIndex: number;
 };
 
-type TodoProps = Reminder & ListItemButtonProps;
+type ParentReminder = { childrenReminders?: DBReminder[] };
+
+type TodoProps = Reminder & ListItemButtonProps & ParentReminder;
 
 export type { Reminder, TodoProps };

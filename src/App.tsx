@@ -1,22 +1,17 @@
+import { Outlet } from 'react-router-dom';
+
 import { Root } from './App.styles';
-import { ReminderWrapper } from './components/ReminderWrapper/ReminderWrapper';
-import { Theme } from './components/Theme/Theme';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
-import { useState } from 'react';
+import { useTheme } from '@mui/material';
 
 const App: React.FC = () => {
-  const [newReminderOpen, setNewReminderOpen] = useState(false);
+  const theme = useTheme();
   return (
-    <Root>
-      <Theme>
-        <Header onCreate={setNewReminderOpen} />
-        <ReminderWrapper
-          addingNewReminder={newReminderOpen}
-          onNewReminderClickAway={setNewReminderOpen}
-        />
-        <Footer />
-      </Theme>
+    <Root theme={theme}>
+      <Header />
+      <Outlet />
+      <Footer />
     </Root>
   );
 };

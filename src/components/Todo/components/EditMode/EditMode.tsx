@@ -4,7 +4,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { Dialog, TextField, DialogContent, DialogActions } from '@mui/material';
 import { useState } from 'react';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { updateReminderDB } from '../../../../api/functions.api';
 

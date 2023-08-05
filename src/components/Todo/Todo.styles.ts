@@ -13,7 +13,7 @@ interface WrapperProps {
 
 const Root = styled.div<WrapperProps>(
   ({ isChild, theme }) => css`
-    width: 100%;
+    background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
     overflow-x: auto;
     margin-top: ${!isChild ? '20px' : '0'};
     border: solid 1px;
@@ -21,6 +21,7 @@ const Root = styled.div<WrapperProps>(
       ? theme.palette.primary.light
       : theme.palette.primary.main};
     border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   `
 );
 

@@ -2,7 +2,7 @@ import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { useReminderIdContext } from '../../../ReminderWrapper/hooks/useReminderIdContext';
+import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { updateReminderDB } from '../../../../api/functions.api';
 
 import { ImportantStyled } from './ImportantToggle.styles';
