@@ -9,10 +9,12 @@ type OtherOptionsProps = {};
 const OtherOptions: React.FC<OtherOptionsProps> = () => {
   return (
     <Root>
-      <HeaderButton>
-        <SettingsTwoToneIcon />
-        Settings
-      </HeaderButton>
+      <Link to={'/settings'}>
+        <HeaderButton>
+          <SettingsTwoToneIcon />
+          Settings
+        </HeaderButton>
+      </Link>
       <Link to={'/about'}>
         <HeaderButton>
           <InfoTwoToneIcon />

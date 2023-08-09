@@ -1,10 +1,11 @@
-import { useTheme } from '@mui/material';
+import { Drawer, useTheme } from '@mui/material';
 import { CreateReminder } from '../../../../components/Header/components/CreateReminder/CreateReminder';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import FilterListTwoToneIcon from '@mui/icons-material/FilterListTwoTone';
 import { Root } from './SubHeader.styles';
 import { HeaderButton } from '../../../../components/HeaderButton/HeaderButton';
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
+import { SearchAndFilter } from '../SearchAndFilter/SearchAndFilter';
 
 type SubHeaderProps = {
   onCreate?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,17 +14,14 @@ type SubHeaderProps = {
 const SubHeader = forwardRef<HTMLDivElement, SubHeaderProps>(
   ({ onCreate }, ref) => {
     const theme = useTheme();
-
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     return (
       <Root ref={ref} theme={theme}>
+        <SearchAndFilter isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
         <CreateReminder onCreate={onCreate} />
-        <HeaderButton>
-          <SearchTwoToneIcon />
-          Search
-        </HeaderButton>
-        <HeaderButton>
+        <HeaderButton onClick={() => setIsDrawerOpen(true)}>
           <FilterListTwoToneIcon />
-          Filter by tag
+          Search and Filter
         </HeaderButton>
       </Root>
     );

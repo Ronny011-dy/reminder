@@ -1,7 +1,8 @@
 import { SubHeader } from '../ReminderWrapper/components/SubHeader/SubHeader';
 import { useTheme, Slide } from '@mui/material';
-import { Root, ImgStyled, TickerStyled } from './About.styles';
+import { Root, Card, Wrapper, ChildDiv } from './About.styles';
 import { useEffect, useRef, useState } from 'react';
+import { Ticker } from './components/Ticker/Ticker';
 
 const About: React.FC = () => {
   const subHeaderRef = useRef<HTMLDivElement | null>(null);
@@ -25,17 +26,19 @@ const About: React.FC = () => {
       >
         <SubHeader ref={subHeaderRef} />
       </Slide>
-      <Root theme={theme}>
-        <div>
-          reminder<br></br> An example Todo list fullstack app build with Vite
-          and Typescript react on top of PlanentScale serverless DB with Prisma
-          query handling<br></br>Technologies
-          <TickerStyled>
-            <ImgStyled src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" />
-            <ImgStyled src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" />
-            <ImgStyled src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" />
-          </TickerStyled>
-        </div>
+      <Root>
+        <Card theme={theme}>
+          <Wrapper theme={theme}>
+            <ChildDiv theme={theme}>
+              <h1>reminder</h1>
+              <br></br> An example Todo list fullstack app built with a modern
+              tech stack, like serverless DB, page routing, agnostic server
+              queries, and otehr cool stuff<br></br>
+              <h2>Tech stack</h2>
+              <Ticker />
+            </ChildDiv>
+          </Wrapper>
+        </Card>
       </Root>
     </>
   );

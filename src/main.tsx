@@ -8,6 +8,7 @@ import './index.css';
 import { About } from './routes/About/About';
 import { ReminderWrapper } from './routes/ReminderWrapper/ReminderWrapper';
 import { Theme } from './components/Theme/Theme';
+import { Settings } from './routes/Settings/Settings';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
         element: <ReminderWrapper />,
       },
       { path: 'about', element: <About /> },
+      { path: 'settings', element: <Settings /> },
     ],
   },
 ]);

@@ -83,16 +83,20 @@ const Todo: React.FC<TodoProps> = ({
               </AlignedStack>
               <ListItemTextStyled secondary={description} />
             </Stack>
-            {!parentID && childrenReminders && <Padding />}
-            {!parentID && childrenReminders && (
-              <ChildReminder>
-                <ReminderList
-                  data={childrenReminders}
-                  isChild={true}
-                  parentID={id}
-                />
-              </ChildReminder>
-            )}
+            {!parentID &&
+              childrenReminders &&
+              childrenReminders?.length > 0 && <Padding />}
+            {!parentID &&
+              childrenReminders &&
+              childrenReminders?.length > 0 && (
+                <ChildReminder>
+                  <ReminderList
+                    data={childrenReminders}
+                    isChild={true}
+                    parentID={id}
+                  />
+                </ChildReminder>
+              )}
             <RightMenu />
           </ListItemButtonStyled>
         </ListItem>

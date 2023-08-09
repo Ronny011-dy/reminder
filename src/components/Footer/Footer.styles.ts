@@ -5,6 +5,8 @@ const Root = styled.div(
     display: flex;
     align-items: end;
     justify-content: center;
+    position: fixed;
+    bottom: 0;
     padding-bottom: 5px;
     padding-right: 10px;
     width: 100vw;

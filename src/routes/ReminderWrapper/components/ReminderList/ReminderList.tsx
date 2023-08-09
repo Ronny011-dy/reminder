@@ -33,7 +33,7 @@ const ReminderList: React.FC<ReminderListProps> = ({
     <ClickAwayListener onClickAway={handleClickAway}>
       <List disablePadding>
         {reminders &&
-          reminders.map((reminder, i) => {
+          reminders.reverse().map((reminder, i) => {
             return (
               <IdProvider id={reminder.id} key={reminder.id}>
                 <Todo
