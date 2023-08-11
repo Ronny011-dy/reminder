@@ -1,9 +1,10 @@
+import { Root } from './ReminderOptions.styles.ts';
 import { ButtonGroup } from '@mui/material';
-
 import { DeleteReminder } from '../DeleteReminder/DeleteReminder';
 import { ImportantToggle } from '../ImportantToggle/ImportantToggle';
 import { AddSubReminder } from '../AddSubReminder/AddSubReminder';
 import { EditMode } from '../EditMode/EditMode';
+import { Tags } from '../Tags/Tags';
 
 type ReminderOptionsProps = {
   important: boolean;
@@ -12,6 +13,10 @@ type ReminderOptionsProps = {
   isChild: boolean;
   isSelected: boolean;
   reminderText: string;
+  date?: number;
+  tags: string[];
+  isHidden: boolean;
+  hideHandler: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ReminderOptions: React.FC<ReminderOptionsProps> = ({
@@ -21,15 +26,29 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   isChild,
   isSelected,
   reminderText,
+  date,
+  tags,
+  hideHandler,
+  isHidden,
 }) => {
   return (
-    <ButtonGroup>
-      {isSelected && <EditMode reminderText={reminderText} />}
-      {isSelected && <ImportantToggle important={important} />}
-      {/* sub reminders can't have their own sub reminders */}
-      {!isChild && isSelected && <AddSubReminder subSetter={subSetter} />}
-      <DeleteReminder subReminders={subState} />
-    </ButtonGroup>
+    <Root>
+      <ButtonGroup>
+        {isSelected && (
+          <Tags
+            date={date}
+            tags={tags}
+            isReminderTextHidden={isHidden}
+            hideTextOnExpand={hideHandler}
+          />
+        )}
+        {isSelected && <EditMode reminderText={reminderText} />}
+        {isSelected && <ImportantToggle important={important} />}
+        {/* sub reminders can't have their own sub reminders */}
+        {!isChild && isSelected && <AddSubReminder subSetter={subSetter} />}
+        <DeleteReminder subReminders={subState} />
+      </ButtonGroup>
+    </Root>
   );
 };
 

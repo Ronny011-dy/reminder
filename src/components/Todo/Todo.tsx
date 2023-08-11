@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material';
 import type { TodoProps } from './Todo.types';
 import {
@@ -10,7 +10,6 @@ import {
   ListItemButtonStyled,
   CheckboxStyled,
 } from './Todo.styles';
-import { Tags } from './components/Tags/Tags';
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
 import { ListItem, ListItemIcon, Stack } from '@mui/material';
 import { useQueryClientAndMutation } from '../../hooks/useQueryClientAndMutation';
@@ -33,6 +32,13 @@ const Todo: React.FC<TodoProps> = ({
   selectedIndex,
   childrenReminders,
 }) => {
+  const [isTextHidden, setIsTextHidden] = useState(false);
+  const shouldDisplay = selectedIndex !== i ? true : !isTextHidden;
+  useEffect(() => {
+    if (selectedIndex !== i) {
+      setIsTextHidden(false);
+    }
+  }, [selectedIndex, i]);
   const theme = useTheme();
   const [subReminders, setSubReminders] = useState<string[]>([]);
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
@@ -60,6 +66,10 @@ const Todo: React.FC<TodoProps> = ({
               isChild={parentID !== null}
               isSelected={selectedIndex === i}
               reminderText={title}
+              date={date}
+              tags={tags}
+              isHidden={isTextHidden}
+              hideHandler={setIsTextHidden}
             />
           }
         >
@@ -68,6 +78,8 @@ const Todo: React.FC<TodoProps> = ({
             disableGutters
             selected={selectedIndex === i}
             onClick={(event) => onClick(event, i)}
+            disableRipple
+            disableTouchRipple
           >
             <Stack direction="column">
               <AlignedStack direction="row">
@@ -78,10 +90,15 @@ const Todo: React.FC<TodoProps> = ({
                     theme={theme}
                   />
                 </ListItemIcon>
-                <ListItemTextStyled primary={title} $done={done} />
-                <Tags date={date} tags={tags} />
+                <ListItemTextStyled
+                  $done={done}
+                  $display={shouldDisplay}
+                  $selected={selectedIndex === i}
+                >
+                  {title}
+                </ListItemTextStyled>
               </AlignedStack>
-              <ListItemTextStyled secondary={description} />
+              {/* <ListItemTextStyled secondary={description} /> */}
             </Stack>
             {!parentID &&
               childrenReminders &&

@@ -1,6 +1,5 @@
-import { Drawer, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { CreateReminder } from '../../../../components/Header/components/CreateReminder/CreateReminder';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import FilterListTwoToneIcon from '@mui/icons-material/FilterListTwoTone';
 import { Root } from './SubHeader.styles';
 import { HeaderButton } from '../../../../components/HeaderButton/HeaderButton';

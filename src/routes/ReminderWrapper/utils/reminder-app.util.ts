@@ -15,4 +15,8 @@ const setCookie = (cookieName: string, cookieValue: string) => {
     (document.cookie = `${cookieName}=${cookieValue}`);
 };
 
-export { getCookieValue, setCookie };
+function filterNonUnique(arr: string[]) {
+  return arr.filter((value, index, self) => self.indexOf(value) === index);
+}
+
+export { getCookieValue, setCookie, filterNonUnique };

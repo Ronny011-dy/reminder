@@ -1,9 +1,6 @@
 import { useState } from 'react';
-
 import { v4 as uuidv4 } from 'uuid';
-
 import { Stack, Chip, Collapse } from '@mui/material';
-
 import { DatePicker } from '../DatePicker/DatePicker';
 import { TextInput } from '../TextInput/TextInput';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
@@ -11,13 +8,17 @@ import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/u
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { updateReminderDB } from '../../../../api/functions.api';
-
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-
 import type { TagsProps } from './Tags.types';
+import { Root } from './Tags.styles';
 
-const Tags: React.FC<TagsProps> = ({ date, tags }) => {
+const Tags: React.FC<TagsProps> = ({
+  date,
+  tags,
+  isReminderTextHidden,
+  hideTextOnExpand,
+}) => {
   const id = useReminderIdContext();
   const done = useReminderDoneContext();
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
@@ -30,18 +31,20 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
   const handleExpander = () => {
     setOpen(!open);
     setIsAdding(false);
+    hideTextOnExpand(!isReminderTextHidden);
   };
   const openTagAdder = () => {
     setIsAdding(!isAdding);
   };
 
+  const parsedCurrentTags = `${
+    tags && tags.length > 0 ? `${[...tags.map((tag) => `"${tag}"`)]}` : ''
+  }`;
+
   const addTagHandler = () => {
     setIsAdding(!isAdding);
-    const parsedCurrentTags = `${
-      tags.length > 0 ? `${[...tags.map((tag) => `"${tag}"`)]}` : ''
-    }`;
-
-    tagText.length > 0 &&
+    // condition filters out duplicates before pushign to DB
+    (tagText.length > 0 && tags.includes(tagText)) ||
       mutation.mutate({
         id,
         req: {
@@ -71,7 +74,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
   };
 
   return (
-    <>
+    <Root>
       <Collapse in={open} orientation="horizontal">
         <Stack direction="row" spacing={0.6}>
           {!done && !isAdding && (
@@ -115,7 +118,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
       >
         {open ? <NavigateBeforeRoundedIcon /> : <MoreVertRoundedIcon />}
       </OptionWrapper>
-    </>
+    </Root>
   );
 };
 

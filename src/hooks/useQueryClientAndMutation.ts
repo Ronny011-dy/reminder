@@ -18,7 +18,8 @@ const useQueryClientAndMutation = (
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (variables: MutationVariables) => dbQueryFunction(variables),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['reminders', { id: variables.id }], data);
       queryClient.invalidateQueries(['reminders']);
     },
     onError: () => {

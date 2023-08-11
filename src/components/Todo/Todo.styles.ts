@@ -2,12 +2,14 @@ import styled, { css } from 'styled-components';
 import { Checkbox, ListItemButton } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 
-import { ListItemText, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 interface WrapperProps {
   isChild?: boolean;
   //using transient prop as the done property by itself is not registered as boolean
   $done?: boolean;
+  $display?: boolean;
+  $selected?: boolean;
   theme?: Theme;
 }
 
@@ -43,26 +45,38 @@ const Padding = styled.div`
   height: 15px;
 `;
 
-const ListItemTextStyled = styled(ListItemText)<WrapperProps>(
-  ({ $done }) => css`
+const ListItemTextStyled = styled.div<WrapperProps>(
+  ({ $done, $display, $selected }) => css`
     text-decoration: ${$done ? 'line-through' : 'none'};
     opacity: ${$done ? '50%' : '100%'};
+    margin-right: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(30vw - ${$selected ? '2' : '0'}vw);
+    max-width: 50ch;
+    display: ${$display ? 'block' : 'none'};
+    @media (max-width: 610px) {
+      width: 20vw;
+    }
   `
 );
 
 const ListItemButtonStyled = styled(ListItemButton)(
   ({ theme }) => css`
     padding: 0;
-    :hover {
+    &:hover {
       color: ${theme.palette.mode === 'dark'
         ? theme.palette.primary.light
         : theme.palette.primary.main};
+      background-color: transparent !important;
     }
   `
 );
 
 const CheckboxStyled = styled(Checkbox)(
   ({ theme }) => css`
+    margin-left: 17px !important;
     color: ${theme.palette.mode === 'dark'
       ? theme.palette.primary.light
       : theme.palette.primary.main} !important;

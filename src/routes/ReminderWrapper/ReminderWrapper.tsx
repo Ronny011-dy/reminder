@@ -33,9 +33,6 @@ const ReminderWrapper: React.FC = () => {
     <Root>
       <ToastProvider>
         <SubHeader onCreate={setNewReminderOpen} />
-        {/* //TODO: remove the entire DataProvider mechanism */}
-        {/* //* reminder doesn't have a data/childs property so context is needed. */}
-        {/* //* reminder list will get data passed down from reminder - to render childs*/}
         <LeftMenu>
           {isAdding && (
             // MUI click-away listener requires access to DOM node, hence the ref
