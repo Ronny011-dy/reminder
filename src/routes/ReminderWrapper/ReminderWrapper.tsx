@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 import { fetchRemindersDB } from '../../api/functions.api';
 
@@ -9,13 +9,16 @@ import { Root, LeftMenu } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
 import { SubHeader } from './components/SubHeader/SubHeader';
+import { DBReminder } from './ReminderWrapper.types';
 
 const ReminderWrapper: React.FC = () => {
-  const [newReminderOpen, setNewReminderOpen] = useState(false);
-  const newReminderRef = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
+
   const { isError, data, error } = useQuery({
     queryKey: ['reminders'],
     queryFn: fetchRemindersDB,
+    staleTime: 10 * (60 * 1000), // 10 mins
+    cacheTime: 15 * (60 * 1000), // 15 mins
   });
 
   if (isError)
@@ -24,11 +27,14 @@ const ReminderWrapper: React.FC = () => {
         Error occurred while fetching data {`Error description: ${error}`}
       </div>
     );
-  // by not returning the first two blocks, we assume data exists
+  const [newReminderOpen, setNewReminderOpen] = useState(false);
+  const newReminderRef = useRef<HTMLDivElement | null>(null);
+  const cachedData: DBReminder[] | undefined =
+    queryClient.getQueryData('reminders');
   const handleClickAway = () => {
     setNewReminderOpen(false);
   };
-  const isAdding: boolean = newReminderOpen || data?.length === 0;
+  const isAdding: boolean = newReminderOpen || cachedData?.length === 0;
   return (
     <Root>
       <ToastProvider>
@@ -40,7 +46,7 @@ const ReminderWrapper: React.FC = () => {
               <NewReminder ref={newReminderRef} onSubmit={setNewReminderOpen} />
             </ClickAwayListener>
           )}
-          <ReminderList data={data} isChild={false} />
+          <ReminderList data={cachedData} isChild={false} />
         </LeftMenu>
       </ToastProvider>
     </Root>

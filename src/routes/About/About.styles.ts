@@ -14,18 +14,23 @@ const Root = styled.div`
 const Card = styled.div(
   ({ theme }) => css`
     width: 60%;
-    background-color: ${theme.palette.common.white};
+    background-color: ${theme.palette.mode === 'dark'
+      ? theme.palette.common.black
+      : theme.palette.common.white};
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
+    border: solid 1px;
+    border-color: ${theme.palette.mode === 'dark'
+      ? theme.palette.primary.light
+      : theme.palette.primary.main};
   `
 );
 
 const Wrapper = styled.div(
   ({ theme }) => css`
     width: 70%;
-    color: ${theme.palette.common.black};
     overflow: hidden;
     padding: 15px;
   `

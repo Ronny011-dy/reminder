@@ -33,7 +33,7 @@ const About: React.FC = () => {
               <h1>reminder</h1>
               <br></br> An example Todo list fullstack app built with a modern
               tech stack, like serverless DB, page routing, agnostic server
-              queries, and otehr cool stuff<br></br>
+              queries, and other cool stuff!<br></br>
               <h2>Tech stack</h2>
               <Ticker />
             </ChildDiv>

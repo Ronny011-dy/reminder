@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Root = styled.div`
-  max-width: 1440px;
+  max-width: 1400px;
   height: fit-content;
   overflow: hidden;
 `;

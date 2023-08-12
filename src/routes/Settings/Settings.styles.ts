@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 import { Switch } from '@mui/material';
 
@@ -8,6 +8,27 @@ const Root = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+const StyledDiv = styled.div(
+  ({ theme }) => css`
+    background-color: ${theme.palette.mode === 'light'
+      ? theme.palette.common.white
+      : theme.palette.common.black};
+    border: solid 1px;
+    border-radius: 15px;
+    border-color: ${theme.palette.mode === 'light'
+      ? theme.palette.primary.dark
+      : theme.palette.primary.light};
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 25px;
+    h3 {
+      align-self: center;
+    }
+  `
+);
+
 const MaterialUISwitch = muiStyled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -55,4 +76,4 @@ const MaterialUISwitch = muiStyled(Switch)(({ theme }) => ({
   },
 }));
 
-export { Root, MaterialUISwitch };
+export { Root, StyledDiv, MaterialUISwitch };

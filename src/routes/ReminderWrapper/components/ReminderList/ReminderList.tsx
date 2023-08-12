@@ -1,3 +1,4 @@
+import { Root } from './ReminderList.styles';
 import { IdProvider } from '../IdProvider/IdProvider';
 import { Todo } from '../../../../components/Todo/Todo';
 import { DBReminder } from '../../ReminderWrapper.types';
@@ -30,39 +31,41 @@ const ReminderList: React.FC<ReminderListProps> = ({
   const handleClickAway = () => setSelectedIndex(-1);
 
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
-      <List disablePadding>
-        {reminders &&
-          reminders.map((reminder, i) => {
-            return (
-              <IdProvider id={reminder.id} key={reminder.id}>
-                <Todo
-                  done={Boolean(reminder.done)}
-                  title={reminder.title}
-                  description={reminder.description}
-                  tags={JSON.parse(reminder.tags)}
-                  createdDate={Number(reminder.createdDate)}
-                  date={
-                    reminder.date === null ? undefined : Number(reminder.date)
-                  }
-                  important={reminder.important}
-                  parentID={reminder.parentID}
-                  i={i}
-                  onClick={handleReminderClick}
-                  selectedIndex={selectedIndex}
-                  childrenReminders={
-                    isChild
-                      ? undefined
-                      : data?.filter(
-                          (reminder) => reminder.parentID === parentID
-                        )
-                  }
-                />
-              </IdProvider>
-            );
-          })}
-      </List>
-    </ClickAwayListener>
+    <Root>
+      <ClickAwayListener onClickAway={handleClickAway}>
+        <List disablePadding>
+          {reminders &&
+            reminders.map((reminder, i) => {
+              return (
+                <IdProvider id={reminder.id} key={reminder.id}>
+                  <Todo
+                    done={Boolean(reminder.done)}
+                    title={reminder.title}
+                    description={reminder.description}
+                    tags={JSON.parse(reminder.tags)}
+                    createdDate={Number(reminder.createdDate)}
+                    date={
+                      reminder.date === null ? undefined : Number(reminder.date)
+                    }
+                    important={reminder.important}
+                    parentID={reminder.parentID}
+                    i={i}
+                    onClick={handleReminderClick}
+                    selectedIndex={selectedIndex}
+                    childrenReminders={
+                      isChild
+                        ? undefined
+                        : data?.filter(
+                            (reminder) => reminder.parentID === parentID
+                          )
+                    }
+                  />
+                </IdProvider>
+              );
+            })}
+        </List>
+      </ClickAwayListener>
+    </Root>
   );
 };
 

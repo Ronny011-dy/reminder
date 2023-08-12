@@ -5,6 +5,7 @@ import { ImportantToggle } from '../ImportantToggle/ImportantToggle';
 import { AddSubReminder } from '../AddSubReminder/AddSubReminder';
 import { EditMode } from '../EditMode/EditMode';
 import { Tags } from '../Tags/Tags';
+import { useReminderDoneContext } from '../../hooks/useReminderDoneContext.ts';
 
 type ReminderOptionsProps = {
   important: boolean;
@@ -31,6 +32,7 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   hideHandler,
   isHidden,
 }) => {
+  const done = useReminderDoneContext();
   return (
     <Root>
       <ButtonGroup>
@@ -42,10 +44,12 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
             hideTextOnExpand={hideHandler}
           />
         )}
-        {isSelected && <EditMode reminderText={reminderText} />}
+        {!done && isSelected && <EditMode reminderText={reminderText} />}
         {isSelected && <ImportantToggle important={important} />}
         {/* sub reminders can't have their own sub reminders */}
-        {!isChild && isSelected && <AddSubReminder subSetter={subSetter} />}
+        {!done && !isChild && isSelected && (
+          <AddSubReminder subSetter={subSetter} />
+        )}
         <DeleteReminder subReminders={subState} />
       </ButtonGroup>
     </Root>

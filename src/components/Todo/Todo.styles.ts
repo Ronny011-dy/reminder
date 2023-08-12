@@ -15,6 +15,8 @@ interface WrapperProps {
 
 const Root = styled.div<WrapperProps>(
   ({ isChild, theme }) => css`
+    width: 50vw;
+    max-width: 1400px;
     background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
     overflow-x: auto;
     margin-top: ${!isChild ? '20px' : '0'};

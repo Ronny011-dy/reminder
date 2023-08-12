@@ -1,31 +1,45 @@
-import { FormControlLabel, FormGroup } from '@mui/material';
-import { Root, MaterialUISwitch } from './Settings.styles';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { FormControlLabel, FormGroup, Checkbox, useTheme } from '@mui/material';
+import { ColorModeContext } from '../../components/Theme/Theme';
+import { Root, StyledDiv, MaterialUISwitch } from './Settings.styles';
 
-type SettingsProps = {};
-
-const Settings: React.FC<SettingsProps> = () => {
-  const [themeModeLabel, setThemeModeLabel] = useState('Dark mode');
-  const [checked, setChecked] = useState(true);
+const Settings: React.FC = () => {
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+  const overriden = colorMode?.getOverrideStatus();
+  const handleOnCheck = () => {
+    colorMode?.toggleOverride();
+  };
   const toggleHandler = () => {
-    setChecked((prev) => !prev);
-    setThemeModeLabel(!checked ? 'Dark mode' : 'Light mode');
+    colorMode?.toggleColorMode();
   };
   return (
     <Root>
       <h2>Application Settings</h2>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <MaterialUISwitch
-              sx={{ m: 1 }}
-              onChange={toggleHandler}
-              checked={checked}
-            />
-          }
-          label={themeModeLabel}
-        />
-      </FormGroup>
+      <StyledDiv theme={theme}>
+        <h3>Theme</h3>
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox checked={overriden} onClick={handleOnCheck} />}
+            label={'Override OS preference'}
+          />
+          <FormControlLabel
+            disabled={!overriden}
+            control={
+              <MaterialUISwitch
+                sx={{ m: 1 }}
+                onChange={toggleHandler}
+                checked={
+                  colorMode?.getThemePreference() === 'dark' ? true : false
+                }
+              />
+            }
+            label={`${
+              colorMode?.getThemePreference() === 'dark' ? 'Dark' : 'Light'
+            } mode`}
+          />
+        </FormGroup>
+      </StyledDiv>
     </Root>
   );
 };
