@@ -13,7 +13,7 @@ const Root = styled.div`
 const LeftMenu = styled.div`
   padding-left: 30px;
   padding-right: 30px;
-  margin-top: 3.5vh;
+  margin-top: 7.5vh;
   height: 30vh;
   overflow-y: hidden;
   transition: overflow-y 0.3s ease-in-out;

@@ -28,8 +28,13 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(
       setTitle(event.target.value);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) =>
-      event.key === 'Enter' && handleSubmit;
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+        handleSubmit;
+      }
+    };
     return (
       <Root ref={ref} theme={theme}>
         <form onSubmit={handleSubmit}>

@@ -32,7 +32,7 @@ const Title = styled.h1(
     margin: 0 !important;
     transition: text-shadow 0.3s ease-in-out;
     &:hover {
-      text-shadow: 0px 0px 2px #000000;
+      text-shadow: 0px 0px 10px #000000;
     }
   `
 );

@@ -15,8 +15,9 @@ const Settings: React.FC = () => {
   };
   return (
     <Root>
-      <h2>Application Settings</h2>
       <StyledDiv theme={theme}>
+        <h2>Application Settings</h2>
+        <hr />
         <h3>Theme</h3>
         <FormGroup>
           <FormControlLabel

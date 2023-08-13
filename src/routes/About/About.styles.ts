@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 const Root = styled.div`
   height: 80vh;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   border-radius: 15px;
@@ -13,18 +12,21 @@ const Root = styled.div`
 `;
 const Card = styled.div(
   ({ theme }) => css`
+    margin-top: 7.5vh;
     width: 60%;
-    background-color: ${theme.palette.mode === 'dark'
-      ? theme.palette.common.black
-      : theme.palette.common.white};
+    background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 15px;
     border: solid 1px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-color: ${theme.palette.mode === 'dark'
       ? theme.palette.primary.light
       : theme.palette.primary.main};
+    @media (max-width: 1440px) {
+      margin-top: 12vh;
+    }
   `
 );
 

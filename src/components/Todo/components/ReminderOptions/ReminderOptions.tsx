@@ -47,9 +47,9 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
         {!done && isSelected && <EditMode reminderText={reminderText} />}
         {isSelected && <ImportantToggle important={important} />}
         {/* sub reminders can't have their own sub reminders */}
-        {!done && !isChild && isSelected && (
+        {/* {!done && !isChild && isSelected && (
           <AddSubReminder subSetter={subSetter} />
-        )}
+        )} */}
         <DeleteReminder subReminders={subState} />
       </ButtonGroup>
     </Root>

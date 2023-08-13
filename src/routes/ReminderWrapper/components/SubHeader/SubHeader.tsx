@@ -7,16 +7,23 @@ import { forwardRef, useState } from 'react';
 import { SearchAndFilter } from '../SearchAndFilter/SearchAndFilter';
 
 type SubHeaderProps = {
+  searchHandler: React.Dispatch<React.SetStateAction<string>>;
+  filterHandler: React.Dispatch<React.SetStateAction<string[]>>;
   onCreate?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SubHeader = forwardRef<HTMLDivElement, SubHeaderProps>(
-  ({ onCreate }, ref) => {
+  ({ onCreate, searchHandler, filterHandler }, ref) => {
     const theme = useTheme();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     return (
       <Root ref={ref} theme={theme}>
-        <SearchAndFilter isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+        <SearchAndFilter
+          isOpen={isDrawerOpen}
+          setIsOpen={setIsDrawerOpen}
+          onSearch={searchHandler}
+          onFilter={filterHandler}
+        />
         <CreateReminder onCreate={onCreate} />
         <HeaderButton onClick={() => setIsDrawerOpen(true)}>
           <FilterListTwoToneIcon />

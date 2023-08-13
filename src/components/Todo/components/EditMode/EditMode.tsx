@@ -13,10 +13,26 @@ import { useFocus } from '../../../../hooks/useFocus';
 type EditModeProps = { reminderText: string };
 
 const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) =>
-    event.key === 'Enter' && !cantSave && onSave();
-  // state of dialog open
+  const id = useReminderIdContext();
+  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
+  const [title, setTitle] = useState(reminderText);
   const [isEditing, setIsEditing] = useState(false);
+  const cantSave = title === '' || title.length >= 100;
+  const onSave = () => {
+    title !== reminderText && mutation.mutate({ id, req: { title: title } });
+    setTimeout(() => {
+      setTitle(title);
+    }, 150);
+    setIsEditing(false);
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      !cantSave && onSave();
+    }
+  };
+  // state of dialog open
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useFocus({
@@ -24,9 +40,6 @@ const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
     elementRendered: isEditing,
   });
 
-  const id = useReminderIdContext();
-  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
-  const [title, setTitle] = useState(reminderText);
   const handleClose = () => {
     setIsEditing(false);
     // fill in the value from the DB if the field was cleared and the dialog is then closed
@@ -37,13 +50,7 @@ const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
   const textChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
-  const onSave = () => {
-    title !== reminderText && mutation.mutate({ id, req: { title: title } });
-    setTimeout(() => {
-      setTitle(title);
-    }, 150);
-    setIsEditing(false);
-  };
+
   // basic validation of title
   const error =
     title === ''
@@ -51,7 +58,6 @@ const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
       : title.length >= 100
       ? 'Title is over 100 characters'
       : '';
-  const cantSave = title === '' || title.length >= 100;
   return (
     <Root>
       <OptionWrapper onClick={() => setIsEditing(true)} title="Edit reminder">

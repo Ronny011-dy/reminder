@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
-import { TextInput } from '../TextInput/TextInput';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { updateReminderDB } from '../../../../api/functions.api';
-import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
+import KeyboardArrowRightTwoToneIcon from '@mui/icons-material/KeyboardArrowRightTwoTone';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import type { TagsProps } from './Tags.types';
-import { Root } from './Tags.styles';
+import { Root, TagsWrapper, TagInput, AddButton } from './Tags.styles';
+import { useFocus } from '../../../../hooks/useFocus';
 
 const Tags: React.FC<TagsProps> = ({
   date,
@@ -19,32 +20,49 @@ const Tags: React.FC<TagsProps> = ({
   isReminderTextHidden,
   hideTextOnExpand,
 }) => {
+  const [tagCollapseOpen, setTagCollapseOpen] = useState(false);
+  const [tagAdderOpen, setTagAdderOpen] = useState(false);
+  const [tagText, setTagText] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  useFocus({
+    inputRef,
+    elementRendered: tagAdderOpen,
+  });
   const id = useReminderIdContext();
   const done = useReminderDoneContext();
   const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
-  const [tagText, setTagText] = useState('');
-  // for tags component
-  const [open, setOpen] = useState(false);
-  // for tag adder in tags component
-  const [isAdding, setIsAdding] = useState(false);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      addTagHandler();
+    }
+  };
   // close tag adder if tags are collapsed
   const handleExpander = () => {
-    setOpen(!open);
-    setIsAdding(false);
+    setTagCollapseOpen(!tagCollapseOpen);
+    setTagAdderOpen(false);
     hideTextOnExpand(!isReminderTextHidden);
   };
   const openTagAdder = () => {
-    setIsAdding(!isAdding);
+    setTagAdderOpen((prev) => !prev);
   };
 
   const parsedCurrentTags = `${
     tags && tags.length > 0 ? `${[...tags.map((tag) => `"${tag}"`)]}` : ''
   }`;
 
+  const tagInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagText(e.target.value);
+  };
+
   const addTagHandler = () => {
-    setIsAdding(!isAdding);
+    setTagAdderOpen((prev) => !prev);
+    if (tagText.length === 0) {
+      return;
+    }
     // condition filters out duplicates before pushign to DB
-    (tagText.length > 0 && tags.includes(tagText)) ||
+    !tags.includes(tagText) &&
       mutation.mutate({
         id,
         req: {
@@ -75,30 +93,11 @@ const Tags: React.FC<TagsProps> = ({
 
   return (
     <Root>
-      <Collapse in={open} orientation="horizontal">
+      <Collapse in={tagCollapseOpen} orientation="horizontal">
         <Stack direction="row" spacing={0.6}>
-          {!done && !isAdding && (
-            <Chip
-              label="Add tag"
-              variant="outlined"
-              size="small"
-              onClick={openTagAdder}
-            />
-          )}
-          <Collapse in={isAdding} orientation="horizontal">
-            {open && (
-              <TextInput
-                title=""
-                placeholder="Enter tag"
-                accept={addTagHandler}
-                autoFocus
-                isTag
-                setTagText={setTagText}
-              />
-            )}
-          </Collapse>
+          {/* <TagsWrapper> */}
           {tags.map((tag, i) => {
-            return done || isAdding ? (
+            return done || tagAdderOpen ? (
               <Chip key={uuidv4()} label={tag} size="small" />
             ) : (
               <Chip
@@ -109,14 +108,43 @@ const Tags: React.FC<TagsProps> = ({
               />
             );
           })}
+          {/* </TagsWrapper> */}
+          {!done && !tagAdderOpen && (
+            <Chip
+              label="Add tag"
+              variant="outlined"
+              size="small"
+              onClick={openTagAdder}
+            />
+          )}
+          <Collapse in={tagAdderOpen} orientation="horizontal">
+            {tagCollapseOpen && (
+              <TagInput>
+                <input
+                  placeholder="Enter tag"
+                  ref={inputRef}
+                  value={tagText}
+                  onChange={tagInputChangeHandler}
+                  onKeyDown={handleKeyDown}
+                />
+                <AddButton onClick={addTagHandler} disableRipple>
+                  <AddTwoToneIcon />
+                </AddButton>
+              </TagInput>
+            )}
+          </Collapse>
           <DatePicker date={date} />
         </Stack>
       </Collapse>
       <OptionWrapper
-        title={`${open ? 'Minimize' : 'Show more'}`}
+        title={`${tagCollapseOpen ? 'Minimize' : 'Show more'}`}
         onClick={handleExpander}
       >
-        {open ? <NavigateBeforeRoundedIcon /> : <MoreVertRoundedIcon />}
+        {tagCollapseOpen ? (
+          <KeyboardArrowRightTwoToneIcon />
+        ) : (
+          <MoreVertRoundedIcon />
+        )}
       </OptionWrapper>
     </Root>
   );

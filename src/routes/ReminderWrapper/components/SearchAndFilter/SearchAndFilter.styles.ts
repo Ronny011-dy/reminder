@@ -1,3 +1,4 @@
+import { Drawer } from '@mui/material';
 import styled, { css } from 'styled-components';
 
 const lightMode = () => css`
@@ -15,6 +16,14 @@ const darkMode = () => css`
 `;
 
 const Root = styled.div``;
+
+const StyledDrawer = styled(Drawer)`
+  .MuiDrawer-root {
+    .MuiBackdrop-root {
+      background-color: transparent;
+    }
+  }
+`;
 
 const DrawerWrapper = styled.div(
   ({ theme }) => css`
@@ -58,4 +67,11 @@ const SearchIconButton = styled.div`
   top: 30px;
 `;
 
-export { Root, DrawerWrapper, InputStyled, SearchWrapper, SearchIconButton };
+export {
+  Root,
+  StyledDrawer,
+  DrawerWrapper,
+  InputStyled,
+  SearchWrapper,
+  SearchIconButton,
+};

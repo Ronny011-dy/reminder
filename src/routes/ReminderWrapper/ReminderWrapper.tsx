@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 
 import { fetchRemindersDB } from '../../api/functions.api';
 
@@ -9,11 +9,8 @@ import { Root, LeftMenu } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
 import { SubHeader } from './components/SubHeader/SubHeader';
-import { DBReminder } from './ReminderWrapper.types';
 
 const ReminderWrapper: React.FC = () => {
-  const queryClient = useQueryClient();
-
   const { isError, data, error } = useQuery({
     queryKey: ['reminders'],
     queryFn: fetchRemindersDB,
@@ -27,18 +24,28 @@ const ReminderWrapper: React.FC = () => {
         Error occurred while fetching data {`Error description: ${error}`}
       </div>
     );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filtersArr, setFiltersArr] = useState<string[]>([]);
+  const filterData = () => {
+    if (filtersArr.length === 0) return data;
+    return data?.filter((reminder) =>
+      JSON.parse(reminder.tags).some((tag: string) => filtersArr.includes(tag))
+    );
+  };
   const [newReminderOpen, setNewReminderOpen] = useState(false);
   const newReminderRef = useRef<HTMLDivElement | null>(null);
-  const cachedData: DBReminder[] | undefined =
-    queryClient.getQueryData('reminders');
   const handleClickAway = () => {
     setNewReminderOpen(false);
   };
-  const isAdding: boolean = newReminderOpen || cachedData?.length === 0;
+  const isAdding: boolean = newReminderOpen || data?.length === 0;
   return (
     <Root>
       <ToastProvider>
-        <SubHeader onCreate={setNewReminderOpen} />
+        <SubHeader
+          onCreate={setNewReminderOpen}
+          searchHandler={setSearchQuery}
+          filterHandler={setFiltersArr}
+        />
         <LeftMenu>
           {isAdding && (
             // MUI click-away listener requires access to DOM node, hence the ref
@@ -46,7 +53,12 @@ const ReminderWrapper: React.FC = () => {
               <NewReminder ref={newReminderRef} onSubmit={setNewReminderOpen} />
             </ClickAwayListener>
           )}
-          <ReminderList data={cachedData} isChild={false} />
+          <ReminderList
+            data={filterData()?.filter((reminder) =>
+              reminder.title.includes(searchQuery)
+            )}
+            isChild={false}
+          />
         </LeftMenu>
       </ToastProvider>
     </Root>
