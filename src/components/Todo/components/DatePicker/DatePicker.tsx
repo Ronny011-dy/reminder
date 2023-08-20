@@ -7,18 +7,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
-import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { updateReminderDB } from '../../../../api/functions.api';
 import type { DatePickerProps } from './DatePicker.types';
+import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 
 const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
   const id = useReminderIdContext();
   const done = useReminderDoneContext();
-  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
+  const mutation = useQueryUpdate();
   // initializes with current date or saved date if exists
-  const [dateValue, setDateValue] = React.useState<Dayjs | null>(
-    date ? dayjs.unix(date) : dayjs()
-  );
+  const [dateValue, setDateValue] = React.useState<Dayjs | null>(date ? dayjs.unix(date) : dayjs());
 
   //popover logic
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -33,11 +30,11 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
   const dateChangeHandler = (newDate: dayjs.Dayjs | null) => {
     setAnchorEl(null);
     setDateValue(newDate);
-    mutation.mutate({ id, req: { date: String(newDate?.unix()) } });
+    mutation?.mutate({ id, req: { date: String(newDate?.unix()) } });
   };
 
   const deleteDateHandler = () => {
-    mutation.mutate({ id, req: { date: undefined } });
+    mutation?.mutate({ id, req: { date: undefined } });
   };
 
   const open = Boolean(anchorEl);
@@ -67,7 +64,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
         onClose={closeCalendarHandler}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'left'
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>

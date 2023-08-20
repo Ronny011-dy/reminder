@@ -12,12 +12,10 @@ type Reminder = {
 };
 
 type ListItemButtonProps = {
-  i: number;
-  onClick: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number
-  ) => void;
+  reminderIndex: number;
   selectedIndex: number;
+  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void;
+  lastElementRef?: (element: any) => void;
 };
 
 type ParentReminder = { childrenReminders?: DBReminder[] };

@@ -3,7 +3,7 @@ import { Root, ListItemStyled, CheckboxStyled } from './Filters.styles';
 import { useQueryClient } from 'react-query';
 import type { DBReminder } from '../../ReminderWrapper.types';
 import { useEffect, useState } from 'react';
-import { filterNonUnique } from '../../utils/reminder-app.util';
+import { filterNonUnique } from '../../utils/ReminderWrapper.util';
 import { useLocalStorage } from '../../../../hooks/useLocalStorage';
 
 interface CheckboxStates {
@@ -14,8 +14,7 @@ type FiltersProps = { onCheck: React.Dispatch<React.SetStateAction<string[]>> };
 const Filters: React.FC<FiltersProps> = ({ onCheck }) => {
   const theme = useTheme();
   const queryClient = useQueryClient();
-  const cachedData: DBReminder[] | undefined =
-    queryClient.getQueryData('reminders');
+  const cachedData: DBReminder[] | undefined = queryClient.getQueryData('reminders');
   const [filters, setFilters] = useState<string[]>([]);
   useEffect(() => {
     cachedData?.map(
@@ -23,14 +22,12 @@ const Filters: React.FC<FiltersProps> = ({ onCheck }) => {
         reminder.tags &&
         reminder.tags.length > 0 &&
         JSON.parse(reminder.tags).map((tag: string) => {
-          !filters.includes(tag) &&
-            setFilters((prev) => [...filterNonUnique(prev), tag]);
+          !filters.includes(tag) && setFilters((prev) => [...filterNonUnique(prev), tag]);
         })
     );
-  }, [cachedData]);
+  }, [cachedData, filters]);
 
-  const [filtersLocalStorage, setFiltersLocalStorage] =
-    useLocalStorage<CheckboxStates>('reminders_Filter_State', {});
+  const [filtersLocalStorage, setFiltersLocalStorage] = useLocalStorage<CheckboxStates>('reminders_Filter_State', {});
 
   const checkBoxHandler = (filterText: string) => {
     // filter exists in locaStorage
@@ -39,11 +36,10 @@ const Filters: React.FC<FiltersProps> = ({ onCheck }) => {
       filtersLocalStorage[filterText] === true &&
         onCheck((prev) => prev.filter((filterTag) => filterTag !== filterText));
       // if the value was false then it means the filter doesn't exist in the filterState
-      filtersLocalStorage[filterText] === false &&
-        onCheck((prev) => [...prev, filterText]);
+      filtersLocalStorage[filterText] === false && onCheck((prev) => [...prev, filterText]);
       setFiltersLocalStorage((prev) => ({
         ...prev,
-        [filterText]: !prev[filterText],
+        [filterText]: !prev[filterText]
       }));
     }
     // filter doesn't exist in locaStorage
@@ -56,18 +52,17 @@ const Filters: React.FC<FiltersProps> = ({ onCheck }) => {
 
   return (
     <Root>
-      {filterNonUnique(filters).length > 0
-        ? 'Filter by tag'
-        : 'No available filters'}
+      {filterNonUnique(filters).length > 0 ? 'Filter by tag' : 'No available filters'}
       <List>
         {filters.slice(0, -1).map((filter, i) => (
-          <ListItemStyled dense disableGutters disablePadding key={i}>
+          <ListItemStyled
+            dense
+            disableGutters
+            disablePadding
+            key={i}
+          >
             <CheckboxStyled
-              checked={
-                filtersLocalStorage[filter] === undefined
-                  ? false
-                  : filtersLocalStorage[filter]
-              }
+              checked={filtersLocalStorage[filter] === undefined ? false : filtersLocalStorage[filter]}
               theme={theme}
               onClick={() => checkBoxHandler(filter)}
             />

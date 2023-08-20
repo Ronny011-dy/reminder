@@ -1,88 +1,79 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTheme } from '@mui/material';
 import type { TodoProps } from './Todo.types';
 import {
   Root,
+  StyledListItem,
+  StyledDiv,
   ChildReminder,
-  AlignedStack,
   Padding,
-  ListItemTextStyled,
-  ListItemButtonStyled,
-  CheckboxStyled,
+  StyledListItemText,
+  StyledListItemButton,
+  CheckboxStyled
 } from './Todo.styles';
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
-import { ListItem, ListItemIcon, Stack } from '@mui/material';
-import { useQueryClientAndMutation } from '../../hooks/useQueryClientAndMutation';
-import { updateReminderDB } from '../../api/functions.api';
+import { ListItemIcon } from '@mui/material';
+import { useQueryUpdate } from '../../api/reactQueryMutations';
 import { useReminderIdContext } from '../../routes/ReminderWrapper/hooks/useReminderIdContext';
 import { ReminderList } from '../../routes/ReminderWrapper/components/ReminderList/ReminderList';
 import { RightMenu } from './components/RightMenu/RightMenu';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
+import { Tags } from './components/Tags/Tags';
 
 const Todo: React.FC<TodoProps> = ({
   done,
-  title,
   description,
-  tags,
-  date,
-  important,
   parentID,
-  i,
+  reminderIndex,
   onClick,
   selectedIndex,
   childrenReminders,
+  lastElementRef,
+  tags,
+  ...restOfReminderProps
 }) => {
-  const [isTextHidden, setIsTextHidden] = useState(false);
-  const shouldDisplay = selectedIndex !== i ? true : !isTextHidden;
-  useEffect(() => {
-    if (selectedIndex !== i) {
-      setIsTextHidden(false);
-    }
-  }, [selectedIndex, i]);
   const theme = useTheme();
   const [subReminders, setSubReminders] = useState<string[]>([]);
-  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
+  const mutation = useQueryUpdate();
   const id = useReminderIdContext();
 
   const doneHandler = () => {
-    subReminders &&
-      subReminders.map((sub) =>
-        mutation.mutate({ id: sub, req: { done: !done } })
-      );
-    mutation.mutate({ id, req: { done: !done } });
+    subReminders?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
+    mutation?.mutate({ id, req: { done: !done } });
   };
 
   return (
-    <Root isChild={parentID !== null} theme={theme}>
+    <Root ref={lastElementRef}>
       <DoneProvider done={done}>
-        <ListItem
+        <StyledListItem
+          theme={theme}
           disablePadding
           disableGutters
           secondaryAction={
             <ReminderOptions
-              important={important}
-              subState={subReminders}
-              subSetter={setSubReminders}
+              {...restOfReminderProps}
+              subReminders={subReminders}
+              setSubReminders={setSubReminders}
               isChild={parentID !== null}
-              isSelected={selectedIndex === i}
-              reminderText={title}
-              date={date}
-              tags={tags}
-              isHidden={isTextHidden}
-              hideHandler={setIsTextHidden}
+              isSelected={selectedIndex === reminderIndex}
             />
           }
+          $isChild={parentID !== null}
         >
-          <ListItemButtonStyled
+          <StyledListItemButton
             theme={theme}
+            selected={selectedIndex === reminderIndex}
+            onClick={(event) => onClick(event, reminderIndex)}
             disableGutters
-            selected={selectedIndex === i}
-            onClick={(event) => onClick(event, i)}
-            disableRipple
-            disableTouchRipple
           >
-            <Stack direction="column">
-              <AlignedStack direction="row">
+            <StyledDiv
+              orientation="column"
+              align
+            >
+              <StyledDiv
+                orientation="row"
+                align
+              >
                 <ListItemIcon>
                   <CheckboxStyled
                     checked={done}
@@ -90,33 +81,34 @@ const Todo: React.FC<TodoProps> = ({
                     theme={theme}
                   />
                 </ListItemIcon>
-                <ListItemTextStyled
+                <StyledListItemText
                   $done={done}
-                  $display={shouldDisplay}
-                  $selected={selectedIndex === i}
+                  selected={selectedIndex === reminderIndex}
                 >
-                  {title}
-                </ListItemTextStyled>
-              </AlignedStack>
-              {/* <ListItemTextStyled secondary={description} /> */}
-            </Stack>
-            {!parentID &&
-              childrenReminders &&
-              childrenReminders?.length > 0 && <Padding />}
-            {!parentID &&
-              childrenReminders &&
-              childrenReminders?.length > 0 && (
-                <ChildReminder>
-                  <ReminderList
-                    data={childrenReminders}
-                    isChild={true}
-                    parentID={id}
-                  />
-                </ChildReminder>
-              )}
-            <RightMenu />
-          </ListItemButtonStyled>
-        </ListItem>
+                  {restOfReminderProps.title}
+                </StyledListItemText>
+              </StyledDiv>
+              <StyledDiv
+                orientation="column"
+                paddingLeft
+              >
+                <StyledListItemText secondary>{description.length > 0 ? `${description}` : '•••'}</StyledListItemText>
+                <Tags tags={tags} />
+                {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
+                {!parentID && childrenReminders && childrenReminders?.length > 0 && (
+                  <ChildReminder>
+                    <ReminderList
+                      data={childrenReminders}
+                      isChild={true}
+                      parentID={id}
+                    />
+                  </ChildReminder>
+                )}
+              </StyledDiv>
+              <RightMenu />
+            </StyledDiv>
+          </StyledListItemButton>
+        </StyledListItem>
       </DoneProvider>
     </Root>
   );

@@ -4,9 +4,7 @@ import { HeaderButton } from '../../../HeaderButton/HeaderButton';
 import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
 import InfoTwoToneIcon from '@mui/icons-material/InfoTwoTone';
 
-type OtherOptionsProps = {};
-
-const OtherOptions: React.FC<OtherOptionsProps> = () => {
+const OtherOptions: React.FC = () => {
   return (
     <Root>
       <Link to={'/settings'}>

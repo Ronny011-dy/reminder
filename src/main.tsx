@@ -16,12 +16,12 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <ReminderWrapper />,
+        element: <ReminderWrapper />
       },
       { path: 'about', element: <About /> },
-      { path: 'settings', element: <Settings /> },
-    ],
-  },
+      { path: 'settings', element: <Settings /> }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

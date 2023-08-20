@@ -3,10 +3,7 @@ import styled, { css } from 'styled-components';
 
 const lightMode = () => css`
   background-color: whitesmoke;
-  background-image: radial-gradient(
-      rgba(68, 77, 247, 0.175) 0.8px,
-      transparent 0.8px
-    ),
+  background-image: radial-gradient(rgba(68, 77, 247, 0.175) 0.8px, transparent 0.8px),
     radial-gradient(rgba(68, 77, 247, 0.207) 0.8px, #e5e5f7 0.8px);
 `;
 const darkMode = () => css`
@@ -35,9 +32,7 @@ const DrawerWrapper = styled.div(
     flex-direction: column;
     ${theme.palette.mode === 'dark' ? darkMode : lightMode};
     border-left: solid 2px;
-    border-color: ${theme.palette.mode === 'dark'
-      ? theme.palette.primary.light
-      : theme.palette.primary.main};
+    border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     padding: 25px;
   `
 );
@@ -67,11 +62,4 @@ const SearchIconButton = styled.div`
   top: 30px;
 `;
 
-export {
-  Root,
-  StyledDrawer,
-  DrawerWrapper,
-  InputStyled,
-  SearchWrapper,
-  SearchIconButton,
-};
+export { Root, StyledDrawer, DrawerWrapper, InputStyled, SearchWrapper, SearchIconButton };

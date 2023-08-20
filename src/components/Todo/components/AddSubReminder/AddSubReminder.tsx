@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
-import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { addNewReminderDB } from '../../../../api/functions.api';
+import { addNewReminder } from '../../../../api/reminders';
 import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useQueryCreate } from '../../../../api/reactQueryMutations';
 
 //TODO: add subreminder NewReminder component
 
@@ -16,7 +16,7 @@ const AddSubReminder: React.FC<AddSubReminderProps> = ({ subSetter }) => {
   const parentID = useReminderIdContext();
   const id = uuidv4();
   // create a reminder and assign it with a parentID
-  const mutation = useQueryClientAndMutation(addNewReminderDB, 'Create');
+  const mutation = useQueryCreate();
 
   const subAddhandler = () => {
     mutation.mutate({ id, parentID });
@@ -24,7 +24,10 @@ const AddSubReminder: React.FC<AddSubReminderProps> = ({ subSetter }) => {
   };
 
   return (
-    <OptionWrapper title="Add sub-reminder" onClick={subAddhandler}>
+    <OptionWrapper
+      title="Add sub-reminder"
+      onClick={subAddhandler}
+    >
       <ChecklistRoundedIcon />
     </OptionWrapper>
   );

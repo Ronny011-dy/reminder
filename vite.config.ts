@@ -6,6 +6,6 @@ export default defineConfig({
   server: { proxy: { '/api': 'http://localhost:5001' } },
   plugins: [react()],
   resolve: {
-    alias: { src: '/src', components: '/src/components' },
-  },
+    alias: { src: '/src', components: '/src/components' }
+  }
 });

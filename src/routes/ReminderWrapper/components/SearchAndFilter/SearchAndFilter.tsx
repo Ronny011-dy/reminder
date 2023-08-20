@@ -5,7 +5,7 @@ import {
   DrawerWrapper,
   InputStyled,
   SearchWrapper,
-  SearchIconButton,
+  SearchIconButton
 } from './SearchAndFilter.styles';
 import { useTheme } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
@@ -20,12 +20,7 @@ type SearchAndFilterProps = {
   onFilter: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
-  isOpen,
-  setIsOpen,
-  onSearch,
-  onFilter,
-}) => {
+const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ isOpen, setIsOpen, onSearch, onFilter }) => {
   const [searchText, setSearchedText] = useState('');
   const onSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);

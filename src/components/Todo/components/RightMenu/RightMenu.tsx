@@ -1,6 +1,4 @@
-type RightMenuProps = {};
-
-const RightMenu: React.FC<RightMenuProps> = () => {
+const RightMenu: React.FC = () => {
   return <></>;
 };
 

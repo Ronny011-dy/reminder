@@ -3,6 +3,7 @@ import { Root } from './HeaderButton.styles';
 
 type HeaderButtonProps = {
   children: ReactNode;
+  // also used in subheader, where onClick is needed. Not needed for routing
   onClick?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

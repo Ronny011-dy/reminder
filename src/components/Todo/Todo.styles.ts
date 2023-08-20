@@ -1,34 +1,61 @@
 import styled, { css } from 'styled-components';
-import { Checkbox, ListItemButton } from '@mui/material';
+import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 
-import { Stack } from '@mui/material';
-
 interface WrapperProps {
-  isChild?: boolean;
-  //using transient prop as the done property by itself is not registered as boolean
-  $done?: boolean;
+  $isChild?: boolean;
   $display?: boolean;
-  $selected?: boolean;
   theme?: Theme;
 }
 
-const Root = styled.div<WrapperProps>(
-  ({ isChild, theme }) => css`
+interface StyledListItemTextProps {
+  secondary?: boolean;
+  //using transient prop as the done property by itself is not registered as boolean
+  $done?: boolean;
+  selected?: boolean;
+}
+
+interface StyledDivProps {
+  orientation: 'row' | 'column';
+  align?: boolean;
+  justify?: boolean;
+  paddingLeft?: boolean;
+}
+
+const alignedToCenter = css`
+  align-items: center;
+`;
+
+const justifiedToCenter = css`
+  justify-content: center;
+`;
+
+export const Root = styled.div``;
+
+export const StyledListItem = styled(ListItem)<WrapperProps>(
+  ({ $isChild, theme }) => css`
     width: 50vw;
-    max-width: 1400px;
+    max-width: 1000px;
     background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
-    margin-top: ${!isChild ? '20px' : '0'};
+    margin-top: ${!$isChild ? '20px' : '0'};
     border: solid 1px;
-    border-color: ${theme.palette.mode === 'dark'
-      ? theme.palette.primary.light
-      : theme.palette.primary.main};
+    border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   `
 );
 
-const ChildReminder = styled.div`
+export const StyledDiv = styled.div<StyledDivProps>(
+  ({ orientation, align, justify, paddingLeft }) => css`
+    display: flex;
+    flex-direction: ${orientation};
+    ${align && alignedToCenter};
+    ${justify && justifiedToCenter};
+    padding-left: ${paddingLeft ? '20' : '0'}px;
+  `
+);
+
+export const ChildReminder = styled.div`
   background-color: rgb(23, 46, 69);
   border: solid 2px rgba(255, 255, 255, 0.486);
   border-radius: 15px;
@@ -36,60 +63,39 @@ const ChildReminder = styled.div`
   margin-right: 25px;
 `;
 
-const AlignedStack = styled(Stack)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const Padding = styled.div`
+export const Padding = styled.div`
   height: 15px;
 `;
 
-const ListItemTextStyled = styled.div<WrapperProps>(
-  ({ $done, $display, $selected }) => css`
+export const StyledListItemText = styled.div<StyledListItemTextProps>(
+  ({ $done, selected, secondary }) => css`
     text-decoration: ${$done ? 'line-through' : 'none'};
-    opacity: ${$done ? '50%' : '100%'};
+    opacity: ${$done || secondary ? '50%' : '100%'};
     margin-right: 15px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: calc(30vw - ${$selected ? '2' : '0'}vw);
+    width: calc(30vw - ${selected ? '2' : '0'}vw);
     max-width: 50ch;
-    display: ${$display ? 'block' : 'none'};
     @media (max-width: 610px) {
       width: 20vw;
     }
   `
 );
 
-const ListItemButtonStyled = styled(ListItemButton)(
+export const StyledListItemButton = styled(ListItemButton)(
   ({ theme }) => css`
-    padding: 0;
+    border-radius: 15px !important;
     &:hover {
-      color: ${theme.palette.mode === 'dark'
-        ? theme.palette.primary.light
-        : theme.palette.primary.main};
+      color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
       background-color: transparent !important;
     }
   `
 );
 
-const CheckboxStyled = styled(Checkbox)(
+export const CheckboxStyled = styled(Checkbox)(
   ({ theme }) => css`
-    margin-left: 17px !important;
-    color: ${theme.palette.mode === 'dark'
-      ? theme.palette.primary.light
-      : theme.palette.primary.main} !important;
+    margin-left: 10px !important;
+    color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main} !important;
   `
 );
-
-export {
-  Root,
-  ChildReminder,
-  AlignedStack,
-  Padding,
-  ListItemTextStyled,
-  ListItemButtonStyled,
-  CheckboxStyled,
-};

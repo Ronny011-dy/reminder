@@ -21,9 +21,7 @@ const Card = styled.div(
     border-radius: 15px;
     border: solid 1px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    border-color: ${theme.palette.mode === 'dark'
-      ? theme.palette.primary.light
-      : theme.palette.primary.main};
+    border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     @media (max-width: 1440px) {
       margin-top: 12vh;
     }
@@ -31,7 +29,7 @@ const Card = styled.div(
 );
 
 const Wrapper = styled.div(
-  ({ theme }) => css`
+  () => css`
     width: 70%;
     overflow: hidden;
     padding: 15px;

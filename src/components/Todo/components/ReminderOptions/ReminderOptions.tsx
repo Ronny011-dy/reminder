@@ -9,48 +9,34 @@ import { useReminderDoneContext } from '../../hooks/useReminderDoneContext.ts';
 
 type ReminderOptionsProps = {
   important: boolean;
-  subState: string[];
-  subSetter: React.Dispatch<React.SetStateAction<string[]>>;
+  subReminders: string[];
+  setSubReminders: React.Dispatch<React.SetStateAction<string[]>>;
   isChild: boolean;
   isSelected: boolean;
-  reminderText: string;
+  title: string;
   date?: number;
-  tags: string[];
-  isHidden: boolean;
-  hideHandler: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   important,
-  subState,
-  subSetter,
+  subReminders,
+  setSubReminders,
   isChild,
   isSelected,
-  reminderText,
-  date,
-  tags,
-  hideHandler,
-  isHidden,
+  title,
+  date
 }) => {
   const done = useReminderDoneContext();
   return (
     <Root>
       <ButtonGroup>
-        {isSelected && (
-          <Tags
-            date={date}
-            tags={tags}
-            isReminderTextHidden={isHidden}
-            hideTextOnExpand={hideHandler}
-          />
-        )}
-        {!done && isSelected && <EditMode reminderText={reminderText} />}
+        {!done && isSelected && <EditMode reminderText={title} />}
         {isSelected && <ImportantToggle important={important} />}
         {/* sub reminders can't have their own sub reminders */}
         {/* {!done && !isChild && isSelected && (
-          <AddSubReminder subSetter={subSetter} />
+          <AddSubReminder setSubReminders={setSubReminders} />
         )} */}
-        <DeleteReminder subReminders={subState} />
+        <DeleteReminder subReminders={subReminders} />
       </ButtonGroup>
     </Root>
   );

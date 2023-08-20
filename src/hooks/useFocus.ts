@@ -10,12 +10,9 @@ type hookProps = {
 const useFocus = ({ inputRef, elementRendered }: hookProps): void => {
   const [shouldFocus, setShouldFocus] = useState(false);
   useEffect(() => {
-    elementRendered &&
-      inputRef.current &&
-      shouldFocus &&
-      inputRef.current.focus();
+    elementRendered && inputRef.current && shouldFocus && inputRef.current.focus();
     setShouldFocus(false);
-  }, [elementRendered, shouldFocus]);
+  }, [elementRendered, shouldFocus, inputRef]);
 
   useEffect(() => {
     elementRendered && setShouldFocus(true);

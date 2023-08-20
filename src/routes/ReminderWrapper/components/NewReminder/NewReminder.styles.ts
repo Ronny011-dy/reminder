@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 const Root = styled.div(
   ({ theme }) => css`
     width: 50vw;
+    max-width: 1000px;
     margin-top: 20px;
     border: 2px dashed;
     border-radius: 15px;

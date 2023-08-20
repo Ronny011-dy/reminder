@@ -6,7 +6,6 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   height: 80vh;
 `;
 
@@ -14,7 +13,6 @@ const LeftMenu = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   margin-top: 7.5vh;
-  height: 30vh;
   overflow-y: hidden;
   transition: overflow-y 0.3s ease-in-out;
   &:hover {
@@ -23,7 +21,6 @@ const LeftMenu = styled.div`
   }
   @media (max-width: 1440px) {
     margin-top: 12vh;
-    height: 47.5vh;
   }
 `;
 

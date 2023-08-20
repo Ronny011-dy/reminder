@@ -5,8 +5,7 @@ import { Dialog, DialogContent, DialogActions } from '@mui/material';
 import { useState, useRef } from 'react';
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
-import { useQueryClientAndMutation } from '../../../../hooks/useQueryClientAndMutation';
-import { updateReminderDB } from '../../../../api/functions.api';
+import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 import { Root, InputStyled, ContentStyled } from './EditMode.styles';
 import { useFocus } from '../../../../hooks/useFocus';
 
@@ -14,12 +13,12 @@ type EditModeProps = { reminderText: string };
 
 const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
   const id = useReminderIdContext();
-  const mutation = useQueryClientAndMutation(updateReminderDB, 'Update');
+  const mutation = useQueryUpdate();
   const [title, setTitle] = useState(reminderText);
   const [isEditing, setIsEditing] = useState(false);
   const cantSave = title === '' || title.length >= 100;
   const onSave = () => {
-    title !== reminderText && mutation.mutate({ id, req: { title: title } });
+    title !== reminderText && mutation?.mutate({ id: id, req: { title: title } });
     setTimeout(() => {
       setTitle(title);
     }, 150);
@@ -37,7 +36,7 @@ const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
 
   useFocus({
     inputRef,
-    elementRendered: isEditing,
+    elementRendered: isEditing
   });
 
   const handleClose = () => {
@@ -52,18 +51,19 @@ const EditMode: React.FC<EditModeProps> = ({ reminderText }) => {
   };
 
   // basic validation of title
-  const error =
-    title === ''
-      ? 'Please enter a valid title'
-      : title.length >= 100
-      ? 'Title is over 100 characters'
-      : '';
+  const error = title === '' ? 'Please enter a valid title' : title.length >= 100 ? 'Title is over 100 characters' : '';
   return (
     <Root>
-      <OptionWrapper onClick={() => setIsEditing(true)} title="Edit reminder">
+      <OptionWrapper
+        onClick={() => setIsEditing(true)}
+        title="Edit reminder"
+      >
         <EditTwoToneIcon />
       </OptionWrapper>
-      <Dialog open={isEditing} onClose={handleClose}>
+      <Dialog
+        open={isEditing}
+        onClose={handleClose}
+      >
         <DialogContent>
           <ContentStyled>
             <h3>Edit reminder</h3>

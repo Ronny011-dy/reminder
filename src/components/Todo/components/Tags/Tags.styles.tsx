@@ -5,16 +5,6 @@ const Root = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-`;
-
-const TagsWrapper = styled.div`
-  width: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: end;
-  overflow-x: scroll;
 `;
 
 const TagInput = styled.div`
@@ -44,4 +34,4 @@ const AddButton = styled(IconButton)`
   }
 `;
 
-export { Root, TagsWrapper, TagInput, AddButton };
+export { Root, TagInput, AddButton };

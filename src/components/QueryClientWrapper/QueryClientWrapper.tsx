@@ -9,9 +9,7 @@ type QueryClientWrapperProps = {
 
 const reactQueryClient = new QueryClient();
 
-const QueryClientWrapper: React.FC<QueryClientWrapperProps> = ({
-  children,
-}) => {
+const QueryClientWrapper: React.FC<QueryClientWrapperProps> = ({ children }) => {
   return (
     <QueryClientProvider client={reactQueryClient}>
       {children}

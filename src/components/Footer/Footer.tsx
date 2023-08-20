@@ -1,9 +1,7 @@
 import { useTheme } from '@mui/material';
 import { Root } from './Footer.styles';
 
-type FooterProps = {};
-
-const Footer: React.FC<FooterProps> = () => {
+const Footer: React.FC = () => {
   const theme = useTheme();
   return (
     <Root theme={theme}>
