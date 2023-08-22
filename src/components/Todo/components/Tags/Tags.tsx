@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
@@ -10,7 +10,7 @@ import { Root, TagInput, AddButton } from './Tags.styles';
 import { useFocus } from '../../../../hooks/useFocus';
 import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 
-const Tags: React.FC<TagsProps> = ({ date, tags }) => {
+const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
   const [tagAdderOpen, setTagAdderOpen] = useState(false);
   const [tagText, setTagText] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -56,6 +56,8 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
     setTagText('');
   };
 
+  const isTagAdderOpen = useMemo(() => tagAdderOpen && isSelected, [tagAdderOpen, isSelected]);
+
   const handleTagDelete = (tagToDelete: number) => () => {
     const filteredTags = [...tags].filter((_, i) => i !== tagToDelete);
     const parsedFilteredTags = `${filteredTags.length > 0 ? `${[...filteredTags.map((tag) => `"${tag}"`)]}` : ''}`;
@@ -89,7 +91,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
             />
           );
         })}
-        {!done && !tagAdderOpen && (
+        {!done && !isTagAdderOpen && (
           <Chip
             label="Add tag"
             variant="outlined"
@@ -98,7 +100,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags }) => {
           />
         )}
         <Collapse
-          in={tagAdderOpen}
+          in={isTagAdderOpen}
           orientation="horizontal"
         >
           <TagInput>

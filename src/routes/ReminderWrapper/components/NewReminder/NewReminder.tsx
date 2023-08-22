@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
-import { ListItem, Checkbox, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
-import { Root } from './NewReminder.styles';
+import { Root, StyledListItem } from './NewReminder.styles';
 import { useState, forwardRef } from 'react';
 import { useQueryCreate } from '../../../../api/reactQueryMutations';
 
@@ -9,9 +9,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 type NewReminderProps = {
   onSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  noReminders: boolean;
 };
 
-const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit }, ref) => {
+const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit, noReminders }, ref) => {
   const theme = useTheme();
   const mutation = useQueryCreate();
   const [title, setTitle] = useState('');
@@ -20,14 +21,13 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit }, 
     event?.preventDefault();
     mutation.mutate({
       id: uuidv4(),
-      done: false,
       title,
-      description: '',
-      tags: '[]',
       createdDate: String(Date.now()),
-      date: undefined,
+      parentID: null,
+      done: false,
+      description: '',
       important: false,
-      parentID: undefined
+      tags: '[]'
     });
     !mutation.isSuccess && onSubmit(false);
   };
@@ -44,12 +44,11 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit }, 
     }
   };
   return (
-    <Root
-      ref={ref}
-      theme={theme}
-    >
+    <Root ref={ref}>
       <form onSubmit={handleSubmit}>
-        <ListItem
+        <StyledListItem
+          $noReminders={noReminders}
+          theme={theme}
           secondaryAction={
             <Tooltip
               title="Add reminder"
@@ -62,7 +61,6 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit }, 
             </Tooltip>
           }
         >
-          <Checkbox disabled />
           <input
             autoFocus
             type="text"
@@ -73,7 +71,7 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ onSubmit }, 
             onChange={handleTitleChange}
             onKeyDown={handleKeyDown}
           />
-        </ListItem>
+        </StyledListItem>
       </form>
     </Root>
   );

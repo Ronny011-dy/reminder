@@ -6,22 +6,17 @@ import { paginationPageLength } from '../common/values';
 
 const fetchReminders = async (page: number): Promise<DBReminder[]> => {
   const remindersToShow = paginationPageLength;
-  const response = (await ky.get('/api/read', {}).json()) as DBReminder[];
+  const response = (await ky.get('/api/read').json()) as DBReminder[];
   return response.slice((page - 1) * remindersToShow, page * remindersToShow);
 };
+
 // supports both reminders and sub reminders
-const addNewReminder = async (req: MutationVariables): Promise<DBReminder[]> => {
+const addNewReminder = async (req: DBReminder): Promise<DBReminder[]> => {
+  const { parentID, ...otherJsonProps } = req;
   return await ky
     .post('/api/insert', {
       json: {
-        id: req.id,
-        done: false,
-        title: req.title,
-        description: '',
-        tags: '[]',
-        createdDate: req.createdDate,
-        date: null,
-        important: false,
+        ...otherJsonProps,
         parentID: req?.parentID || null
       }
     })

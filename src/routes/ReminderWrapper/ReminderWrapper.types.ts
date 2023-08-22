@@ -1,13 +1,9 @@
 import type { Reminder } from '../../components/Todo/Todo.types';
 
-type DBReminder = Pick<
-  Reminder,
-  'done' | 'title' | 'description' | 'important' | 'parentID'
-> & {
+export type DBReminder = Pick<Reminder, 'done' | 'title' | 'description' | 'important'> & {
   createdDate?: string;
   date?: string;
   id: string;
   tags: string;
+  parentID: null | string;
 };
-
-export type { DBReminder };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
 import { fetchReminders } from '../../api/reminders';
@@ -12,6 +12,7 @@ import { DBReminder } from './ReminderWrapper.types';
 import { Toaster } from 'react-hot-toast';
 import { useIntersection } from '@mantine/hooks';
 import { flat } from './utils/ReminderWrapper.util';
+import { paginationPageLength } from '../../common/values';
 
 const ReminderWrapper: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,8 +38,16 @@ const ReminderWrapper: React.FC = () => {
   const { ref: lastElementRef, entry } = useIntersection({ root: lastReminderRef.current, threshold: 1 });
 
   useEffect(() => {
-    if ((data?.pages[data?.pages?.length - 1]?.length ?? 0) === 10 && entry?.isIntersecting) fetchNextPage();
-  }, [entry, data?.pages, fetchNextPage]);
+    // if the number of reminders on the last paginated page is lower than 5 then it's the last page
+    // if it's exactly 5 but there are no more reminders, then one last fetch will occur, with 0(<5) reminders
+    if ((data?.pages[data?.pages?.length - 1]?.length ?? 0) === paginationPageLength && entry?.isIntersecting) {
+      fetchNextPage();
+    }
+  }, [entry]);
+
+  const filteredAndSearchedData = useMemo(() => {
+    return filterData(flat(data))?.filter((reminder) => reminder.title.includes(searchQuery));
+  }, [data, searchQuery, filtersArr]);
 
   return (
     <Root>
@@ -55,17 +64,17 @@ const ReminderWrapper: React.FC = () => {
             <NewReminder
               ref={newReminderRef}
               onSubmit={setNewReminderOpen}
+              noReminders={filteredAndSearchedData?.length === 0}
             />
           </ClickAwayListener>
         )}
         <ReminderList
-          data={filterData(flat(data))?.filter((reminder) => reminder.title.includes(searchQuery))}
+          data={filteredAndSearchedData}
           isChild={false}
           numOfReminders={flat(data).length - 1}
           lastElementRef={lastElementRef}
         />
       </LeftMenu>
-      {isFetchingNextPage && <div className="bottom">Loading</div>}
     </Root>
   );
 };

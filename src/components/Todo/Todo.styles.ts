@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import { Theme } from '@mui/material/styles';
+import { Tags } from './components/Tags/Tags';
 
 interface WrapperProps {
   $isChild?: boolean;
@@ -22,6 +23,10 @@ interface StyledDivProps {
   paddingLeft?: boolean;
 }
 
+interface StyledTagsWrapperProps {
+  isSelected: boolean;
+}
+
 const alignedToCenter = css`
   align-items: center;
 `;
@@ -34,10 +39,10 @@ export const Root = styled.div``;
 
 export const StyledListItem = styled(ListItem)<WrapperProps>(
   ({ $isChild, theme }) => css`
-    width: 50vw;
+    width: 100%;
     max-width: 1000px;
     background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
-    margin-top: ${!$isChild ? '20px' : '0'};
+    /* margin-top: ${!$isChild ? '20px' : '0'}; */
     border: solid 1px;
     border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     border-radius: 15px;
@@ -51,7 +56,10 @@ export const StyledDiv = styled.div<StyledDivProps>(
     flex-direction: ${orientation};
     ${align && alignedToCenter};
     ${justify && justifiedToCenter};
-    padding-left: ${paddingLeft ? '20' : '0'}px;
+    /* padding-left: ${paddingLeft ? '0' : '0'}px; */
+    /* @media (max-width: 1440px) {
+      padding-left: ${paddingLeft ? '20' : '0'}px;
+    } */
   `
 );
 
@@ -90,6 +98,9 @@ export const StyledListItemButton = styled(ListItemButton)(
       color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
       background-color: transparent !important;
     }
+    &:hover ${StyledTagsWrapper} {
+      opacity: 100%;
+    }
   `
 );
 
@@ -97,5 +108,11 @@ export const CheckboxStyled = styled(Checkbox)(
   ({ theme }) => css`
     margin-left: 10px !important;
     color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main} !important;
+  `
+);
+
+export const StyledTagsWrapper = styled.div<StyledTagsWrapperProps>(
+  ({ isSelected }) => css`
+    opacity: ${isSelected ? '100' : '0'}%;
   `
 );

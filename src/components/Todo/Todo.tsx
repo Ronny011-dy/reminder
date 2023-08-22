@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTheme } from '@mui/material';
 import type { TodoProps } from './Todo.types';
 import {
@@ -9,7 +9,8 @@ import {
   Padding,
   StyledListItemText,
   StyledListItemButton,
-  CheckboxStyled
+  CheckboxStyled,
+  StyledTagsWrapper
 } from './Todo.styles';
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
 import { ListItemIcon } from '@mui/material';
@@ -42,6 +43,8 @@ const Todo: React.FC<TodoProps> = ({
     mutation?.mutate({ id, req: { done: !done } });
   };
 
+  const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
+
   return (
     <Root ref={lastElementRef}>
       <DoneProvider done={done}>
@@ -55,14 +58,14 @@ const Todo: React.FC<TodoProps> = ({
               subReminders={subReminders}
               setSubReminders={setSubReminders}
               isChild={parentID !== null}
-              isSelected={selectedIndex === reminderIndex}
+              isSelected={isSelected}
             />
           }
           $isChild={parentID !== null}
         >
           <StyledListItemButton
             theme={theme}
-            selected={selectedIndex === reminderIndex}
+            selected={isSelected}
             onClick={(event) => onClick(event, reminderIndex)}
             disableGutters
           >
@@ -83,7 +86,7 @@ const Todo: React.FC<TodoProps> = ({
                 </ListItemIcon>
                 <StyledListItemText
                   $done={done}
-                  selected={selectedIndex === reminderIndex}
+                  selected={isSelected}
                 >
                   {restOfReminderProps.title}
                 </StyledListItemText>
@@ -92,8 +95,15 @@ const Todo: React.FC<TodoProps> = ({
                 orientation="column"
                 paddingLeft
               >
-                <StyledListItemText secondary>{description.length > 0 ? `${description}` : '•••'}</StyledListItemText>
-                <Tags tags={tags} />
+                <StyledListItemText secondary>
+                  {description.length > 0 ? `${description}` : 'Enter description'}
+                </StyledListItemText>
+                <StyledTagsWrapper isSelected={isSelected}>
+                  <Tags
+                    tags={tags}
+                    isSelected={isSelected}
+                  />
+                </StyledTagsWrapper>
                 {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
                 {!parentID && childrenReminders && childrenReminders?.length > 0 && (
                   <ChildReminder>

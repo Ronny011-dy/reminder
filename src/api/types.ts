@@ -1,11 +1,7 @@
 import { DBReminder } from '../routes/ReminderWrapper/ReminderWrapper.types';
 
-interface MutationVariables {
-  id: string;
-  title?: string;
-  parentID?: string;
-  createdDate?: string;
-  req?: Partial<DBReminder>;
-}
+type MutationVariables = {
+  req: Partial<DBReminder>;
+} & DBReminder;
 
 export type { MutationVariables };

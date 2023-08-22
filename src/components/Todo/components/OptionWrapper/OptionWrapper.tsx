@@ -16,12 +16,14 @@ const OptionWrapper: React.FC<OptionWrapperProps> = ({ children, title, onClick,
       enterDelay={650}
       enterNextDelay={650}
     >
-      <IconButton
-        onClick={onClick}
-        disabled={disabled}
-      >
-        {children}
-      </IconButton>
+      <span>
+        <IconButton
+          onClick={onClick}
+          disabled={disabled}
+        >
+          {children}
+        </IconButton>
+      </span>
     </Tooltip>
   );
 };

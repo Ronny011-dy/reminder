@@ -12,15 +12,13 @@ const darkMode = () => css`
 
 const Root = styled.div(
   ({ theme }) => css`
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     ${theme.palette.mode === 'dark' ? darkMode : lightMode};
     background-size: 32px 32px;
     background-position: 0 0, 16px 16px;
-    /* background-image: radial-gradient(#444df74a 0.8px, transparent 0.8px),
-      radial-gradient(#444df74a 0.8px, #e5e5f7 0.8px); */
   `
 );
 

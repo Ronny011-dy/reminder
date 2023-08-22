@@ -4,7 +4,6 @@ import { DeleteReminder } from '../DeleteReminder/DeleteReminder';
 import { ImportantToggle } from '../ImportantToggle/ImportantToggle';
 import { AddSubReminder } from '../AddSubReminder/AddSubReminder';
 import { EditMode } from '../EditMode/EditMode';
-import { Tags } from '../Tags/Tags';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext.ts';
 
 type ReminderOptionsProps = {
@@ -31,7 +30,7 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
     <Root>
       <ButtonGroup>
         {!done && isSelected && <EditMode reminderText={title} />}
-        {isSelected && <ImportantToggle important={important} />}
+        {(isSelected || important) && <ImportantToggle important={important} />}
         {/* sub reminders can't have their own sub reminders */}
         {/* {!done && !isChild && isSelected && (
           <AddSubReminder setSubReminders={setSubReminders} />

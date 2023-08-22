@@ -1,1 +1,1 @@
-export const paginationPageLength = 5;
+export const paginationPageLength = 6;

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Root = styled.div(
+export const Root = styled.div(
   ({ theme }) => css`
     position: absolute;
     display: flex;
@@ -18,5 +18,3 @@ const Root = styled.div(
     }
   `
 );
-
-export { Root };
