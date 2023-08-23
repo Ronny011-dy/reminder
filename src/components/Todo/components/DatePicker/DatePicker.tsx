@@ -6,12 +6,12 @@ import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
-import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 import type { DatePickerProps } from './DatePicker.types';
 import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 
 const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
-  const id = useReminderIdContext();
+  const id = useCurrentReminderContext();
   const done = useReminderDoneContext();
   const mutation = useQueryUpdate();
   // initializes with current date or saved date if exists

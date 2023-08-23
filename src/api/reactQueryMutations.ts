@@ -1,27 +1,11 @@
 import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 
-//? should I use or delete this type
-import type { MutationVariables } from './types';
+import type { ContextType, MutationVariables } from './types';
 import { addNewReminder, deleteReminder, updateReminder } from './reminders';
 import { flat } from '../routes/ReminderWrapper/utils/ReminderWrapper.util';
 import { DBReminder } from '../routes/ReminderWrapper/ReminderWrapper.types';
 import { paginationPageLength } from '../common/values';
-
-interface ReminderMutationType {
-  id: string;
-  req?: {
-    title?: string;
-    done?: boolean;
-    date?: string;
-    important?: boolean;
-    tags?: string;
-  };
-}
-
-interface ContextType {
-  previousReminders: DBReminder[];
-}
 
 export const useQueryCreate = () => {
   const queryClient = useQueryClient();
@@ -34,12 +18,7 @@ export const useQueryCreate = () => {
       const previousReminders = flat(queryClient.getQueryData(['reminders']));
 
       queryClient.setQueryData<InfiniteData<DBReminder[]>>(['reminders'], (oldData) => {
-        const flatOldData = [newReminder, ...flat(oldData)];
-        const newPages: DBReminder[][] = [];
-        for (let i = 0; i < flatOldData.length; i += paginationPageLength) {
-          newPages.push(flatOldData.slice(i, i + paginationPageLength) as DBReminder[]);
-        }
-        return { ...oldData, pages: newPages } as InfiniteData<DBReminder[]>;
+        return saveNewCache(oldData, newReminder);
       });
       return { previousReminders };
     },
@@ -59,22 +38,27 @@ export const useQueryCreate = () => {
 
 export const useQueryUpdate = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (variables: MutationVariables) => updateReminder(variables),
+
     onMutate: async (updatedReminderWithReq) => {
       const { req, ...updatedReminder } = updatedReminderWithReq;
-      await queryClient.cancelQueries({ queryKey: ['reminders', updatedReminder.id] });
-      const outDatedReminder = queryClient.getQueryData(['reminders', updatedReminder.id]) as DBReminder;
-      console.log(outDatedReminder);
-      queryClient.setQueryData(['reminders', updatedReminder.id], updatedReminder);
-      return { outDatedReminder, updatedReminder };
+      await queryClient.cancelQueries({ queryKey: ['reminders'] });
+      const outDatedReminderList = queryClient.getQueryData(['reminders']) as DBReminder[];
+      queryClient.setQueryData<InfiniteData<DBReminder[]>>(['reminders'], (oldData) => {
+        return saveNewCache(oldData, updatedReminder, true);
+      });
+      return { outDatedReminderList };
     },
+
     onError: (err, updatedReminder, context) => {
       toast.error(`Was not able to update reminder with data: ${JSON.stringify(updatedReminder)} \n Got ${err}`);
-      queryClient.setQueryData(['reminders', updatedReminder.id], context?.outDatedReminder);
+      queryClient.setQueryData(['reminders'], context?.outDatedReminderList);
     },
-    onSettled: (updatedReminder) => {
-      queryClient.invalidateQueries({ queryKey: ['reminders', updatedReminder?.id] });
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['reminders'] });
     }
   });
 };
@@ -82,13 +66,13 @@ export const useQueryUpdate = () => {
 export const useQueryDelete = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: ReminderMutationType) => deleteReminder(variables),
-    onMutate: async (deletedReminder) => {
+    mutationFn: (variables: MutationVariables) => deleteReminder(variables),
+    onMutate: async (reminderToDelete) => {
       await queryClient.cancelQueries({ queryKey: ['reminders'] });
       const previousReminders = flat(queryClient.getQueryData(['reminders']));
-      queryClient.setQueryData(['reminders'], (old: DBReminder[] | undefined) =>
-        old ? old.filter((reminder) => reminder.id !== deletedReminder.id) : previousReminders
-      );
+      queryClient.setQueryData<InfiniteData<DBReminder[]>>(['reminders'], (oldData) => {
+        return saveNewCache(oldData, reminderToDelete, false, true);
+      });
       return { previousReminders };
     },
     onError: (err, deletedReminder, context) => {
@@ -99,4 +83,28 @@ export const useQueryDelete = () => {
       queryClient.invalidateQueries({ queryKey: ['reminders'] });
     }
   });
+};
+
+const saveNewCache = (
+  oldData: InfiniteData<DBReminder[]> | undefined,
+  reminderToMutate: DBReminder | MutationVariables,
+  shouldUpdate?: boolean,
+  shouldDelete?: boolean
+) => {
+  const oldOrFilteredFlatData = shouldDelete
+    ? flat(oldData).filter((reminder) => reminder.id !== reminderToMutate.id)
+    : flat(oldData);
+
+  const flatDataToCache = shouldDelete
+    ? oldOrFilteredFlatData
+    : shouldUpdate
+    ? oldOrFilteredFlatData.map((reminder) => (reminder.id === reminderToMutate.id ? reminderToMutate : reminder))
+    : [reminderToMutate, ...oldOrFilteredFlatData];
+
+  const newPages: DBReminder[][] = [];
+  for (let i = 0; i < flatDataToCache.length; i += paginationPageLength) {
+    newPages.push(flatDataToCache.slice(i, i + paginationPageLength) as DBReminder[]);
+  }
+
+  return { ...oldData, pages: newPages } as InfiniteData<DBReminder[]>;
 };

@@ -10,10 +10,9 @@ interface WrapperProps {
 }
 
 interface StyledListItemTextProps {
-  secondary?: boolean;
   //using transient prop as the done property by itself is not registered as boolean
   $done?: boolean;
-  selected?: boolean;
+  isSelected?: boolean;
 }
 
 interface StyledDivProps {
@@ -76,15 +75,15 @@ export const Padding = styled.div`
 `;
 
 export const StyledListItemText = styled.div<StyledListItemTextProps>(
-  ({ $done, selected, secondary }) => css`
+  ({ $done, isSelected }) => css`
     text-decoration: ${$done ? 'line-through' : 'none'};
-    opacity: ${$done || secondary ? '50%' : '100%'};
     margin-right: 15px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: calc(30vw - ${selected ? '2' : '0'}vw);
+    width: calc(30vw - ${isSelected ? '2' : '0'}vw);
     max-width: 50ch;
+    opacity: ${isSelected ? '30' : '0'}%;
     @media (max-width: 610px) {
       width: 20vw;
     }
@@ -100,6 +99,9 @@ export const StyledListItemButton = styled(ListItemButton)(
     }
     &:hover ${StyledTagsWrapper} {
       opacity: 100%;
+    }
+    &:hover ${StyledListItemText} {
+      opacity: 30%;
     }
   `
 );

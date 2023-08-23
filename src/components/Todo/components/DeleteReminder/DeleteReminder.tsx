@@ -1,20 +1,20 @@
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
-import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 import { useQueryDelete } from '../../../../api/reactQueryMutations';
 
 type DeleteReminderProps = {
-  subReminders: string[];
+  subReminderIds: string[];
 };
 
-const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminders }) => {
-  const id = useReminderIdContext();
+const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
+  const id = useCurrentReminderContext();
   const mutation = useQueryDelete();
 
   const deletehandler = () => {
     // first delete sub reminders
-    subReminders.forEach((sub) => mutation.mutate({ id: sub }));
+    subReminderIds.forEach((sub) => mutation.mutate({ id: sub }));
     mutation.mutate({ id });
   };
 

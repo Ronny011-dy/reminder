@@ -20,6 +20,6 @@ type ListItemButtonProps = {
 
 type ParentReminder = { childrenReminders?: DBReminder[] };
 
-type TodoProps = Reminder & ListItemButtonProps & ParentReminder;
+type TodoProps = Reminder & ListItemButtonProps & ParentReminder & { dbReminder: DBReminder };
 
 export type { Reminder, TodoProps };

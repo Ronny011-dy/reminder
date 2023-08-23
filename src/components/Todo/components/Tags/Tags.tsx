@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
-import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import type { TagsProps } from './Tags.types';
@@ -18,7 +18,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
     inputRef,
     elementRendered: tagAdderOpen
   });
-  const id = useReminderIdContext();
+  const id = useCurrentReminderContext();
   const done = useReminderDoneContext();
   const mutation = useQueryUpdate();
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

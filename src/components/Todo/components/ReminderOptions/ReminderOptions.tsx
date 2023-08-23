@@ -3,13 +3,12 @@ import { ButtonGroup } from '@mui/material';
 import { DeleteReminder } from '../DeleteReminder/DeleteReminder';
 import { ImportantToggle } from '../ImportantToggle/ImportantToggle';
 import { AddSubReminder } from '../AddSubReminder/AddSubReminder';
-import { EditMode } from '../EditMode/EditMode';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext.ts';
 
 type ReminderOptionsProps = {
   important: boolean;
-  subReminders: string[];
-  setSubReminders: React.Dispatch<React.SetStateAction<string[]>>;
+  subReminderIds: string[];
+  setSubReminderIds: React.Dispatch<React.SetStateAction<string[]>>;
   isChild: boolean;
   isSelected: boolean;
   title: string;
@@ -18,8 +17,8 @@ type ReminderOptionsProps = {
 
 const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   important,
-  subReminders,
-  setSubReminders,
+  subReminderIds,
+  setSubReminderIds,
   isChild,
   isSelected,
   title,
@@ -29,13 +28,12 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   return (
     <Root>
       <ButtonGroup>
-        {!done && isSelected && <EditMode reminderText={title} />}
         {(isSelected || important) && <ImportantToggle important={important} />}
         {/* sub reminders can't have their own sub reminders */}
-        {/* {!done && !isChild && isSelected && (
-          <AddSubReminder setSubReminders={setSubReminders} />
-        )} */}
-        <DeleteReminder subReminders={subReminders} />
+        {/* {{!done && !isChild && isSelected && (
+          <AddSubReminder setSubReminderIds={setSubReminderIds} />
+        )} } */}
+        <DeleteReminder subReminderIds={subReminderIds} />
       </ButtonGroup>
     </Root>
   );

@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTheme } from '@mui/material';
+
 import type { TodoProps } from './Todo.types';
 import {
   Root,
@@ -15,13 +16,15 @@ import {
 import { DoneProvider } from './components/DoneProvider/DoneProvider';
 import { ListItemIcon } from '@mui/material';
 import { useQueryUpdate } from '../../api/reactQueryMutations';
-import { useReminderIdContext } from '../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useCurrentReminderContext } from '../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 import { ReminderList } from '../../routes/ReminderWrapper/components/ReminderList/ReminderList';
 import { RightMenu } from './components/RightMenu/RightMenu';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
+import { InputText } from './components/InputText/InputText';
 
 const Todo: React.FC<TodoProps> = ({
+  dbReminder,
   done,
   description,
   parentID,
@@ -31,16 +34,18 @@ const Todo: React.FC<TodoProps> = ({
   childrenReminders,
   lastElementRef,
   tags,
+  title,
   ...restOfReminderProps
 }) => {
   const theme = useTheme();
-  const [subReminders, setSubReminders] = useState<string[]>([]);
+  const [subReminderIds, setSubReminderIds] = useState<string[]>([]);
   const mutation = useQueryUpdate();
-  const id = useReminderIdContext();
+  const currentReminder = useCurrentReminderContext();
 
   const doneHandler = () => {
-    subReminders?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
-    mutation?.mutate({ id, req: { done: !done } });
+    // subReminderIds?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
+    const { done: _, ...restofDBReminder } = dbReminder;
+    mutation?.mutate({ ...restofDBReminder, done: !done, req: { done: !done } });
   };
 
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
@@ -55,10 +60,11 @@ const Todo: React.FC<TodoProps> = ({
           secondaryAction={
             <ReminderOptions
               {...restOfReminderProps}
-              subReminders={subReminders}
-              setSubReminders={setSubReminders}
-              isChild={parentID !== null}
+              title={title}
+              subReminderIds={subReminderIds}
+              setSubReminderIds={setSubReminderIds}
               isSelected={isSelected}
+              isChild={parentID !== null}
             />
           }
           $isChild={parentID !== null}
@@ -84,19 +90,23 @@ const Todo: React.FC<TodoProps> = ({
                     theme={theme}
                   />
                 </ListItemIcon>
-                <StyledListItemText
-                  $done={done}
-                  selected={isSelected}
-                >
-                  {restOfReminderProps.title}
-                </StyledListItemText>
+                <InputText
+                  textFromDb={title}
+                  currentReminder={currentReminder}
+                  isSelected={isSelected}
+                  isTitle
+                />
               </StyledDiv>
               <StyledDiv
                 orientation="column"
                 paddingLeft
               >
-                <StyledListItemText secondary>
-                  {description.length > 0 ? `${description}` : 'Enter description'}
+                <StyledListItemText isSelected={isSelected}>
+                  <InputText
+                    textFromDb={description}
+                    currentReminder={currentReminder}
+                    isSelected={isSelected}
+                  />
                 </StyledListItemText>
                 <StyledTagsWrapper isSelected={isSelected}>
                   <Tags
@@ -104,7 +114,7 @@ const Todo: React.FC<TodoProps> = ({
                     isSelected={isSelected}
                   />
                 </StyledTagsWrapper>
-                {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
+                {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
                 {!parentID && childrenReminders && childrenReminders?.length > 0 && (
                   <ChildReminder>
                     <ReminderList
@@ -113,7 +123,7 @@ const Todo: React.FC<TodoProps> = ({
                       parentID={id}
                     />
                   </ChildReminder>
-                )}
+                )} */}
               </StyledDiv>
               <RightMenu />
             </StyledDiv>

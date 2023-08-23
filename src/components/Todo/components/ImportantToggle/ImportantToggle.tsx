@@ -1,7 +1,7 @@
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
-import { useReminderIdContext } from '../../../../routes/ReminderWrapper/hooks/useReminderIdContext';
+import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 
 import { ImportantStyled } from './ImportantToggle.styles';
 import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
@@ -10,7 +10,7 @@ import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 type ImportantToggleProps = { important: boolean };
 
 const ImportantToggle: React.FC<ImportantToggleProps> = ({ important }) => {
-  const id = useReminderIdContext();
+  const id = useCurrentReminderContext();
   const done = useReminderDoneContext();
 
   const mutation = useQueryUpdate();
