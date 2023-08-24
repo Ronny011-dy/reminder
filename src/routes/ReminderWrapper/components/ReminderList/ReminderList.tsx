@@ -1,5 +1,5 @@
 import { ClickAwayListener, List } from '@mui/material';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { Root, StyledMargin } from './ReminderList.styles';
 import { CurrentReminderProvider } from '../CurrentReminderProvider/CurrentReminderProvider';
@@ -40,40 +40,36 @@ const ReminderList: React.FC<ReminderListProps> = ({ data, isChild, parentID, nu
             };
             if (i === (numOfReminders ?? paginationPageLength) - 1)
               return (
-                <CurrentReminderProvider
-                  {...reminder}
-                  key={reminder.id}
-                >
-                  <Todo
-                    // if this is the last reminder from the ones that were rendered, send a ref...
-                    // ... which will trigger loading of more reminders
-                    lastElementRef={lastElementRef}
-                    {...otherReminderProps}
-                    dbReminder={reminder}
-                    {...convertedProps}
-                    reminderIndex={i}
-                    onClick={handleReminderClick}
-                    selectedIndex={selectedIndex}
-                  />
-                  <StyledMargin />
-                </CurrentReminderProvider>
+                <Fragment key={reminder.id}>
+                  <CurrentReminderProvider {...reminder}>
+                    <Todo
+                      // if this is the last reminder from the ones that were rendered, send a ref...
+                      // ... which will trigger loading of more reminders
+                      lastElementRef={lastElementRef}
+                      {...otherReminderProps}
+                      {...convertedProps}
+                      reminderIndex={i}
+                      onClick={handleReminderClick}
+                      selectedIndex={selectedIndex}
+                    />
+                    <StyledMargin />
+                  </CurrentReminderProvider>
+                </Fragment>
               );
             else
               return (
-                <CurrentReminderProvider
-                  key={reminder.id}
-                  {...reminder}
-                >
-                  <Todo
-                    {...otherReminderProps}
-                    dbReminder={reminder}
-                    {...convertedProps}
-                    reminderIndex={i}
-                    onClick={handleReminderClick}
-                    selectedIndex={selectedIndex}
-                  />
-                  <StyledMargin />
-                </CurrentReminderProvider>
+                <Fragment key={reminder.id}>
+                  <CurrentReminderProvider {...reminder}>
+                    <Todo
+                      {...otherReminderProps}
+                      {...convertedProps}
+                      reminderIndex={i}
+                      onClick={handleReminderClick}
+                      selectedIndex={selectedIndex}
+                    />
+                    <StyledMargin />
+                  </CurrentReminderProvider>
+                </Fragment>
               );
           })}
         </List>

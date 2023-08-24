@@ -1,7 +1,3 @@
-type TagsProps = {
-  date?: number;
-  tags: string[];
+export type TagsProps = {
   isSelected: boolean;
 };
-
-export type { TagsProps };

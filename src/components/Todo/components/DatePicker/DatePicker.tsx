@@ -5,39 +5,42 @@ import { Popover, Chip } from '@mui/material';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
-import type { DatePickerProps } from './DatePicker.types';
 import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 
-const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
-  const id = useCurrentReminderContext();
-  const done = useReminderDoneContext();
+const DatePicker: React.FC = () => {
+  const { done, id, date, ...restOfCurrentReminder } = useCurrentReminderContext();
   const mutation = useQueryUpdate();
-  // initializes with current date or saved date if exists
-  const [dateValue, setDateValue] = React.useState<Dayjs | null>(date ? dayjs.unix(date) : dayjs());
+  // initializes with current date or saved date if exists. required because date is optional
+  const [dateValue, setDateValue] = React.useState<Dayjs | null>(date ? dayjs.unix(Number(date)) : dayjs());
 
   //popover logic
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const openCalendarHandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [popOverAnchor, setPopOverAnchor] = useState<HTMLDivElement | null>(null);
+  const openCalendarHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    setPopOverAnchor(e.currentTarget);
   };
 
   const closeCalendarHandler = () => {
-    setAnchorEl(null);
+    setPopOverAnchor(null);
   };
 
   const dateChangeHandler = (newDate: dayjs.Dayjs | null) => {
-    setAnchorEl(null);
+    setPopOverAnchor(null);
     setDateValue(newDate);
-    mutation?.mutate({ id, req: { date: String(newDate?.unix()) } });
+    mutation?.mutate({
+      id,
+      done,
+      date: String(newDate?.unix()),
+      ...restOfCurrentReminder,
+      req: { date: String(newDate?.unix()) }
+    });
   };
 
   const deleteDateHandler = () => {
-    mutation?.mutate({ id, req: { date: undefined } });
+    mutation?.mutate({ id, done, date: null, ...restOfCurrentReminder, req: { date: null } });
   };
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(popOverAnchor);
   return (
     <>
       {date && (
@@ -60,7 +63,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
       )}
       <Popover
         open={open}
-        anchorEl={anchorEl}
+        anchorEl={popOverAnchor}
         onClose={closeCalendarHandler}
         anchorOrigin={{
           vertical: 'bottom',
@@ -68,14 +71,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ date }) => {
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {' '}
           <DateCalendar
             autoFocus
             value={dateValue}
             onChange={(newValue) => {
               dateChangeHandler(newValue);
             }}
-          />{' '}
+          />
         </LocalizationProvider>
       </Popover>
     </>

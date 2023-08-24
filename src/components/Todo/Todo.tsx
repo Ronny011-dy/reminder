@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTheme } from '@mui/material';
 
 import type { TodoProps } from './Todo.types';
@@ -13,7 +13,6 @@ import {
   CheckboxStyled,
   StyledTagsWrapper
 } from './Todo.styles';
-import { DoneProvider } from './components/DoneProvider/DoneProvider';
 import { ListItemIcon } from '@mui/material';
 import { useQueryUpdate } from '../../api/reactQueryMutations';
 import { useCurrentReminderContext } from '../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
@@ -24,7 +23,6 @@ import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
 
 const Todo: React.FC<TodoProps> = ({
-  dbReminder,
   done,
   description,
   parentID,
@@ -44,7 +42,7 @@ const Todo: React.FC<TodoProps> = ({
 
   const doneHandler = () => {
     // subReminderIds?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
-    const { done: _, ...restofDBReminder } = dbReminder;
+    const { done: _, ...restofDBReminder } = currentReminder;
     mutation?.mutate({ ...restofDBReminder, done: !done, req: { done: !done } });
   };
 
@@ -52,69 +50,65 @@ const Todo: React.FC<TodoProps> = ({
 
   return (
     <Root ref={lastElementRef}>
-      <DoneProvider done={done}>
-        <StyledListItem
+      <StyledListItem
+        theme={theme}
+        disablePadding
+        disableGutters
+        secondaryAction={
+          <ReminderOptions
+            {...restOfReminderProps}
+            title={title}
+            subReminderIds={subReminderIds}
+            setSubReminderIds={setSubReminderIds}
+            isSelected={isSelected}
+            isChild={parentID !== null}
+          />
+        }
+        $isChild={parentID !== null}
+      >
+        <StyledListItemButton
           theme={theme}
-          disablePadding
+          selected={isSelected}
+          onClick={(event) => onClick(event, reminderIndex)}
           disableGutters
-          secondaryAction={
-            <ReminderOptions
-              {...restOfReminderProps}
-              title={title}
-              subReminderIds={subReminderIds}
-              setSubReminderIds={setSubReminderIds}
-              isSelected={isSelected}
-              isChild={parentID !== null}
-            />
-          }
-          $isChild={parentID !== null}
         >
-          <StyledListItemButton
-            theme={theme}
-            selected={isSelected}
-            onClick={(event) => onClick(event, reminderIndex)}
-            disableGutters
+          <StyledDiv
+            orientation="column"
+            align
           >
             <StyledDiv
-              orientation="column"
+              orientation="row"
               align
             >
-              <StyledDiv
-                orientation="row"
-                align
-              >
-                <ListItemIcon>
-                  <CheckboxStyled
-                    checked={done}
-                    onClick={doneHandler}
-                    theme={theme}
-                  />
-                </ListItemIcon>
+              <ListItemIcon>
+                <CheckboxStyled
+                  checked={done}
+                  onClick={doneHandler}
+                  theme={theme}
+                />
+              </ListItemIcon>
+              <InputText
+                textFromDb={title}
+                currentReminder={currentReminder}
+                isSelected={isSelected}
+                isTitle
+              />
+            </StyledDiv>
+            <StyledDiv
+              orientation="column"
+              paddingLeft
+            >
+              <StyledListItemText isSelected={isSelected}>
                 <InputText
-                  textFromDb={title}
+                  textFromDb={description}
                   currentReminder={currentReminder}
                   isSelected={isSelected}
-                  isTitle
                 />
-              </StyledDiv>
-              <StyledDiv
-                orientation="column"
-                paddingLeft
-              >
-                <StyledListItemText isSelected={isSelected}>
-                  <InputText
-                    textFromDb={description}
-                    currentReminder={currentReminder}
-                    isSelected={isSelected}
-                  />
-                </StyledListItemText>
-                <StyledTagsWrapper isSelected={isSelected}>
-                  <Tags
-                    tags={tags}
-                    isSelected={isSelected}
-                  />
-                </StyledTagsWrapper>
-                {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
+              </StyledListItemText>
+              <StyledTagsWrapper isSelected={isSelected}>
+                <Tags isSelected={isSelected} />
+              </StyledTagsWrapper>
+              {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
                 {!parentID && childrenReminders && childrenReminders?.length > 0 && (
                   <ChildReminder>
                     <ReminderList
@@ -124,12 +118,11 @@ const Todo: React.FC<TodoProps> = ({
                     />
                   </ChildReminder>
                 )} */}
-              </StyledDiv>
-              <RightMenu />
             </StyledDiv>
-          </StyledListItemButton>
-        </StyledListItem>
-      </DoneProvider>
+            <RightMenu />
+          </StyledDiv>
+        </StyledListItemButton>
+      </StyledListItem>
     </Root>
   );
 };

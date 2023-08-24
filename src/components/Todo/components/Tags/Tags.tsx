@@ -3,14 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
-import { useReminderDoneContext } from '../../hooks/useReminderDoneContext';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import type { TagsProps } from './Tags.types';
 import { Root, TagInput, AddButton } from './Tags.styles';
 import { useFocus } from '../../../../hooks/useFocus';
 import { useQueryUpdate } from '../../../../api/reactQueryMutations';
 
-const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
+const Tags: React.FC<TagsProps> = ({ isSelected }) => {
   const [tagAdderOpen, setTagAdderOpen] = useState(false);
   const [tagText, setTagText] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -18,8 +17,8 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
     inputRef,
     elementRendered: tagAdderOpen
   });
-  const id = useCurrentReminderContext();
-  const done = useReminderDoneContext();
+  const { id, done, tags, ...restOfCurrentReminder } = useCurrentReminderContext();
+  const convertedTags = JSON.parse(tags);
   const mutation = useQueryUpdate();
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
@@ -28,11 +27,10 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
       addTagHandler();
     }
   };
-  const openTagAdder = () => {
-    setTagAdderOpen((prev) => !prev);
-  };
 
-  const parsedCurrentTags = `${tags && tags.length > 0 ? `${[...tags.map((tag) => `"${tag}"`)]}` : ''}`;
+  const parsedCurrentTags = `${
+    convertedTags && convertedTags.length > 0 ? `${[...convertedTags.map((tag: string) => `"${tag}"`)]}` : ''
+  }`;
 
   const tagInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagText(e.target.value);
@@ -44,12 +42,15 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
       return;
     }
     // condition filters out duplicates before pushign to DB
-    !tags.includes(tagText) &&
+    !convertedTags.includes(tagText) &&
       mutation?.mutate({
         id,
+        done,
+        tags: `[${parsedCurrentTags}${convertedTags.length > 0 ? ',' : ''}"${tagText}"]`,
+        ...restOfCurrentReminder,
         req: {
           //* server compatible format - '["tag1","tag2"]'
-          tags: `[${parsedCurrentTags}${tags.length > 0 ? ',' : ''}"${tagText}"]`
+          tags: `[${parsedCurrentTags}${convertedTags.length > 0 ? ',' : ''}"${tagText}"]`
         }
       });
     // clear field in state when clicking 'add tag' - or else will add last valid value
@@ -59,10 +60,13 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
   const isTagAdderOpen = useMemo(() => tagAdderOpen && isSelected, [tagAdderOpen, isSelected]);
 
   const handleTagDelete = (tagToDelete: number) => () => {
-    const filteredTags = [...tags].filter((_, i) => i !== tagToDelete);
+    const filteredTags = [...convertedTags].filter((_, i) => i !== tagToDelete);
     const parsedFilteredTags = `${filteredTags.length > 0 ? `${[...filteredTags.map((tag) => `"${tag}"`)]}` : ''}`;
     mutation?.mutate({
       id,
+      done,
+      tags: `[${parsedFilteredTags}]`,
+      ...restOfCurrentReminder,
       req: {
         tags: `[${parsedFilteredTags}]`
       }
@@ -75,7 +79,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
         direction="row"
         spacing={0.6}
       >
-        {tags.map((tag, i) => {
+        {convertedTags.map((tag: string, i: number) => {
           return done || tagAdderOpen ? (
             <Chip
               key={uuidv4()}
@@ -96,7 +100,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
             label="Add tag"
             variant="outlined"
             size="small"
-            onClick={openTagAdder}
+            onClick={() => setTagAdderOpen((prev) => !prev)}
           />
         )}
         <Collapse
@@ -119,7 +123,7 @@ const Tags: React.FC<TagsProps> = ({ date, tags, isSelected }) => {
             </AddButton>
           </TagInput>
         </Collapse>
-        <DatePicker date={date} />
+        <DatePicker />
       </Stack>
     </Root>
   );

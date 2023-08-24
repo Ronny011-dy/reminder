@@ -9,13 +9,13 @@ type DeleteReminderProps = {
 };
 
 const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
-  const id = useCurrentReminderContext();
+  const { id, ...restOfCurrentReminder } = useCurrentReminderContext();
   const mutation = useQueryDelete();
 
   const deletehandler = () => {
     // first delete sub reminders
-    subReminderIds.forEach((sub) => mutation.mutate({ id: sub }));
-    mutation.mutate({ id });
+    // subReminderIds.forEach((sub) => mutation.mutate({id,...restOfCurrentReminder,req:{ id: sub }}));
+    mutation.mutate({ id, ...restOfCurrentReminder, req: { id } });
   };
 
   return (

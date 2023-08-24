@@ -3,7 +3,6 @@ import { ButtonGroup } from '@mui/material';
 import { DeleteReminder } from '../DeleteReminder/DeleteReminder';
 import { ImportantToggle } from '../ImportantToggle/ImportantToggle';
 import { AddSubReminder } from '../AddSubReminder/AddSubReminder';
-import { useReminderDoneContext } from '../../hooks/useReminderDoneContext.ts';
 
 type ReminderOptionsProps = {
   important: boolean;
@@ -24,11 +23,10 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   title,
   date
 }) => {
-  const done = useReminderDoneContext();
   return (
     <Root>
       <ButtonGroup>
-        {(isSelected || important) && <ImportantToggle important={important} />}
+        {(isSelected || important) && <ImportantToggle />}
         {/* sub reminders can't have their own sub reminders */}
         {/* {{!done && !isChild && isSelected && (
           <AddSubReminder setSubReminderIds={setSubReminderIds} />
