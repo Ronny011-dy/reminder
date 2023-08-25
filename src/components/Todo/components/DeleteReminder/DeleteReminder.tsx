@@ -15,7 +15,7 @@ const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
   const deletehandler = () => {
     // first delete sub reminders
     // subReminderIds.forEach((sub) => mutation.mutate({id,...restOfCurrentReminder,req:{ id: sub }}));
-    mutation.mutate({ id, ...restOfCurrentReminder, req: { id } });
+    mutation.mutate({ id, ...restOfCurrentReminder });
   };
 
   return (

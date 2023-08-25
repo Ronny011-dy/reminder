@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Root = styled.div`
+export const Root = styled.div`
   height: 80vh;
   display: flex;
   align-items: center;
@@ -10,7 +10,7 @@ const Root = styled.div`
     font-weight: 400;
   }
 `;
-const Card = styled.div(
+export const Card = styled.div(
   ({ theme }) => css`
     margin-top: 7.5vh;
     width: 60%;
@@ -28,7 +28,7 @@ const Card = styled.div(
   `
 );
 
-const Wrapper = styled.div(
+export const Wrapper = styled.div(
   () => css`
     width: 70%;
     overflow: hidden;
@@ -36,9 +36,8 @@ const Wrapper = styled.div(
   `
 );
 
-const ChildDiv = styled.div`
+export const ChildDiv = styled.div`
   text-align: center;
   padding-top: 15px;
   padding-bottom: 15px;
 `;
-export { Root, Card, Wrapper, ChildDiv };

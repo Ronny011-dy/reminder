@@ -17,10 +17,10 @@ type SearchAndFilterProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSearch: React.Dispatch<React.SetStateAction<string>>;
-  onFilter: React.Dispatch<React.SetStateAction<string[]>>;
+  setTagsToFilterArr: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ isOpen, setIsOpen, onSearch, onFilter }) => {
+const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ isOpen, setIsOpen, onSearch, setTagsToFilterArr }) => {
   const [searchText, setSearchedText] = useState('');
   const onSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
@@ -50,7 +50,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ isOpen, setIsOpen, on
               </OptionWrapper>
             </SearchIconButton>
           </SearchWrapper>
-          <Filters onCheck={onFilter} />
+          <Filters setTagsToFilterArr={setTagsToFilterArr} />
         </DrawerWrapper>
       </StyledDrawer>
     </Root>

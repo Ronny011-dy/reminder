@@ -8,7 +8,6 @@ interface StyledListItemTextProps {
 
 export const Root = styled.div<StyledListItemTextProps>(
   ({ $done, isSelected, secondary }) => css`
-    text-decoration: ${$done ? 'line-through' : 'none'};
     opacity: ${$done || secondary ? '50%' : '100%'};
     margin-right: 15px;
     white-space: nowrap;
@@ -18,6 +17,9 @@ export const Root = styled.div<StyledListItemTextProps>(
     max-width: 50ch;
     @media (max-width: 610px) {
       width: 20vw;
+    }
+    ${StyledTextInput} {
+      text-decoration: ${$done ? 'line-through' : 'none'} !important;
     }
   `
 );

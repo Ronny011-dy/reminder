@@ -43,7 +43,7 @@ const DatePicker: React.FC = () => {
   const open = Boolean(popOverAnchor);
   return (
     <>
-      {date && (
+      {date && !done && (
         <Chip
           label={`Due ${dateValue?.format('DD/MM/YYYY')}`}
           variant="outlined"
@@ -51,6 +51,15 @@ const DatePicker: React.FC = () => {
           onClick={openCalendarHandler}
           disabled={done}
           onDelete={deleteDateHandler}
+        />
+      )}
+      {date && done && (
+        <Chip
+          label={`Due ${dateValue?.format('DD/MM/YYYY')}`}
+          variant="outlined"
+          size="small"
+          onClick={openCalendarHandler}
+          disabled={done}
         />
       )}
       {!done && !date && (
@@ -72,7 +81,7 @@ const DatePicker: React.FC = () => {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar
-            autoFocus
+            disablePast
             value={dateValue}
             onChange={(newValue) => {
               dateChangeHandler(newValue);

@@ -88,7 +88,6 @@ const Todo: React.FC<TodoProps> = ({
                 />
               </ListItemIcon>
               <InputText
-                textFromDb={title}
                 currentReminder={currentReminder}
                 isSelected={isSelected}
                 isTitle
@@ -100,7 +99,6 @@ const Todo: React.FC<TodoProps> = ({
             >
               <StyledListItemText isSelected={isSelected}>
                 <InputText
-                  textFromDb={description}
                   currentReminder={currentReminder}
                   isSelected={isSelected}
                 />

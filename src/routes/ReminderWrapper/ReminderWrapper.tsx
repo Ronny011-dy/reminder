@@ -3,7 +3,6 @@ import { useInfiniteQuery } from 'react-query';
 
 import { fetchReminders } from '../../api/reminders';
 
-import ClickAwayListener from '@mui/base/ClickAwayListener';
 import { Root, LeftMenu } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
@@ -16,20 +15,20 @@ import { paginationPageLength } from '../../common/values';
 
 const ReminderWrapper: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filtersArr, setFiltersArr] = useState<string[]>([]);
+  const [tagsToFilterArr, setTagsToFilterArr] = useState<string[]>([]);
   const [newReminderOpen, setNewReminderOpen] = useState(false);
   const newReminderRef = useRef<HTMLDivElement | null>(null);
 
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['reminders'],
     queryFn: async ({ pageParam = 1 }) => fetchReminders(pageParam),
     getNextPageParam: (_, pages) => pages.length + 1
   });
 
   const filterData = (flatData: DBReminder[]): DBReminder[] | undefined => {
-    return filtersArr.length === 0
+    return tagsToFilterArr.length === 0
       ? flatData
-      : flatData.filter((reminder) => JSON.parse(reminder.tags).some((tag: string) => filtersArr.includes(tag)));
+      : flatData.filter((reminder) => JSON.parse(reminder.tags).some((tag: string) => tagsToFilterArr.includes(tag)));
   };
   // useMemo should be used if the calculation becomes expensive
   const isAddingNewReminder: boolean = newReminderOpen || flat(data).length === 0;
@@ -47,7 +46,7 @@ const ReminderWrapper: React.FC = () => {
 
   const filteredAndSearchedData = useMemo(() => {
     return filterData(flat(data))?.filter((reminder) => reminder.title.includes(searchQuery));
-  }, [data, searchQuery, filtersArr]);
+  }, [data, searchQuery, tagsToFilterArr]);
 
   return (
     <Root>
@@ -55,18 +54,15 @@ const ReminderWrapper: React.FC = () => {
       <SubHeader
         onCreate={setNewReminderOpen}
         searchHandler={setSearchQuery}
-        filterHandler={setFiltersArr}
+        setTagsToFilterArr={setTagsToFilterArr}
       />
       <LeftMenu>
         {isAddingNewReminder && (
-          // MUI click-away listener requires access to DOM node, hence the ref
-          <ClickAwayListener onClickAway={() => setNewReminderOpen(false)}>
-            <NewReminder
-              ref={newReminderRef}
-              onSubmit={setNewReminderOpen}
-              noReminders={filteredAndSearchedData?.length === 0}
-            />
-          </ClickAwayListener>
+          <NewReminder
+            ref={newReminderRef}
+            setNewReminderOpen={setNewReminderOpen}
+            noReminders={filteredAndSearchedData?.length === 0}
+          />
         )}
         <ReminderList
           data={filteredAndSearchedData}
