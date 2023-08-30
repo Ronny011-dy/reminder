@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
-import { Tooltip, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { ArrowTooltip } from '../../../ArrowTooltip/ArrowTooltip';
 
 type OptionWrapperProps = {
   title: string;
@@ -11,20 +12,16 @@ type OptionWrapperProps = {
 
 const OptionWrapper: React.FC<OptionWrapperProps> = ({ children, title, onClick, disabled }) => {
   return (
-    <Tooltip
-      title={title}
-      enterDelay={650}
-      enterNextDelay={650}
-    >
-      <span>
+    <ArrowTooltip title={title}>
+      <>
         <IconButton
           onClick={onClick}
           disabled={disabled}
         >
           {children}
         </IconButton>
-      </span>
-    </Tooltip>
+      </>
+    </ArrowTooltip>
   );
 };
 

@@ -6,8 +6,6 @@ import {
   Root,
   StyledListItem,
   StyledDiv,
-  ChildReminder,
-  Padding,
   StyledListItemText,
   StyledListItemButton,
   CheckboxStyled,
@@ -21,8 +19,9 @@ import { RightMenu } from './components/RightMenu/RightMenu';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
+import { Draggable } from '@hello-pangea/dnd';
 
-const Todo: React.FC<TodoProps> = ({
+export const Todo: React.FC<TodoProps> = ({
   done,
   description,
   parentID,
@@ -42,87 +41,92 @@ const Todo: React.FC<TodoProps> = ({
 
   const doneHandler = () => {
     // subReminderIds?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
-    const { done: _, ...restofDBReminder } = currentReminder;
-    mutation?.mutate({ ...restofDBReminder, done: !done, req: { done: !done } });
+    const { done: _, ...restOfCurrentReminder } = currentReminder;
+    mutation?.mutate({ ...restOfCurrentReminder, done: !done, req: { done: !done } });
   };
 
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
 
   return (
     <Root ref={lastElementRef}>
-      <StyledListItem
-        theme={theme}
-        disablePadding
-        disableGutters
-        secondaryAction={
-          <ReminderOptions
-            {...restOfReminderProps}
-            title={title}
-            subReminderIds={subReminderIds}
-            setSubReminderIds={setSubReminderIds}
-            isSelected={isSelected}
-            isChild={parentID !== null}
-          />
-        }
-        $isChild={parentID !== null}
+      <Draggable
+        draggableId={currentReminder.id}
+        index={reminderIndex}
       >
-        <StyledListItemButton
-          theme={theme}
-          selected={isSelected}
-          onClick={(event) => onClick(event, reminderIndex)}
-          disableGutters
-        >
-          <StyledDiv
-            orientation="column"
-            align
-          >
-            <StyledDiv
-              orientation="row"
-              align
-            >
-              <ListItemIcon>
-                <CheckboxStyled
-                  checked={done}
-                  onClick={doneHandler}
-                  theme={theme}
-                />
-              </ListItemIcon>
-              <InputText
-                currentReminder={currentReminder}
+        {(provided) => (
+          <StyledListItem
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            theme={theme}
+            disablePadding
+            disableGutters
+            secondaryAction={
+              <ReminderOptions
+                {...restOfReminderProps}
+                title={title}
+                subReminderIds={subReminderIds}
+                setSubReminderIds={setSubReminderIds}
                 isSelected={isSelected}
-                isTitle
+                isChild={parentID !== null}
               />
-            </StyledDiv>
-            <StyledDiv
-              orientation="column"
-              paddingLeft
+            }
+            $isChild={parentID !== null}
+          >
+            <StyledListItemButton
+              theme={theme}
+              selected={isSelected}
+              onClick={(event) => onClick(event, reminderIndex)}
+              disableGutters
             >
-              <StyledListItemText isSelected={isSelected}>
-                <InputText
-                  currentReminder={currentReminder}
-                  isSelected={isSelected}
-                />
-              </StyledListItemText>
-              <StyledTagsWrapper isSelected={isSelected}>
-                <Tags isSelected={isSelected} />
-              </StyledTagsWrapper>
-              {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && <Padding />}
-                {!parentID && childrenReminders && childrenReminders?.length > 0 && (
-                  <ChildReminder>
+              <StyledDiv
+                orientation="column"
+                align
+              >
+                <StyledDiv
+                  orientation="row"
+                  align
+                >
+                  <ListItemIcon>
+                    <CheckboxStyled
+                      checked={done}
+                      onClick={doneHandler}
+                      theme={theme}
+                    />
+                  </ListItemIcon>
+                  <InputText
+                    currentReminder={currentReminder}
+                    isSelected={isSelected}
+                    isTitle
+                  />
+                </StyledDiv>
+                <StyledDiv
+                  orientation="column"
+                  paddingLeft
+                >
+                  <StyledListItemText isSelected={isSelected}>
+                    <InputText
+                      currentReminder={currentReminder}
+                      isSelected={isSelected}
+                    />
+                  </StyledListItemText>
+                  <StyledTagsWrapper isSelected={isSelected}>
+                    <Tags isSelected={isSelected} />
+                  </StyledTagsWrapper>
+                  {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && (
                     <ReminderList
                       data={childrenReminders}
                       isChild={true}
-                      parentID={id}
+                      parentID={currentReminder.id}
                     />
-                  </ChildReminder>
-                )} */}
-            </StyledDiv>
-            <RightMenu />
-          </StyledDiv>
-        </StyledListItemButton>
-      </StyledListItem>
+                  )} */}
+                </StyledDiv>
+                <RightMenu />
+              </StyledDiv>
+            </StyledListItemButton>
+          </StyledListItem>
+        )}
+      </Draggable>
     </Root>
   );
 };
-
-export { Todo };

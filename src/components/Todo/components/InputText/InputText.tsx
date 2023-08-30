@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { useQueryDelete, useQueryUpdate } from '../../../../api/reactQueryMutations';
-import { DBReminder } from '../../../../routes/ReminderWrapper/ReminderWrapper.types';
+import { DbReminder } from '../../../../routes/ReminderWrapper/ReminderWrapper.types';
 import { Root, StyledTextInput } from './InputText.styles';
 
-type InputTextProps = { currentReminder: DBReminder; isSelected: boolean; isTitle?: boolean };
+type InputTextProps = { currentReminder: DbReminder; isSelected: boolean; isTitle?: boolean };
 
 export const InputText: React.FC<InputTextProps> = ({ currentReminder, isSelected, isTitle }) => {
   const { title, description, ...restOfCurrentReminder } = currentReminder;

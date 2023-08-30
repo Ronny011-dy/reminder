@@ -1,9 +1,9 @@
-import { DBReminder } from '../routes/ReminderWrapper/ReminderWrapper.types';
+import { DbReminder } from '../routes/ReminderWrapper/ReminderWrapper.types';
 
 export type MutationVariables = {
-  req?: Partial<DBReminder>;
-} & DBReminder;
+  req?: Partial<DbReminder>;
+} & DbReminder;
 
 export interface ContextType {
-  previousReminders: DBReminder[];
+  previousReminders: DbReminder[];
 }

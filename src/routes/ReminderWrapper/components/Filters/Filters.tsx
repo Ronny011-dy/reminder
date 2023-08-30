@@ -1,7 +1,7 @@
 import { List, ListItemText, useTheme } from '@mui/material';
 import { Root, ListItemStyled, CheckboxStyled } from './Filters.styles';
 import { useQueryClient } from 'react-query';
-import type { DBReminder } from '../../ReminderWrapper.types';
+import type { DbReminder } from '../../ReminderWrapper.types';
 import { useEffect, useState } from 'react';
 import { filterNonUnique, flat } from '../../utils/ReminderWrapper.util';
 import { useLocalStorage } from '../../../../hooks/useLocalStorage';
@@ -9,12 +9,14 @@ import { useLocalStorage } from '../../../../hooks/useLocalStorage';
 interface CheckboxStates {
   [checkboxKey: string]: boolean;
 }
-type FiltersProps = { setTagsToFilterArr: React.Dispatch<React.SetStateAction<string[]>> };
+interface FiltersProps {
+  setTagsToFilterArr: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-const Filters: React.FC<FiltersProps> = ({ setTagsToFilterArr }) => {
+export const Filters: React.FC<FiltersProps> = ({ setTagsToFilterArr }) => {
   const theme = useTheme();
   const queryClient = useQueryClient();
-  const cachedData: DBReminder[] | undefined = flat(queryClient.getQueryData(['reminders']));
+  const cachedData: DbReminder[] | undefined = flat(queryClient.getQueryData(['reminders']));
   const [tagFliters, setFilters] = useState<string[]>([]);
   useEffect(() => {
     cachedData?.map(
@@ -70,8 +72,22 @@ const Filters: React.FC<FiltersProps> = ({ setTagsToFilterArr }) => {
           </ListItemStyled>
         ))}
       </List>
+      {/* Filter by states
+      <List>
+          <ListItemStyled
+            dense
+            disableGutters
+            disablePadding
+            key={0}
+          >
+            <CheckboxStyled
+              checked={filtersLocalStorage[filter] === undefined ? false : filtersLocalStorage[filter]}
+              theme={theme}
+              onClick={() => checkBoxHandler(filter)}
+            />
+            <ListItemText>Done</ListItemText>
+          </ListItemStyled>
+      </List> */}
     </Root>
   );
 };
-
-export { Filters };

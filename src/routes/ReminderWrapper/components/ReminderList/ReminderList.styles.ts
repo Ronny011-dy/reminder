@@ -5,7 +5,3 @@ export const Root = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
-export const StyledMargin = styled.div`
-  height: 20px;
-`;

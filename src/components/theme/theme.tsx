@@ -8,12 +8,12 @@ type ThemeProps = {
 };
 
 // context type
-type ContextParams = {
+export interface ContextParams {
   toggleColorMode: () => void;
   toggleOverride: () => void;
   getOverrideStatus: () => boolean;
   getThemePreference: () => string;
-};
+}
 
 // theme type
 

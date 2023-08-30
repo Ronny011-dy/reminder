@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 
 import { CurrentReminderContext } from '../components/CurrentReminderProvider/CurrentReminderProvider';
-import { DBReminder } from '../ReminderWrapper.types';
+import { DbReminder } from '../ReminderWrapper.types';
 
-export const useCurrentReminderContext = (): DBReminder => {
+export const useCurrentReminderContext = (): DbReminder => {
   const context = useContext(CurrentReminderContext);
 
   if (!context) {

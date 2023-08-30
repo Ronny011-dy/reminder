@@ -1,5 +1,5 @@
 import { InfiniteData } from 'react-query';
-import { DBReminder } from '../ReminderWrapper.types';
+import { DbReminder } from '../ReminderWrapper.types';
 
 export const getCookieValue = (cookieName: string): string | null => {
   // filters cookies
@@ -17,7 +17,7 @@ export const filterNonUnique = (arr: string[]) => {
   return arr.filter((value, index, self) => self.indexOf(value) === index);
 };
 
-export const flat = (data: InfiniteData<DBReminder[]> | undefined) => {
+export const flat = (data: InfiniteData<DbReminder[]> | undefined) => {
   if (data?.pages?.flat().length && data?.pages?.flat().length > 0) {
     return data.pages.flat();
   }

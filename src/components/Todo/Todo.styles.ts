@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import { Tags } from './components/Tags/Tags';
 
 interface WrapperProps {
   $isChild?: boolean;
@@ -41,11 +40,11 @@ export const StyledListItem = styled(ListItem)<WrapperProps>(
     width: 100%;
     max-width: 1000px;
     background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
-    /* margin-top: ${!$isChild ? '20px' : '0'}; */
     border: solid 1px;
     border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    margin-bottom: 20px;
   `
 );
 
@@ -61,18 +60,6 @@ export const StyledDiv = styled.div<StyledDivProps>(
     } */
   `
 );
-
-export const ChildReminder = styled.div`
-  background-color: rgb(23, 46, 69);
-  border: solid 2px rgba(255, 255, 255, 0.486);
-  border-radius: 15px;
-  margin-left: 50px;
-  margin-right: 25px;
-`;
-
-export const Padding = styled.div`
-  height: 15px;
-`;
 
 export const StyledListItemText = styled.div<StyledListItemTextProps>(
   ({ $done, isSelected }) => css`
@@ -98,7 +85,7 @@ export const StyledListItemButton = styled(ListItemButton)(
       background-color: transparent !important;
     }
     &:hover ${StyledTagsWrapper} {
-      opacity: 100%;
+      visibility: visible;
     }
     &:hover ${StyledListItemText} {
       opacity: 30%;
@@ -115,6 +102,6 @@ export const CheckboxStyled = styled(Checkbox)(
 
 export const StyledTagsWrapper = styled.div<StyledTagsWrapperProps>(
   ({ isSelected }) => css`
-    opacity: ${isSelected ? '100' : '0'}%;
+    visibility: ${isSelected ? 'visible' : 'hidden'};
   `
 );

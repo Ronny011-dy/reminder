@@ -1,11 +1,12 @@
 import { ClickAwayListener, useTheme } from '@mui/material';
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton } from '@mui/material';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import { Root, StyledListItem } from './NewReminder.styles';
 import { useState, forwardRef, useRef } from 'react';
 import { useQueryCreate } from '../../../../api/reactQueryMutations';
 
 import { v4 as uuidv4 } from 'uuid';
+import { ArrowTooltip } from '../../../../components/ArrowTooltip/ArrowTooltip';
 
 interface NewReminderProps {
   setNewReminderOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +25,7 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewRemind
       id: uuidv4(),
       title,
       createdDate: String(Date.now()),
+      orderID: String(Date.now()),
       parentID: null,
       done: false,
       description: '',
@@ -63,15 +65,11 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewRemind
             $noReminders={noReminders}
             theme={theme}
             secondaryAction={
-              <Tooltip
-                title="Add reminder"
-                enterDelay={650}
-                enterNextDelay={650}
-              >
+              <ArrowTooltip title="Add reminder">
                 <IconButton type="submit">
                   <AddTaskRoundedIcon />
                 </IconButton>
-              </Tooltip>
+              </ArrowTooltip>
             }
           >
             <input

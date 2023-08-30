@@ -19,9 +19,7 @@ const ReminderOptions: React.FC<ReminderOptionsProps> = ({
   subReminderIds,
   setSubReminderIds,
   isChild,
-  isSelected,
-  title,
-  date
+  isSelected
 }) => {
   return (
     <Root>

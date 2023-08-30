@@ -1,18 +1,15 @@
 import { useContext } from 'react';
 import { FormControlLabel, FormGroup, Checkbox, useTheme } from '@mui/material';
 import { ColorModeContext } from '../../components/Theme/Theme';
-import { Root, StyledDiv, MaterialUISwitch } from './Settings.styles';
+import { Root, StyledDiv } from './Settings.styles';
+import { MUISwitch } from './components/MUISwitch';
+import { ArrowTooltip } from '../../components/ArrowTooltip/ArrowTooltip';
 
 const Settings: React.FC = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-  const overriden = colorMode?.getOverrideStatus();
-  const handleOnCheck = () => {
-    colorMode?.toggleOverride();
-  };
-  const toggleHandler = () => {
-    colorMode?.toggleColorMode();
-  };
+  const isOverriden = colorMode?.getOverrideStatus();
+
   return (
     <Root>
       <StyledDiv theme={theme}>
@@ -21,24 +18,22 @@ const Settings: React.FC = () => {
         <h3>Theme</h3>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={overriden} onClick={handleOnCheck} />}
+            control={
+              <ArrowTooltip title="Override mode set in your OS">
+                <Checkbox
+                  checked={isOverriden}
+                  onClick={() => colorMode?.toggleOverride()}
+                />
+              </ArrowTooltip>
+            }
             label={'Override OS preference'}
           />
-          <FormControlLabel
-            disabled={!overriden}
-            control={
-              <MaterialUISwitch
-                sx={{ m: 1 }}
-                onChange={toggleHandler}
-                checked={
-                  colorMode?.getThemePreference() === 'dark' ? true : false
-                }
-              />
-            }
-            label={`${
-              colorMode?.getThemePreference() === 'dark' ? 'Dark' : 'Light'
-            } mode`}
-          />
+          {colorMode && isOverriden && (
+            <MUISwitch
+              isOverriden={isOverriden}
+              colorMode={colorMode}
+            />
+          )}
         </FormGroup>
       </StyledDiv>
     </Root>

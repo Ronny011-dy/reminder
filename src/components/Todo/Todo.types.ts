@@ -1,4 +1,4 @@
-import { DBReminder } from '../../routes/ReminderWrapper/ReminderWrapper.types';
+import { DbReminder } from '../../routes/ReminderWrapper/ReminderWrapper.types';
 
 type Reminder = {
   done: boolean;
@@ -18,7 +18,7 @@ type ListItemButtonProps = {
   lastElementRef?: (element: any) => void;
 };
 
-type ParentReminder = { childrenReminders?: DBReminder[] };
+type ParentReminder = { childrenReminders?: DbReminder[] };
 
 type TodoProps = Reminder & ListItemButtonProps & ParentReminder;
 
