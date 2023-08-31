@@ -1,5 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { paginationPageLength } from '../../common/values';
+import { ReminderList } from './components/ReminderList/ReminderList';
+
+interface StyledReminderListProps {
+  opacity: number;
+}
 
 export const Root = styled.div`
   max-width: 1440px;
@@ -27,3 +32,9 @@ export const LeftMenu = styled.div`
     height: ${(106 + 20) * (paginationPageLength - 2)}px;
   }
 `;
+
+export const StyledReminderListWrapper = styled.div<StyledReminderListProps>(
+  ({ opacity }) => css`
+    opacity: ${opacity};
+  `
+);

@@ -9,7 +9,6 @@ const Root = styled.div(
     padding-left: 10px;
     color: white;
     height: 10vh;
-    border-radius: 0px 0px 15px 15px;
     z-index: 1;
     div {
       display: flex;

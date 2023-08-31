@@ -12,7 +12,6 @@ const Root = styled.div(
     width: 100vw;
     height: 10vh;
     background-color: ${theme.palette.primary[`${theme.palette.mode}`]};
-    border-radius: 15px 15px 0px 0px;
     color: white;
     div {
       display: flex;

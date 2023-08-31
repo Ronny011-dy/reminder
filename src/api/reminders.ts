@@ -56,8 +56,6 @@ export const deleteReminder = async (req: MutationVariables): Promise<DbReminder
   return await ky.post(`/api/drop/${req.id}`, {}).json();
 };
 
-export const batchedDeleteReminder = async (batch: any[]) => {};
-
 export const moveReminder = async (reminderDragDropObj: ReminderToMove) => {
   const { sourceReminder, upperReminder, bottomReminder } = reminderDragDropObj;
   const upperOrderId = upperReminder?.orderID ? Number(upperReminder.orderID) : undefined;

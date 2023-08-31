@@ -4,7 +4,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 
 import { fetchReminders } from '../../api/reminders';
 
-import { Root, LeftMenu } from './ReminderWrapper.styles';
+import { Root, LeftMenu, StyledReminderListWrapper } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
 import { SubHeader } from './components/SubHeader/SubHeader';
@@ -19,7 +19,7 @@ export const ReminderWrapper: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [tagsToFilterArr, setTagsToFilterArr] = useState<string[]>([]);
   const [newReminderOpen, setNewReminderOpen] = useState(false);
-  const newReminderRef = useRef<HTMLDivElement | null>(null);
+  const [reminderListOpacity, setReminderListOpacity] = useState(1);
   const moveMutation = useQueryMove();
 
   const { data, fetchNextPage } = useInfiniteQuery({
@@ -34,8 +34,6 @@ export const ReminderWrapper: React.FC = () => {
       : flatData.filter((reminder) => JSON.parse(reminder.tags).some((tag: string) => tagsToFilterArr.includes(tag)));
   };
 
-  const isAddingNewReminder: boolean = newReminderOpen || flat(data).length === 0;
-
   const lastReminderRef = useRef<HTMLElement>(null);
   const { ref: lastElementRef, entry } = useIntersection({ root: lastReminderRef.current, threshold: 1 });
 
@@ -47,17 +45,21 @@ export const ReminderWrapper: React.FC = () => {
     }
   }, [entry]);
 
+  useEffect(() => {
+    setNewReminderOpen((prev) => (data?.pages[0].length === 0 ? true : prev));
+  }, [data]);
+
   const filteredAndSearchedData = useMemo(() => {
     return filterData(flat(data))?.filter((reminder) => reminder.title.includes(searchQuery));
   }, [data, searchQuery, tagsToFilterArr]);
 
-  const onDragEnd = (result: DropResult) => {
-    console.log('Fired onDragEnd');
+  const onDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
     // if the destination is null - not in a droppable
     if (!destination) return;
     // if the reminder was placed in the same slot it was in before
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+    setReminderListOpacity(0);
 
     const flatData = flat(data);
     const sourceReminder = flatData.filter((reminder) => reminder.id === draggableId)[0];
@@ -72,8 +74,8 @@ export const ReminderWrapper: React.FC = () => {
 
     const upperReminder = flatData[indexOfUpperReminder];
     const bottomReminder = flatData[indexOfBottomReminder];
-
     moveMutation.mutate({ sourceReminder, destinationReminder, upperReminder, bottomReminder });
+    setReminderListOpacity(1);
   };
 
   return (
@@ -84,21 +86,25 @@ export const ReminderWrapper: React.FC = () => {
         searchHandler={setSearchQuery}
         setTagsToFilterArr={setTagsToFilterArr}
       />
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onDragStart={() => setReminderListOpacity(0.5)}
+      >
         <LeftMenu>
-          {isAddingNewReminder && (
+          {(data?.pages[0].length === 0 || newReminderOpen) && (
             <NewReminder
-              ref={newReminderRef}
               setNewReminderOpen={setNewReminderOpen}
               noReminders={filteredAndSearchedData?.length === 0}
             />
           )}
-          <ReminderList
-            data={filteredAndSearchedData}
-            isChild={false}
-            numOfReminders={filteredAndSearchedData && filteredAndSearchedData?.length - 1}
-            lastElementRef={lastElementRef}
-          />
+          <StyledReminderListWrapper opacity={reminderListOpacity}>
+            <ReminderList
+              data={filteredAndSearchedData}
+              isChild={false}
+              numOfReminders={filteredAndSearchedData && filteredAndSearchedData?.length - 1}
+              lastElementRef={lastElementRef}
+            />
+          </StyledReminderListWrapper>
         </LeftMenu>
       </DragDropContext>
     </Root>

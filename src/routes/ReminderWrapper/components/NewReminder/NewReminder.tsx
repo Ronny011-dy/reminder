@@ -2,7 +2,7 @@ import { ClickAwayListener, useTheme } from '@mui/material';
 import { IconButton } from '@mui/material';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
 import { Root, StyledListItem } from './NewReminder.styles';
-import { useState, forwardRef, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useQueryCreate } from '../../../../api/reactQueryMutations';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -13,11 +13,12 @@ interface NewReminderProps {
   noReminders: boolean;
 }
 
-const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewReminderOpen, noReminders }, ref) => {
+export const NewReminder: React.FC<NewReminderProps> = ({ setNewReminderOpen, noReminders }) => {
   const theme = useTheme();
   const mutation = useQueryCreate();
   const [title, setTitle] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
@@ -55,7 +56,7 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewRemind
   };
 
   return (
-    <Root>
+    <Root onClick={() => inputRef.current?.focus()}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <form
           onSubmit={handleSubmit}
@@ -73,6 +74,7 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewRemind
             }
           >
             <input
+              ref={inputRef}
               autoFocus
               type="text"
               required
@@ -87,6 +89,4 @@ const NewReminder = forwardRef<HTMLDivElement, NewReminderProps>(({ setNewRemind
       </ClickAwayListener>
     </Root>
   );
-});
-
-export { NewReminder };
+};
