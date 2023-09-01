@@ -1,15 +1,20 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, ReactNode, useState } from 'react';
 import { DbReminder } from '../../ReminderWrapper.types';
 
-type DataProviderProps = {
+interface DataProviderProps {
   children: ReactNode;
-  data?: DbReminder[];
-};
+}
 
-const DataContext = createContext<DbReminder[] | undefined>(undefined);
+interface ContextProviderProps {
+  childReminders: DbReminder[];
+  setChildReminders: React.Dispatch<React.SetStateAction<DbReminder[]>>;
+}
 
-const DataProvider: React.FC<DataProviderProps> = ({ children, data }) => {
-  return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
+const DataContext = createContext<ContextProviderProps | undefined>(undefined);
+
+const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+  const [childReminders, setChildReminders] = useState<DbReminder[]>([]);
+  return <DataContext.Provider value={{ childReminders, setChildReminders }}>{children}</DataContext.Provider>;
 };
 
 export { DataProvider, DataContext };

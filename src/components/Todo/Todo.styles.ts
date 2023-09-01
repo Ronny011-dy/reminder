@@ -35,6 +35,8 @@ const justifiedToCenter = css`
 
 export const Root = styled.div``;
 
+export const StyledFocusableDiv = styled.div``;
+
 export const StyledListItem = styled(ListItem)<WrapperProps>(
   ({ $isChild, theme }) => css`
     width: 100%;

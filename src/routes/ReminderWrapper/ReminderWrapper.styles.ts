@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { paginationPageLength } from '../../common/values';
-import { ReminderList } from './components/ReminderList/ReminderList';
 
 interface StyledReminderListProps {
   opacity: number;
@@ -16,7 +15,20 @@ export const Root = styled.div`
   height: 80vh;
 `;
 
-export const LeftMenu = styled.div`
+export const LeftMenu = styled.div``;
+
+export const StyledListsWrapper = styled.div<StyledReminderListProps>(
+  ({ opacity }) => css`
+    opacity: ${opacity};
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  `
+);
+
+export const StyledNewReminderAndListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   padding-left: 30px;
   padding-right: 30px;
   height: ${(106 + 20) * (paginationPageLength - 1)}px;
@@ -32,9 +44,3 @@ export const LeftMenu = styled.div`
     height: ${(106 + 20) * (paginationPageLength - 2)}px;
   }
 `;
-
-export const StyledReminderListWrapper = styled.div<StyledReminderListProps>(
-  ({ opacity }) => css`
-    opacity: ${opacity};
-  `
-);

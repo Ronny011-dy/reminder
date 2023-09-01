@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '@mui/material';
 
 import type { TodoProps } from './Todo.types';
@@ -9,7 +9,8 @@ import {
   StyledListItemText,
   StyledListItemButton,
   CheckboxStyled,
-  StyledTagsWrapper
+  StyledTagsWrapper,
+  StyledFocusableDiv
 } from './Todo.styles';
 import { ListItemIcon } from '@mui/material';
 import { useQueryUpdate } from '../../api/reactQueryMutations';
@@ -20,24 +21,29 @@ import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
 import { Draggable } from '@hello-pangea/dnd';
+import { useRemindersDataContext } from '../../routes/ReminderWrapper/hooks/useRemindersDataContext';
 
 export const Todo: React.FC<TodoProps> = ({
   done,
   description,
   parentID,
   reminderIndex,
-  onClick,
+  handleReminderClick,
   selectedIndex,
   childrenReminders,
   lastElementRef,
   tags,
   title,
+  draggableId,
+  setDraggableId,
   ...restOfReminderProps
 }) => {
   const theme = useTheme();
   const [subReminderIds, setSubReminderIds] = useState<string[]>([]);
   const mutation = useQueryUpdate();
   const currentReminder = useCurrentReminderContext();
+  const { setChildReminders } = useRemindersDataContext();
+  const focusableDiv = useRef<HTMLDivElement>(null);
 
   const doneHandler = () => {
     // subReminderIds?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
@@ -45,88 +51,93 @@ export const Todo: React.FC<TodoProps> = ({
     mutation?.mutate({ ...restOfCurrentReminder, done: !done, req: { done: !done } });
   };
 
+  const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    handleReminderClick(e, reminderIndex);
+    childrenReminders && setChildReminders(childrenReminders);
+  };
+
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
+
+  useEffect(() => {
+    currentReminder.id === draggableId && focusableDiv.current?.scrollIntoView({ behavior: 'instant' });
+    setDraggableId('');
+  }, [draggableId]);
 
   return (
     <Root ref={lastElementRef}>
-      <Draggable
-        draggableId={currentReminder.id}
-        index={reminderIndex}
-      >
-        {(provided) => (
-          <StyledListItem
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            theme={theme}
-            disablePadding
-            disableGutters
-            secondaryAction={
-              <ReminderOptions
-                {...restOfReminderProps}
-                title={title}
-                subReminderIds={subReminderIds}
-                setSubReminderIds={setSubReminderIds}
-                isSelected={isSelected}
-                isChild={parentID !== null}
-              />
-            }
-            $isChild={parentID !== null}
-          >
-            <StyledListItemButton
+      <StyledFocusableDiv ref={focusableDiv}>
+        <Draggable
+          draggableId={currentReminder.id}
+          index={reminderIndex}
+        >
+          {(provided) => (
+            <StyledListItem
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
               theme={theme}
-              selected={isSelected}
-              onClick={(event) => onClick(event, reminderIndex)}
+              disablePadding
               disableGutters
+              secondaryAction={
+                <ReminderOptions
+                  {...restOfReminderProps}
+                  title={title}
+                  subReminderIds={subReminderIds}
+                  setSubReminderIds={setSubReminderIds}
+                  isSelected={isSelected}
+                  isChild={parentID !== null}
+                />
+              }
+              $isChild={parentID !== null}
             >
-              <StyledDiv
-                orientation="column"
-                align
+              <StyledListItemButton
+                theme={theme}
+                selected={isSelected}
+                onClick={handleOnClick}
+                disableGutters
               >
                 <StyledDiv
-                  orientation="row"
+                  orientation="column"
                   align
                 >
-                  <ListItemIcon>
-                    <CheckboxStyled
-                      checked={done}
-                      onClick={doneHandler}
-                      theme={theme}
-                    />
-                  </ListItemIcon>
-                  <InputText
-                    currentReminder={currentReminder}
-                    isSelected={isSelected}
-                    isTitle
-                  />
-                </StyledDiv>
-                <StyledDiv
-                  orientation="column"
-                  paddingLeft
-                >
-                  <StyledListItemText isSelected={isSelected}>
+                  <StyledDiv
+                    orientation="row"
+                    align
+                  >
+                    <ListItemIcon>
+                      <CheckboxStyled
+                        checked={done}
+                        onClick={doneHandler}
+                        theme={theme}
+                      />
+                    </ListItemIcon>
                     <InputText
                       currentReminder={currentReminder}
                       isSelected={isSelected}
+                      isTitle
                     />
-                  </StyledListItemText>
-                  <StyledTagsWrapper isSelected={isSelected}>
-                    <Tags isSelected={isSelected} />
-                  </StyledTagsWrapper>
-                  {/* {!parentID && childrenReminders && childrenReminders?.length > 0 && (
-                    <ReminderList
-                      data={childrenReminders}
-                      isChild={true}
-                      parentID={currentReminder.id}
-                    />
-                  )} */}
+                  </StyledDiv>
+                  <StyledDiv
+                    orientation="column"
+                    paddingLeft
+                  >
+                    <StyledListItemText isSelected={isSelected}>
+                      <InputText
+                        currentReminder={currentReminder}
+                        isSelected={isSelected}
+                      />
+                    </StyledListItemText>
+                    <StyledTagsWrapper isSelected={isSelected}>
+                      <Tags isSelected={isSelected} />
+                    </StyledTagsWrapper>
+                  </StyledDiv>
+                  <RightMenu />
                 </StyledDiv>
-                <RightMenu />
-              </StyledDiv>
-            </StyledListItemButton>
-          </StyledListItem>
-        )}
-      </Draggable>
+              </StyledListItemButton>
+            </StyledListItem>
+          )}
+        </Draggable>
+      </StyledFocusableDiv>
     </Root>
   );
 };

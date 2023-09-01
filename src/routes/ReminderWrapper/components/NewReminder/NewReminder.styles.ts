@@ -2,7 +2,7 @@ import { ListItem } from '@mui/material';
 import styled, { css } from 'styled-components';
 
 interface StyledListItemProps {
-  $noReminders: boolean;
+  $noReminders?: boolean;
 }
 
 export const Root = styled.div``;

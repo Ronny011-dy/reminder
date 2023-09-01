@@ -8,24 +8,28 @@ import { DbReminder } from '../../ReminderWrapper.types';
 import { paginationPageLength } from '../../../../common/values';
 import { Droppable } from '@hello-pangea/dnd';
 import { DroppableList } from '../DroppableList/DroppableList';
+import { useRemindersDataContext } from '../../hooks/useRemindersDataContext';
 
 interface ReminderListProps {
   data?: DbReminder[];
-  isChild: boolean;
+  isChild?: boolean;
   parentID?: string;
-  numOfReminders?: number;
-  lastElementRef?: (element: any) => void;
+  lastElementRef?: (element: HTMLDivElement) => void;
+  draggableId: string;
+  setDraggableId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ReminderList: React.FC<ReminderListProps> = ({
   data,
   isChild,
   parentID,
-  numOfReminders,
-  lastElementRef
+  lastElementRef,
+  draggableId,
+  setDraggableId
 }) => {
+  const { childReminders } = useRemindersDataContext();
   // if reminders marked as isChild return all children, else render out only parent reminders
-  const reminders = isChild ? data : data?.filter((reminder) => reminder.parentID === null);
+  const reminders = isChild ? childReminders : data?.filter((reminder) => reminder.parentID === null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const handleReminderClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
     setSelectedIndex(index);
@@ -49,10 +53,9 @@ export const ReminderList: React.FC<ReminderListProps> = ({
                     parentID: reminderParentID ? reminderParentID : undefined,
                     tags: JSON.parse(reminder.tags),
                     createdDate: Number(reminder.createdDate),
-                    date: reminder.date ? undefined : Number(reminder.date),
-                    childrenReminders: isChild ? undefined : data?.filter((reminder) => reminder.parentID === parentID)
+                    date: reminder.date ? undefined : Number(reminder.date)
                   };
-                  if (i === (numOfReminders ?? paginationPageLength) - 1)
+                  if (i === (reminders?.length ?? paginationPageLength) - 1)
                     return (
                       <Fragment key={reminder.id}>
                         <CurrentReminderProvider {...reminder}>
@@ -63,8 +66,15 @@ export const ReminderList: React.FC<ReminderListProps> = ({
                             {...otherReminderProps}
                             {...convertedProps}
                             reminderIndex={i}
-                            onClick={handleReminderClick}
+                            handleReminderClick={handleReminderClick}
                             selectedIndex={selectedIndex}
+                            draggableId={draggableId}
+                            setDraggableId={setDraggableId}
+                            childrenReminders={
+                              isChild
+                                ? undefined
+                                : data?.filter((reminder) => reminder.parentID === otherReminderProps.id)
+                            }
                           />
                         </CurrentReminderProvider>
                       </Fragment>
@@ -77,8 +87,15 @@ export const ReminderList: React.FC<ReminderListProps> = ({
                             {...otherReminderProps}
                             {...convertedProps}
                             reminderIndex={i}
-                            onClick={handleReminderClick}
+                            handleReminderClick={handleReminderClick}
                             selectedIndex={selectedIndex}
+                            draggableId={draggableId}
+                            setDraggableId={setDraggableId}
+                            childrenReminders={
+                              isChild
+                                ? undefined
+                                : data?.filter((reminder) => reminder.parentID === otherReminderProps.id)
+                            }
                           />
                         </CurrentReminderProvider>
                       </Fragment>

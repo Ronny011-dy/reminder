@@ -1,6 +1,6 @@
 import { DbReminder } from '../../routes/ReminderWrapper/ReminderWrapper.types';
 
-type Reminder = {
+export type Reminder = {
   done: boolean;
   title: string;
   description: string;
@@ -11,15 +11,20 @@ type Reminder = {
   parentID?: string;
 };
 
-type ListItemButtonProps = {
+interface ListItemButtonProps {
   reminderIndex: number;
   selectedIndex: number;
-  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void;
-  lastElementRef?: (element: any) => void;
-};
+  handleReminderClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void;
+  lastElementRef?: (element: HTMLDivElement) => void;
+}
 
-type ParentReminder = { childrenReminders?: DbReminder[] };
+interface ParentReminder {
+  childrenReminders?: DbReminder[];
+}
 
-type TodoProps = Reminder & ListItemButtonProps & ParentReminder;
+interface DraggableProps {
+  draggableId: string;
+  setDraggableId: React.Dispatch<React.SetStateAction<string>>;
+}
 
-export type { Reminder, TodoProps };
+export type TodoProps = Reminder & ListItemButtonProps & ParentReminder & DraggableProps;

@@ -4,7 +4,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 
 import { fetchReminders } from '../../api/reminders';
 
-import { Root, LeftMenu, StyledReminderListWrapper } from './ReminderWrapper.styles';
+import { Root, LeftMenu, StyledListsWrapper, StyledNewReminderAndListWrapper } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
 import { NewReminder } from './components/NewReminder/NewReminder';
 import { SubHeader } from './components/SubHeader/SubHeader';
@@ -14,12 +14,15 @@ import { useIntersection } from '@mantine/hooks';
 import { flat } from './utils/ReminderWrapper.util';
 import { paginationPageLength } from '../../common/values';
 import { useQueryMove } from '../../api/reactQueryMutations';
+import { DataProvider } from './components/DataProvider/DataProvider';
 
 export const ReminderWrapper: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [tagsToFilterArr, setTagsToFilterArr] = useState<string[]>([]);
   const [newReminderOpen, setNewReminderOpen] = useState(false);
+  const [newSubReminderOpen, setNewSubReminderOpen] = useState(false);
   const [reminderListOpacity, setReminderListOpacity] = useState(1);
+  const [draggableId, setDraggableId] = useState('');
   const moveMutation = useQueryMove();
 
   const { data, fetchNextPage } = useInfiniteQuery({
@@ -34,7 +37,7 @@ export const ReminderWrapper: React.FC = () => {
       : flatData.filter((reminder) => JSON.parse(reminder.tags).some((tag: string) => tagsToFilterArr.includes(tag)));
   };
 
-  const lastReminderRef = useRef<HTMLElement>(null);
+  const lastReminderRef = useRef<HTMLDivElement>(null);
   const { ref: lastElementRef, entry } = useIntersection({ root: lastReminderRef.current, threshold: 1 });
 
   useEffect(() => {
@@ -76,6 +79,7 @@ export const ReminderWrapper: React.FC = () => {
     const bottomReminder = flatData[indexOfBottomReminder];
     moveMutation.mutate({ sourceReminder, destinationReminder, upperReminder, bottomReminder });
     setReminderListOpacity(1);
+    setDraggableId(destinationReminder.id);
   };
 
   return (
@@ -91,20 +95,33 @@ export const ReminderWrapper: React.FC = () => {
         onDragStart={() => setReminderListOpacity(0.5)}
       >
         <LeftMenu>
-          {(data?.pages[0].length === 0 || newReminderOpen) && (
-            <NewReminder
-              setNewReminderOpen={setNewReminderOpen}
-              noReminders={filteredAndSearchedData?.length === 0}
-            />
-          )}
-          <StyledReminderListWrapper opacity={reminderListOpacity}>
-            <ReminderList
-              data={filteredAndSearchedData}
-              isChild={false}
-              numOfReminders={filteredAndSearchedData && filteredAndSearchedData?.length - 1}
-              lastElementRef={lastElementRef}
-            />
-          </StyledReminderListWrapper>
+          <StyledListsWrapper opacity={reminderListOpacity}>
+            <DataProvider>
+              <StyledNewReminderAndListWrapper>
+                {(data?.pages[0].length === 0 || newReminderOpen) && (
+                  <NewReminder
+                    setNewReminderOpen={setNewReminderOpen}
+                    noReminders={filteredAndSearchedData?.length === 0}
+                  />
+                )}
+                <ReminderList
+                  data={filteredAndSearchedData ?? []}
+                  lastElementRef={lastElementRef}
+                  draggableId={draggableId}
+                  setDraggableId={setDraggableId}
+                />
+              </StyledNewReminderAndListWrapper>
+              <StyledNewReminderAndListWrapper>
+                {newSubReminderOpen && <NewReminder setNewReminderOpen={setNewSubReminderOpen} />}
+                <ReminderList
+                  isChild
+                  lastElementRef={lastElementRef}
+                  draggableId={draggableId}
+                  setDraggableId={setDraggableId}
+                />
+              </StyledNewReminderAndListWrapper>
+            </DataProvider>
+          </StyledListsWrapper>
         </LeftMenu>
       </DragDropContext>
     </Root>

@@ -10,7 +10,8 @@ import { ArrowTooltip } from '../../../../components/ArrowTooltip/ArrowTooltip';
 
 interface NewReminderProps {
   setNewReminderOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  noReminders: boolean;
+  noReminders?: boolean;
+  isChild?: boolean;
 }
 
 export const NewReminder: React.FC<NewReminderProps> = ({ setNewReminderOpen, noReminders }) => {

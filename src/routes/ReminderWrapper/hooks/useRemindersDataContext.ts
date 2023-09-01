@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 
 import { DataContext } from '../components/DataProvider/DataProvider';
-import { DbReminder } from '../ReminderWrapper.types';
 
-const useRemindersDataContext = (): DbReminder[] => {
+export const useRemindersDataContext = () => {
   const context = useContext(DataContext);
 
   if (!context) {
@@ -12,5 +11,3 @@ const useRemindersDataContext = (): DbReminder[] => {
 
   return context;
 };
-
-export { useRemindersDataContext };
