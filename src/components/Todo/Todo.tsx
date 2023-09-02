@@ -15,8 +15,6 @@ import {
 import { ListItemIcon } from '@mui/material';
 import { useQueryUpdate } from '../../api/reactQueryMutations';
 import { useCurrentReminderContext } from '../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
-import { ReminderList } from '../../routes/ReminderWrapper/components/ReminderList/ReminderList';
-import { RightMenu } from './components/RightMenu/RightMenu';
 import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
@@ -36,13 +34,14 @@ export const Todo: React.FC<TodoProps> = ({
   title,
   draggableId,
   setDraggableId,
+  isChild,
   ...restOfReminderProps
 }) => {
   const theme = useTheme();
   const [subReminderIds, setSubReminderIds] = useState<string[]>([]);
   const mutation = useQueryUpdate();
   const currentReminder = useCurrentReminderContext();
-  const { setChildReminders } = useRemindersDataContext();
+  const { setChildReminders, setParentID, parentID: contextParentID } = useRemindersDataContext();
   const focusableDiv = useRef<HTMLDivElement>(null);
 
   const doneHandler = () => {
@@ -53,7 +52,10 @@ export const Todo: React.FC<TodoProps> = ({
 
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleReminderClick(e, reminderIndex);
-    childrenReminders && setChildReminders(childrenReminders);
+    if (!isChild) {
+      childrenReminders && childrenReminders?.length > 0 ? setChildReminders(childrenReminders) : setChildReminders([]);
+      setParentID(currentReminder.id);
+    }
   };
 
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
@@ -117,10 +119,7 @@ export const Todo: React.FC<TodoProps> = ({
                       isTitle
                     />
                   </StyledDiv>
-                  <StyledDiv
-                    orientation="column"
-                    paddingLeft
-                  >
+                  <StyledDiv orientation="column">
                     <StyledListItemText isSelected={isSelected}>
                       <InputText
                         currentReminder={currentReminder}
@@ -131,7 +130,6 @@ export const Todo: React.FC<TodoProps> = ({
                       <Tags isSelected={isSelected} />
                     </StyledTagsWrapper>
                   </StyledDiv>
-                  <RightMenu />
                 </StyledDiv>
               </StyledListItemButton>
             </StyledListItem>

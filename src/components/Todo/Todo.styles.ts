@@ -18,7 +18,6 @@ interface StyledDivProps {
   orientation: 'row' | 'column';
   align?: boolean;
   justify?: boolean;
-  paddingLeft?: boolean;
 }
 
 interface StyledTagsWrapperProps {
@@ -51,15 +50,11 @@ export const StyledListItem = styled(ListItem)<WrapperProps>(
 );
 
 export const StyledDiv = styled.div<StyledDivProps>(
-  ({ orientation, align, justify, paddingLeft }) => css`
+  ({ orientation, align, justify }) => css`
     display: flex;
     flex-direction: ${orientation};
     ${align && alignedToCenter};
     ${justify && justifiedToCenter};
-    /* padding-left: ${paddingLeft ? '0' : '0'}px; */
-    /* @media (max-width: 1440px) {
-      padding-left: ${paddingLeft ? '20' : '0'}px;
-    } */
   `
 );
 

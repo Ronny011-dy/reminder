@@ -1,25 +1,27 @@
 import { ClickAwayListener, useTheme } from '@mui/material';
 import { IconButton } from '@mui/material';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
-import { Root, StyledListItem } from './NewReminder.styles';
+import { Root, StyledListItem, StyledWrapper } from './NewReminder.styles';
 import { useState, useRef } from 'react';
 import { useQueryCreate } from '../../../../api/reactQueryMutations';
+import AddIcon from '@mui/icons-material/Add';
 
 import { v4 as uuidv4 } from 'uuid';
 import { ArrowTooltip } from '../../../../components/ArrowTooltip/ArrowTooltip';
+import { HeaderButton } from '../../../../components/HeaderButton/HeaderButton';
 
 interface NewReminderProps {
-  setNewReminderOpen: React.Dispatch<React.SetStateAction<boolean>>;
   noReminders?: boolean;
   isChild?: boolean;
 }
 
-export const NewReminder: React.FC<NewReminderProps> = ({ setNewReminderOpen, noReminders }) => {
+export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild }) => {
   const theme = useTheme();
   const mutation = useQueryCreate();
   const [title, setTitle] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [newReminderOpen, setNewReminderOpen] = useState(false);
 
   const handleSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
@@ -57,37 +59,50 @@ export const NewReminder: React.FC<NewReminderProps> = ({ setNewReminderOpen, no
   };
 
   return (
-    <Root onClick={() => inputRef.current?.focus()}>
-      <ClickAwayListener onClickAway={handleClickAway}>
-        <form
-          onSubmit={handleSubmit}
-          ref={formRef}
+    <Root>
+      {!newReminderOpen && (
+        <HeaderButton
+          onClick={() => setNewReminderOpen(true)}
+          nonheader
         >
-          <StyledListItem
-            $noReminders={noReminders}
-            theme={theme}
-            secondaryAction={
-              <ArrowTooltip title="Add reminder">
-                <IconButton type="submit">
-                  <AddTaskRoundedIcon />
-                </IconButton>
-              </ArrowTooltip>
-            }
-          >
-            <input
-              ref={inputRef}
-              autoFocus
-              type="text"
-              required
-              placeholder="Enter reminder"
-              minLength={1}
-              value={title}
-              onChange={handleTitleChange}
-              onKeyDown={handleKeyDown}
-            />
-          </StyledListItem>
-        </form>
-      </ClickAwayListener>
+          <AddIcon />
+          {isChild ? 'Create a subreminder' : 'Create a reminder'}
+        </HeaderButton>
+      )}
+      {newReminderOpen && (
+        <StyledWrapper onClick={() => inputRef.current?.focus()}>
+          <ClickAwayListener onClickAway={handleClickAway}>
+            <form
+              onSubmit={handleSubmit}
+              ref={formRef}
+            >
+              <StyledListItem
+                $noReminders={noReminders}
+                theme={theme}
+                secondaryAction={
+                  <ArrowTooltip title={isChild ? 'Add a subreminder' : 'Add a reminder'}>
+                    <IconButton type="submit">
+                      <AddTaskRoundedIcon />
+                    </IconButton>
+                  </ArrowTooltip>
+                }
+              >
+                <input
+                  ref={inputRef}
+                  autoFocus
+                  type="text"
+                  required
+                  placeholder={isChild ? 'Enter a subreminder' : 'Enter a reminder'}
+                  minLength={1}
+                  value={title}
+                  onChange={handleTitleChange}
+                  onKeyDown={handleKeyDown}
+                />
+              </StyledListItem>
+            </form>
+          </ClickAwayListener>
+        </StyledWrapper>
+      )}
     </Root>
   );
 };

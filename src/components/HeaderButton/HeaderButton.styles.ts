@@ -1,15 +1,32 @@
-import { IconButton } from '@mui/material';
-import styled from 'styled-components';
+import { IconButton, Theme } from '@mui/material';
+import styled, { css } from 'styled-components';
 
-const Root = styled(IconButton)`
-  color: white !important;
-  font-size: 1rem !important;
-  border-radius: 5px !important;
-  margin-left: 15px !important;
-  &:hover {
-    outline: solid 1px rgba(255, 255, 255, 0.431);
-    outline-offset: -1px;
-  }
+interface RootProps {
+  $nonheader?: boolean;
+}
+
+const nonheaderStyling = () => css`
+  align-self: center;
+  margin-bottom: 20px !important;
+  font-weight: bold;
 `;
+
+const whiteButtonText = (theme: Theme) => css`
+  color: ${theme.palette.common.white} !important;
+`;
+
+const Root = styled(IconButton)<RootProps>(
+  ({ $nonheader, theme }) => css`
+    ${!$nonheader && whiteButtonText(theme)}
+    ${$nonheader && nonheaderStyling}
+    width: fit-content;
+    font-size: 1rem !important;
+    border-radius: 5px !important;
+    &:hover {
+      outline: solid 1px rgba(255, 255, 255, 0.431);
+      outline-offset: -1px;
+    }
+  `
+);
 
 export { Root };

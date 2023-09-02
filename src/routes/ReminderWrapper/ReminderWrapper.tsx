@@ -4,11 +4,11 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 
 import { fetchReminders } from '../../api/reminders';
 
-import { Root, LeftMenu, StyledListsWrapper, StyledNewReminderAndListWrapper } from './ReminderWrapper.styles';
+import { Root, StyledListsWrapper } from './ReminderWrapper.styles';
 import { ReminderList } from './components/ReminderList/ReminderList';
-import { NewReminder } from './components/NewReminder/NewReminder';
 import { SubHeader } from './components/SubHeader/SubHeader';
 import { DbReminder } from './ReminderWrapper.types';
+
 import { Toaster } from 'react-hot-toast';
 import { useIntersection } from '@mantine/hooks';
 import { flat } from './utils/ReminderWrapper.util';
@@ -19,8 +19,6 @@ import { DataProvider } from './components/DataProvider/DataProvider';
 export const ReminderWrapper: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [tagsToFilterArr, setTagsToFilterArr] = useState<string[]>([]);
-  const [newReminderOpen, setNewReminderOpen] = useState(false);
-  const [newSubReminderOpen, setNewSubReminderOpen] = useState(false);
   const [reminderListOpacity, setReminderListOpacity] = useState(1);
   const [draggableId, setDraggableId] = useState('');
   const moveMutation = useQueryMove();
@@ -48,15 +46,11 @@ export const ReminderWrapper: React.FC = () => {
     }
   }, [entry]);
 
-  useEffect(() => {
-    setNewReminderOpen((prev) => (data?.pages[0].length === 0 ? true : prev));
-  }, [data]);
-
   const filteredAndSearchedData = useMemo(() => {
     return filterData(flat(data))?.filter((reminder) => reminder.title.includes(searchQuery));
   }, [data, searchQuery, tagsToFilterArr]);
 
-  const onDragEnd = async (result: DropResult) => {
+  const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
     // if the destination is null - not in a droppable
     if (!destination) return;
@@ -86,7 +80,6 @@ export const ReminderWrapper: React.FC = () => {
     <Root>
       <Toaster />
       <SubHeader
-        onCreate={setNewReminderOpen}
         searchHandler={setSearchQuery}
         setTagsToFilterArr={setTagsToFilterArr}
       />
@@ -94,35 +87,22 @@ export const ReminderWrapper: React.FC = () => {
         onDragEnd={onDragEnd}
         onDragStart={() => setReminderListOpacity(0.5)}
       >
-        <LeftMenu>
-          <StyledListsWrapper opacity={reminderListOpacity}>
-            <DataProvider>
-              <StyledNewReminderAndListWrapper>
-                {(data?.pages[0].length === 0 || newReminderOpen) && (
-                  <NewReminder
-                    setNewReminderOpen={setNewReminderOpen}
-                    noReminders={filteredAndSearchedData?.length === 0}
-                  />
-                )}
-                <ReminderList
-                  data={filteredAndSearchedData ?? []}
-                  lastElementRef={lastElementRef}
-                  draggableId={draggableId}
-                  setDraggableId={setDraggableId}
-                />
-              </StyledNewReminderAndListWrapper>
-              <StyledNewReminderAndListWrapper>
-                {newSubReminderOpen && <NewReminder setNewReminderOpen={setNewSubReminderOpen} />}
-                <ReminderList
-                  isChild
-                  lastElementRef={lastElementRef}
-                  draggableId={draggableId}
-                  setDraggableId={setDraggableId}
-                />
-              </StyledNewReminderAndListWrapper>
-            </DataProvider>
-          </StyledListsWrapper>
-        </LeftMenu>
+        <StyledListsWrapper opacity={reminderListOpacity}>
+          <DataProvider>
+            <ReminderList
+              data={filteredAndSearchedData ?? []}
+              lastElementRef={lastElementRef}
+              draggableId={draggableId}
+              setDraggableId={setDraggableId}
+            />
+            <ReminderList
+              isChild
+              lastElementRef={lastElementRef}
+              draggableId={draggableId}
+              setDraggableId={setDraggableId}
+            />
+          </DataProvider>
+        </StyledListsWrapper>
       </DragDropContext>
     </Root>
   );

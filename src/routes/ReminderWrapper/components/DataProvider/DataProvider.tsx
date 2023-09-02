@@ -6,6 +6,8 @@ interface DataProviderProps {
 }
 
 interface ContextProviderProps {
+  parentID?: string;
+  setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
   childReminders: DbReminder[];
   setChildReminders: React.Dispatch<React.SetStateAction<DbReminder[]>>;
 }
@@ -13,8 +15,13 @@ interface ContextProviderProps {
 const DataContext = createContext<ContextProviderProps | undefined>(undefined);
 
 const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+  const [parentID, setParentID] = useState<string | undefined>(undefined);
   const [childReminders, setChildReminders] = useState<DbReminder[]>([]);
-  return <DataContext.Provider value={{ childReminders, setChildReminders }}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider value={{ parentID, setParentID, childReminders, setChildReminders }}>
+      {children}
+    </DataContext.Provider>
+  );
 };
 
 export { DataProvider, DataContext };

@@ -5,7 +5,12 @@ interface StyledListItemProps {
   $noReminders?: boolean;
 }
 
-export const Root = styled.div``;
+export const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledWrapper = styled.div``;
 
 export const StyledListItem = styled(ListItem)<StyledListItemProps>(
   ({ theme, $noReminders }) => css`

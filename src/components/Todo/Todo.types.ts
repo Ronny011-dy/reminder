@@ -18,8 +18,9 @@ interface ListItemButtonProps {
   lastElementRef?: (element: HTMLDivElement) => void;
 }
 
-interface ParentReminder {
+interface ChildOrParentData {
   childrenReminders?: DbReminder[];
+  isChild?: boolean;
 }
 
 interface DraggableProps {
@@ -27,4 +28,4 @@ interface DraggableProps {
   setDraggableId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export type TodoProps = Reminder & ListItemButtonProps & ParentReminder & DraggableProps;
+export type TodoProps = Reminder & ListItemButtonProps & ChildOrParentData & DraggableProps;

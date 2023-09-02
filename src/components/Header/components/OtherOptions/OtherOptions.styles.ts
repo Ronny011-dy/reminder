@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-const Root = styled.div`
+export const Root = styled.div`
   width: fit-content !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 20px !important;
 `;
-
-export { Root };
