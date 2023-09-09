@@ -5,6 +5,7 @@ const Footer: React.FC = () => {
   const theme = useTheme();
   return (
     <Root theme={theme}>
+      <hr />
       <div>Created by Ronny Paz 2023</div>
     </Root>
   );

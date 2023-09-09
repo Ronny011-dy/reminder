@@ -28,4 +28,8 @@ interface DraggableProps {
   setDraggableId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export type TodoProps = Reminder & ListItemButtonProps & ChildOrParentData & DraggableProps;
+interface sharedListsDataForTodo {
+  setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+
+export type TodoProps = Reminder & ListItemButtonProps & ChildOrParentData & DraggableProps & sharedListsDataForTodo;

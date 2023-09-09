@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Root = styled.div(
+export const Root = styled.div(
   ({ theme }) => css`
     display: flex;
     align-items: end;
@@ -11,8 +11,7 @@ const Root = styled.div(
     padding-right: 10px;
     width: 100vw;
     height: 10vh;
-    background-color: ${theme.palette.primary[`${theme.palette.mode}`]};
-    color: white;
+    background-color: transparent;
     div {
       display: flex;
       justify-content: end;
@@ -20,7 +19,11 @@ const Root = styled.div(
       max-width: 1440px;
       height: fit-content;
     }
+    hr {
+      align-self: baseline;
+      position: absolute;
+      right: 4%;
+      width: 92%;
+    }
   `
 );
-
-export { Root };

@@ -32,6 +32,14 @@ const justifiedToCenter = css`
   justify-content: center;
 `;
 
+const parentBorderColor = (theme: Theme) => css`
+  border-color: ${theme.palette.common[`${theme.palette.mode === 'light' ? 'black' : 'white'}`]};
+`;
+
+const childBorderColor = (theme: Theme) => css`
+  border-color: ${theme.palette.mode === 'light' ? '#bbbbbb' : '#434343'};
+`;
+
 export const Root = styled.div``;
 
 export const StyledFocusableDiv = styled.div``;
@@ -39,12 +47,10 @@ export const StyledFocusableDiv = styled.div``;
 export const StyledListItem = styled(ListItem)<WrapperProps>(
   ({ $isChild, theme }) => css`
     width: 100%;
-    max-width: 1000px;
-    background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
+    max-width: 500px;
     border: solid 1px;
-    border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
+    ${!$isChild ? parentBorderColor(theme) : childBorderColor(theme)}
     border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     margin-bottom: 20px;
   `
 );

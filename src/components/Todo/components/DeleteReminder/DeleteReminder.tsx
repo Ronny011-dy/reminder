@@ -4,12 +4,13 @@ import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 import { useDebouncedRemindersDeletion } from '../../../../api/reactQueryMutations';
 import { useQuery, useQueryClient } from 'react-query';
+import { toast } from 'react-hot-toast';
 
 type DeleteReminderProps = {
   subReminderIds: string[];
 };
 
-const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
+export const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
   // const mutation = useQueryDelete();
   // const queryClient = useQueryClient();
   const addReminderToDelete = useDebouncedRemindersDeletion();
@@ -20,8 +21,7 @@ const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
     // subReminderIds.forEach((sub) => mutation.mutate({id,...restOfCurrentReminder,req:{ id: sub }}));
     // mutation.mutate({ id, ...restOfCurrentReminder });
     await addReminderToDelete({ id, ...restOfCurrentReminder });
-    // fire only one invalidation instead of per delete
-    // queryClient.invalidateQueries({ queryKey: ['reminders'] });
+    toast.success(`reminder ${restOfCurrentReminder.title} deleted :D`);
   };
 
   return (
@@ -33,5 +33,3 @@ const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
     </OptionWrapper>
   );
 };
-
-export { DeleteReminder };

@@ -1,18 +1,14 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { paginationPageLength } from '../../../../common/values';
 
-interface RootProps {
-  shouldHide?: boolean;
-}
+export const Root = styled.div`
+  min-width: 560px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+`;
 
-export const Root = styled.div<RootProps>(
-  ({ shouldHide }) => css`
-    display: ${shouldHide ? 'none' : 'flex'};
-    flex-direction: column;
-  `
-);
-
-export const StyledProvidedWrapper = styled.div`
+export const StyledDroppableWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

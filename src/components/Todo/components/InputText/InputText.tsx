@@ -52,6 +52,7 @@ export const InputText: React.FC<InputTextProps> = ({ currentReminder, isSelecte
     >
       <form ref={formRef}>
         <StyledTextInput
+          name="reminder-title"
           ref={textInputRef}
           required
           minLength={0}

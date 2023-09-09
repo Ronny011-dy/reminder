@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Stack, Chip, Collapse } from '@mui/material';
 import { DatePicker } from '../DatePicker/DatePicker';
@@ -56,7 +56,10 @@ const Tags: React.FC<TagsProps> = ({ isSelected }) => {
     // clear field in state when clicking 'add tag' - or else will add last valid value
     setTagText('');
   };
-
+  // close tag adder on clickaway
+  useEffect(() => {
+    !isSelected && setTagAdderOpen(false);
+  }, [isSelected]);
   const isTagAdderOpen = useMemo(() => tagAdderOpen && isSelected, [tagAdderOpen, isSelected]);
 
   const handleTagDelete = (tagToDelete: number) => () => {

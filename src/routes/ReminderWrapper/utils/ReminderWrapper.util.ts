@@ -23,3 +23,17 @@ export const flat = (data: InfiniteData<DbReminder[]> | undefined) => {
   }
   return [];
 };
+
+export const filterData = (flatData: DbReminder[], filtersArr: string[]): DbReminder[] | undefined => {
+  return filtersArr.length === 0
+    ? flatData
+    : flatData.filter((reminder) => JSON.parse(reminder.tags).some((tag: string) => filtersArr.includes(tag)));
+};
+
+export const filteredAndSearchedData = (
+  data: InfiniteData<DbReminder[]> | undefined,
+  filtersArr: string[],
+  searchQuery: string
+) => {
+  return filterData(flat(data), filtersArr)?.filter((reminder) => reminder.title.includes(searchQuery));
+};

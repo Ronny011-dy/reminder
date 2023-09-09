@@ -8,7 +8,7 @@ type ReminderOptionsProps = {
   important: boolean;
   subReminderIds: string[];
   setSubReminderIds: React.Dispatch<React.SetStateAction<string[]>>;
-  isChild: boolean;
+  isChild?: boolean;
   isSelected: boolean;
   title: string;
   date?: number;

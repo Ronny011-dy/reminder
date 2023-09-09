@@ -14,7 +14,6 @@ export const Card = styled.div(
   ({ theme }) => css`
     margin-top: 7.5vh;
     width: 60%;
-    background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
     display: flex;
     justify-content: center;
     align-items: center;

@@ -11,13 +11,8 @@ const nonheaderStyling = () => css`
   font-weight: bold;
 `;
 
-const whiteButtonText = (theme: Theme) => css`
-  color: ${theme.palette.common.white} !important;
-`;
-
 const Root = styled(IconButton)<RootProps>(
   ({ $nonheader, theme }) => css`
-    ${!$nonheader && whiteButtonText(theme)}
     ${$nonheader && nonheaderStyling}
     width: fit-content;
     font-size: 1rem !important;

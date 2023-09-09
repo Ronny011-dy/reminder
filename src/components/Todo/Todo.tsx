@@ -19,7 +19,6 @@ import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
 import { Draggable } from '@hello-pangea/dnd';
-import { useRemindersDataContext } from '../../routes/ReminderWrapper/hooks/useRemindersDataContext';
 
 export const Todo: React.FC<TodoProps> = ({
   done,
@@ -41,7 +40,7 @@ export const Todo: React.FC<TodoProps> = ({
   const [subReminderIds, setSubReminderIds] = useState<string[]>([]);
   const mutation = useQueryUpdate();
   const currentReminder = useCurrentReminderContext();
-  const { setChildReminders, setParentID, parentID: contextParentID } = useRemindersDataContext();
+  const { setParentID } = restOfReminderProps;
   const focusableDiv = useRef<HTMLDivElement>(null);
 
   const doneHandler = () => {
@@ -52,10 +51,7 @@ export const Todo: React.FC<TodoProps> = ({
 
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleReminderClick(e, reminderIndex);
-    if (!isChild) {
-      childrenReminders && childrenReminders?.length > 0 ? setChildReminders(childrenReminders) : setChildReminders([]);
-      setParentID(currentReminder.id);
-    }
+    !isChild && setParentID(currentReminder.id);
   };
 
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
@@ -69,6 +65,7 @@ export const Todo: React.FC<TodoProps> = ({
     <Root ref={lastElementRef}>
       <StyledFocusableDiv ref={focusableDiv}>
         <Draggable
+          key={currentReminder.id}
           draggableId={currentReminder.id}
           index={reminderIndex}
         >
@@ -87,10 +84,10 @@ export const Todo: React.FC<TodoProps> = ({
                   subReminderIds={subReminderIds}
                   setSubReminderIds={setSubReminderIds}
                   isSelected={isSelected}
-                  isChild={parentID !== null}
+                  isChild={isChild}
                 />
               }
-              $isChild={parentID !== null}
+              $isChild={isChild}
             >
               <StyledListItemButton
                 theme={theme}

@@ -10,7 +10,6 @@ export const Root = styled.div`
 export const StyledDiv = styled.div(
   ({ theme }) => css`
     margin-top: 7.5vh;
-    background-color: ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#e5e5f6'};
     border: solid 1px;
     border-radius: 15px;
     border-color: ${theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light};

@@ -13,9 +13,11 @@ import { HeaderButton } from '../../../../components/HeaderButton/HeaderButton';
 interface NewReminderProps {
   noReminders?: boolean;
   isChild?: boolean;
+  parentID?: string;
+  setClickAwayShouldHide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild }) => {
+export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild, parentID, setClickAwayShouldHide }) => {
   const theme = useTheme();
   const mutation = useQueryCreate();
   const [title, setTitle] = useState('');
@@ -53,16 +55,21 @@ export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild }
   };
 
   const handleClickAway = () => {
+    isChild && setClickAwayShouldHide(true);
     if (title === '') setNewReminderOpen(false);
     else formRef.current?.reportValidity() && handleSubmit();
     setNewReminderOpen(false);
   };
 
+  const handleCreateClick = () => {
+    setNewReminderOpen(true);
+    setClickAwayShouldHide(false);
+  };
   return (
-    <Root>
+    <Root shouldHide={isChild && !Boolean(parentID)}>
       {!newReminderOpen && (
         <HeaderButton
-          onClick={() => setNewReminderOpen(true)}
+          onClick={handleCreateClick}
           nonheader
         >
           <AddIcon />

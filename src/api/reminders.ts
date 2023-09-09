@@ -25,10 +25,24 @@ const debounce = <F extends (req: MutationVariables) => Promise<DbReminder>>(fun
   return debouncedFunc;
 };
 
-export const fetchReminders = async (page: number): Promise<DbReminder[]> => {
+export const fetchAllReminders = async (page: number): Promise<DbReminder[]> => {
   const remindersToShow = paginationPageLength;
   const response = (await ky.get('/api/read').json()) as DbReminder[];
   return response.slice((page - 1) * remindersToShow, page * remindersToShow);
+};
+
+export const fetchParentReminders = async (page: number): Promise<DbReminder[]> => {
+  const remindersToShow = paginationPageLength;
+  const response = (await ky.get('/api/read/parent-reminders/').json()) as DbReminder[];
+  return response.slice((page - 1) * remindersToShow, page * remindersToShow);
+};
+
+export const fetchSubreminders = async (page: number, parentID: string): Promise<DbReminder[]> => {
+  const subremindersToShow = paginationPageLength;
+  // on clickaway, the parentID is set to '' and the API call will respond with 404
+  if (parentID === '') return [];
+  const response = (await ky.get(`/api/read/subreminders/${parentID}`).json()) as DbReminder[];
+  return response.slice((page - 1) * subremindersToShow, page * subremindersToShow);
 };
 
 // supports both reminders and sub reminders
