@@ -84,6 +84,7 @@ export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild, 
               ref={formRef}
             >
               <StyledListItem
+                $isChild={isChild}
                 $noReminders={noReminders}
                 theme={theme}
                 secondaryAction={

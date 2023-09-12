@@ -74,7 +74,7 @@ export const ReminderListParent: React.FC<ReminderListParentProps> = ({
         />
         <Droppable droppableId="parent">
           {(provided) => (
-            <StyledDroppableWrapper>
+            <StyledDroppableWrapper className="what">
               <DroppableList
                 innerRef={provided.innerRef}
                 {...provided.droppableProps}

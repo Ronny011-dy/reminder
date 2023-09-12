@@ -43,6 +43,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ isOpen, setIsOpen, on
               ref={inputRef}
               value={searchText}
               onChange={onSearchHandler}
+              theme={theme}
             />
             <SearchIconButton>
               <OptionWrapper title="Search">

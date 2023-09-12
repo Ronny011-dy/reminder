@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { commonBorderRadius } from '../../common/values';
 
 export const Root = styled.div`
   height: 80vh;
@@ -11,13 +12,12 @@ export const StyledDiv = styled.div(
   ({ theme }) => css`
     margin-top: 7.5vh;
     border: solid 1px;
-    border-radius: 15px;
-    border-color: ${theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light};
+    border-radius: ${commonBorderRadius}px;
+    border-color: ${theme.palette.common[`${theme.palette.mode === 'light' ? 'black' : 'white'}`]};
     display: flex;
     flex-direction: column;
     align-items: start;
     padding: 25px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     h2 {
       margin-top: 0;
     }

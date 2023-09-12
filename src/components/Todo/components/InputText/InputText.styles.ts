@@ -1,23 +1,12 @@
 import styled, { css } from 'styled-components';
 
 interface StyledListItemTextProps {
-  secondary?: boolean;
   $done?: boolean;
-  isSelected?: boolean;
 }
 
 export const Root = styled.div<StyledListItemTextProps>(
-  ({ $done, isSelected, secondary }) => css`
-    opacity: ${$done || secondary ? '50%' : '100%'};
-    margin-right: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: calc(30vw - ${isSelected ? '2' : '0'}vw);
-    max-width: 50ch;
-    @media (max-width: 610px) {
-      width: 20vw;
-    }
+  ({ $done }) => css`
+    opacity: ${$done ? '50%' : '100%'};
     ${StyledTextInput} {
       text-decoration: ${$done ? 'line-through' : 'none'} !important;
     }
@@ -25,8 +14,13 @@ export const Root = styled.div<StyledListItemTextProps>(
 );
 
 export const StyledTextInput = styled.input`
+  width: 35ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   outline: none;
   border: none;
+  padding: 0;
   background-color: transparent;
   font-size: 1rem;
 `;

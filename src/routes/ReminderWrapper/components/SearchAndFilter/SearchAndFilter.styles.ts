@@ -1,5 +1,6 @@
 import { Drawer } from '@mui/material';
 import styled, { css } from 'styled-components';
+import { commonBorderRadius } from '../../../../common/values';
 
 export const Root = styled.div``;
 
@@ -25,17 +26,19 @@ export const DrawerWrapper = styled.div(
   `
 );
 
-export const InputStyled = styled.input`
-  padding: 15px;
-  height: fit-content;
-  width: 300px;
-  outline: none;
-  border-radius: 3px;
-  margin-bottom: 25px;
-  border: solid 1px rgba(30, 30, 30, 0.263);
-  font-weight: bold;
-  color: rgb(30, 30, 30);
-`;
+export const InputStyled = styled.input(
+  ({ theme }) => css`
+    padding: 15px;
+    height: fit-content;
+    width: 300px;
+    outline: none;
+    border-radius: ${commonBorderRadius}px;
+    margin-bottom: 25px;
+    border: solid 1px rgba(30, 30, 30, 0.263);
+    font-weight: bold;
+    color: ${theme.palette.common[`${theme.palette.mode === 'light' ? 'black' : 'white'}`]};
+  `
+);
 
 export const SearchWrapper = styled.div`
   display: flex;

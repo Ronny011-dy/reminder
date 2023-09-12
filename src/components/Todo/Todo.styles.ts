@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import { Theme } from '@mui/material/styles';
+import { commonBorderRadius } from '../../common/values';
 
 interface WrapperProps {
   $isChild?: boolean;
@@ -50,8 +51,9 @@ export const StyledListItem = styled(ListItem)<WrapperProps>(
     max-width: 500px;
     border: solid 1px;
     ${!$isChild ? parentBorderColor(theme) : childBorderColor(theme)}
-    border-radius: 15px;
+    border-radius: ${commonBorderRadius}px;
     margin-bottom: 20px;
+    background-color: ${theme.palette.common[`${theme.palette.mode === 'light' ? 'white' : 'black'}`]};
   `
 );
 
@@ -71,7 +73,7 @@ export const StyledListItemText = styled.div<StyledListItemTextProps>(
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: calc(30vw - ${isSelected ? '2' : '0'}vw);
+    /* width: calc(30vw - ${isSelected ? '2' : '0'}vw); */
     max-width: 50ch;
     opacity: ${isSelected ? '30' : '0'}%;
     @media (max-width: 610px) {
@@ -82,7 +84,7 @@ export const StyledListItemText = styled.div<StyledListItemTextProps>(
 
 export const StyledListItemButton = styled(ListItemButton)(
   ({ theme }) => css`
-    border-radius: 15px !important;
+    border-radius: ${commonBorderRadius}px !important;
     &:hover {
       color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
       background-color: transparent !important;

@@ -1,11 +1,12 @@
 import styled, { css } from 'styled-components';
+import { commonBorderRadius } from '../../common/values';
 
 export const Root = styled.div`
   height: 80vh;
   display: flex;
   align-items: center;
   flex-direction: column;
-  border-radius: 15px;
+  border-radius: ${commonBorderRadius}px;
   h2 {
     font-weight: 400;
   }
@@ -17,9 +18,8 @@ export const Card = styled.div(
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
+    border-radius: ${commonBorderRadius}px;
     border: solid 1px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
     @media (max-width: 1440px) {
       margin-top: 12vh;

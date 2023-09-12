@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { commonBorderRadius } from '../../../../common/values';
 
 const Root = styled.div`
   max-width: 1400px;
@@ -37,7 +38,7 @@ const ImgStyled = styled.img`
   object-fit: scale-down;
   margin-left: 100px;
   opacity: 0.5;
-  border-radius: 5px;
+  border-radius: ${commonBorderRadius}px;
   &:hover {
     opacity: 1;
     filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.22));

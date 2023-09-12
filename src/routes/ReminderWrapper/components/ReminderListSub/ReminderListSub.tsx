@@ -37,7 +37,7 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
   const lastReminderRef = useRef<HTMLDivElement>(null);
   const { ref: lastElementRef, entry } = useIntersection({ root: lastReminderRef.current, threshold: 1 });
   const parentIDForFetch = parentID || '';
-  // subreminders fetching
+
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['subreminders', parentIDForFetch],
     queryFn: async ({ pageParam = 1 }) => fetchSubreminders(pageParam, parentIDForFetch),
@@ -50,7 +50,7 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
     }
   }, [entry]);
 
-  const filteredAndSearchedDataParentData = useMemo<DbReminder[] | undefined>(() => {
+  const filteredAndSearchedDataSubData = useMemo<DbReminder[] | undefined>(() => {
     return !parentID
       ? []
       : (data?.pages[0]?.length ?? 0) > 0
@@ -84,7 +84,7 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
                 innerRef={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {filteredAndSearchedDataParentData?.map((reminder, i) => {
+                {filteredAndSearchedDataSubData?.map((reminder, i) => {
                   const { tags, createdDate, date, parentID: reminderParentID, ...otherReminderProps } = reminder;
                   const convertedProps = {
                     parentID: reminderParentID ? reminderParentID : undefined,
@@ -104,7 +104,7 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
                     setDraggableId,
                     reminderIndex: i
                   };
-                  if (i === (filteredAndSearchedDataParentData?.length ?? paginationPageLength) - 1)
+                  if (i === (filteredAndSearchedDataSubData?.length ?? paginationPageLength) - 1)
                     return (
                       <Fragment key={reminder.id}>
                         <CurrentReminderProvider {...reminder}>

@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { Root } from './HeaderButton.styles';
-import { useTheme } from '@mui/material';
+import { Root, StyledWrapper } from './HeaderButton.styles';
 
 interface HeaderButtonProps {
   children: ReactNode;
@@ -10,14 +9,13 @@ interface HeaderButtonProps {
 }
 
 export const HeaderButton: React.FC<HeaderButtonProps> = ({ children, onClick, nonheader }) => {
-  const theme = useTheme();
   return (
     <Root
-      theme={theme}
       $nonheader={nonheader}
       onClick={() => onClick && onClick(true)}
+      disableRipple
     >
-      {children}
+      <StyledWrapper $nonheader={nonheader}>{children}</StyledWrapper>
     </Root>
   );
 };

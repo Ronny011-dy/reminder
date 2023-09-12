@@ -1,13 +1,23 @@
-import { ListItem } from '@mui/material';
+import { ListItem, Theme } from '@mui/material';
 import styled, { css } from 'styled-components';
+import { commonBorderRadius } from '../../../../common/values';
 
 interface StyledListItemProps {
   $noReminders?: boolean;
+  $isChild?: boolean;
 }
 
 interface RootProps {
   shouldHide?: boolean;
 }
+
+const parentBorderColor = (theme: Theme) => css`
+  border-color: ${theme.palette.common[`${theme.palette.mode === 'light' ? 'black' : 'white'}`]};
+`;
+
+const childBorderColor = (theme: Theme) => css`
+  border-color: ${theme.palette.mode === 'light' ? '#bbbbbb' : '#434343'};
+`;
 
 export const Root = styled.div<RootProps>(
   ({ shouldHide }) => css`
@@ -19,15 +29,13 @@ export const Root = styled.div<RootProps>(
 export const StyledWrapper = styled.div``;
 
 export const StyledListItem = styled(ListItem)<StyledListItemProps>(
-  ({ theme, $noReminders }) => css`
-    width: 100%;
-    max-width: 1000px;
-    /* min-width: ${$noReminders ? '500' : '0'}px; */
+  ({ theme, $isChild }) => css`
+    width: 500px !important;
     height: 108px;
     margin-bottom: 20px;
     border: 2px dashed;
-    border-radius: 15px;
-    border-color: ${theme.palette.mode === 'dark' ? theme.palette.primary.light : theme.palette.primary.main};
+    border-radius: ${commonBorderRadius}px;
+    ${!$isChild ? parentBorderColor(theme) : childBorderColor(theme)}
     input {
       outline: none;
       border: none;

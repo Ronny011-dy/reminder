@@ -6,7 +6,6 @@ interface StyledReminderListProps {
 
 export const Root = styled.div`
   max-width: 1440px;
-  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;

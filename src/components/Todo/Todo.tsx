@@ -112,16 +112,12 @@ export const Todo: React.FC<TodoProps> = ({
                     </ListItemIcon>
                     <InputText
                       currentReminder={currentReminder}
-                      isSelected={isSelected}
                       isTitle
                     />
                   </StyledDiv>
                   <StyledDiv orientation="column">
                     <StyledListItemText isSelected={isSelected}>
-                      <InputText
-                        currentReminder={currentReminder}
-                        isSelected={isSelected}
-                      />
+                      <InputText currentReminder={currentReminder} />
                     </StyledListItemText>
                     <StyledTagsWrapper isSelected={isSelected}>
                       <Tags isSelected={isSelected} />

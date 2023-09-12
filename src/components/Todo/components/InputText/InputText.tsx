@@ -3,9 +3,9 @@ import { useQueryDelete, useQueryUpdate } from '../../../../api/reactQueryMutati
 import { DbReminder } from '../../../../routes/ReminderWrapper/ReminderWrapper.types';
 import { Root, StyledTextInput } from './InputText.styles';
 
-type InputTextProps = { currentReminder: DbReminder; isSelected: boolean; isTitle?: boolean };
+type InputTextProps = { currentReminder: DbReminder; isTitle?: boolean };
 
-export const InputText: React.FC<InputTextProps> = ({ currentReminder, isSelected, isTitle }) => {
+export const InputText: React.FC<InputTextProps> = ({ currentReminder, isTitle }) => {
   const { title, description, ...restOfCurrentReminder } = currentReminder;
   const [textValue, setTextValue] = useState(isTitle ? title : description);
   const formRef = useRef<HTMLFormElement>(null);
@@ -46,10 +46,7 @@ export const InputText: React.FC<InputTextProps> = ({ currentReminder, isSelecte
     }
   };
   return (
-    <Root
-      $done={restOfCurrentReminder.done}
-      isSelected={isSelected}
-    >
+    <Root $done={restOfCurrentReminder.done}>
       <form ref={formRef}>
         <StyledTextInput
           name="reminder-title"

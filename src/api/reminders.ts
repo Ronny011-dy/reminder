@@ -38,9 +38,10 @@ export const fetchParentReminders = async (page: number): Promise<DbReminder[]> 
 };
 
 export const fetchSubreminders = async (page: number, parentID: string): Promise<DbReminder[]> => {
+  // prevent fetching from /api/read/subreminders
+  if (!parentID || parentID === '') return [];
   const subremindersToShow = paginationPageLength;
   // on clickaway, the parentID is set to '' and the API call will respond with 404
-  if (parentID === '') return [];
   const response = (await ky.get(`/api/read/subreminders/${parentID}`).json()) as DbReminder[];
   return response.slice((page - 1) * subremindersToShow, page * subremindersToShow);
 };

@@ -4,5 +4,6 @@ import styled from 'styled-components';
 export const Root = styled(List)`
   display: flex;
   flex-direction: column;
-  /* gap: 20px; */
+  min-height: 400px;
+  min-width: 500px;
 `;
