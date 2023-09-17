@@ -60,7 +60,7 @@ export const addNewReminder = async (req: DbReminder): Promise<DbReminder[]> => 
 };
 
 // updating only one propery per request
-const updateReminder = async (req: MutationVariables): Promise<DbReminder> => {
+export const updateReminder = async (req: MutationVariables): Promise<DbReminder> => {
   //? change from post to put
   return await ky.post(`/api/update/${req.id}`, { json: req.req }).json();
 };

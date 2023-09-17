@@ -1,5 +1,3 @@
-import { DbReminder } from '../../routes/ReminderWrapper/ReminderWrapper.types';
-
 export type Reminder = {
   done: boolean;
   title: string;
@@ -19,7 +17,6 @@ interface ListItemButtonProps {
 }
 
 interface ChildOrParentData {
-  childrenReminders?: DbReminder[];
   isChild?: boolean;
 }
 

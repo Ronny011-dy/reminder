@@ -1,20 +1,20 @@
-import { ClickAwayListener } from '@mui/material';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { ClickAwayListener } from '@mui/material';
 
-import { Root, StyledDroppableWrapper } from './ReminderListParent.styles';
+import { useInfiniteQuery } from 'react-query';
+import { useIntersection } from '@mantine/hooks';
+import { Droppable } from '@hello-pangea/dnd';
+import { DroppableList } from '../DroppableList/DroppableList';
 import { CurrentReminderProvider } from '../CurrentReminderProvider/CurrentReminderProvider';
 import { Todo } from '../../../../components/Todo/Todo';
 import { paginationPageLength } from '../../../../common/values';
-import { Droppable } from '@hello-pangea/dnd';
-import { DroppableList } from '../DroppableList/DroppableList';
 import { NewReminder } from '../NewReminder/NewReminder';
-import { useInfiniteQuery } from 'react-query';
-import { useIntersection } from '@mantine/hooks';
 import { filteredAndSearchedData } from '../../utils/ReminderWrapper.util';
 import { fetchParentReminders } from '../../../../api/reminders';
 import { DbReminder } from '../../ReminderWrapper.types';
+import { Root, StyledDroppableWrapper } from './ReminderListParent.styles';
 
-interface ReminderListParentProps {
+export interface ReminderListProps {
   searchQuery: string;
   filtersArr: string[];
   draggableId: string;
@@ -22,12 +22,12 @@ interface ReminderListParentProps {
   sharedListsData: {
     parentID?: string;
     setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
-    clickawayShouldHide: boolean;
+    clickawayShouldHide?: boolean;
     setClickAwayShouldHide: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
-export const ReminderListParent: React.FC<ReminderListParentProps> = ({
+export const ReminderListParent: React.FC<ReminderListProps> = ({
   searchQuery,
   filtersArr,
   draggableId,
@@ -74,13 +74,13 @@ export const ReminderListParent: React.FC<ReminderListParentProps> = ({
         />
         <Droppable droppableId="parent">
           {(provided) => (
-            <StyledDroppableWrapper className="what">
+            <StyledDroppableWrapper>
               <DroppableList
                 innerRef={provided.innerRef}
                 {...provided.droppableProps}
               >
                 {filteredAndSearchedDataParentData?.map((reminder, i) => {
-                  const { tags, createdDate, date, parentID: reminderParentID, ...otherReminderProps } = reminder;
+                  const { tags, createdDate, date, parentID: reminderParentID, id, ...otherReminderProps } = reminder;
                   const convertedProps = {
                     parentID: reminderParentID ? reminderParentID : undefined,
                     tags: JSON.parse(tags),

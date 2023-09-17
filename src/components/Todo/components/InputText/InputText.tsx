@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
 import { useQueryDelete, useQueryUpdate } from '../../../../api/reactQueryMutations';
-import { DbReminder } from '../../../../routes/ReminderWrapper/ReminderWrapper.types';
 import { Root, StyledTextInput } from './InputText.styles';
+import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
 
-type InputTextProps = { currentReminder: DbReminder; isTitle?: boolean };
+type InputTextProps = { isTitle?: boolean };
 
-export const InputText: React.FC<InputTextProps> = ({ currentReminder, isTitle }) => {
+export const InputText: React.FC<InputTextProps> = ({ isTitle }) => {
+  const currentReminder = useCurrentReminderContext();
   const { title, description, ...restOfCurrentReminder } = currentReminder;
   const [textValue, setTextValue] = useState(isTitle ? title : description);
   const formRef = useRef<HTMLFormElement>(null);
@@ -31,7 +32,7 @@ export const InputText: React.FC<InputTextProps> = ({ currentReminder, isTitle }
   };
 
   const handleTextInputBlur = () => {
-    if (textValue === '') {
+    if (isTitle && textValue === '') {
       deleteMutation.mutate({ title, description, ...restOfCurrentReminder });
       return;
     }

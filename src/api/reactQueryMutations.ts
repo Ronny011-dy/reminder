@@ -3,7 +3,14 @@ import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import type { ContextType, MutationVariables } from './types';
-import { ReminderToMove, addNewReminder, deleteReminder, moveReminder, updateReminderDebounce } from './reminders';
+import {
+  ReminderToMove,
+  addNewReminder,
+  deleteReminder,
+  moveReminder,
+  updateReminder,
+  updateReminderDebounce
+} from './reminders';
 import { flat } from '../routes/ReminderWrapper/utils/ReminderWrapper.util';
 import { DbReminder } from '../routes/ReminderWrapper/ReminderWrapper.types';
 import { paginationPageLength } from '../common/values';
@@ -15,15 +22,17 @@ interface optimisticDragProps {
 
 export const useQueryCreate = () => {
   const queryClient = useQueryClient();
+  let queryKey: string[] = [];
 
   return useMutation<DbReminder[], unknown, DbReminder>({
     mutationFn: (variables: DbReminder) => addNewReminder(variables),
 
     onMutate: async (newReminder) => {
-      await queryClient.cancelQueries({ queryKey: ['reminders'] });
-      const previousReminders = flat(queryClient.getQueryData(['reminders']));
+      queryKey = newReminder.parentID ? ['subreminders', newReminder.parentID] : ['reminders'];
+      await queryClient.cancelQueries({ queryKey: queryKey });
+      const previousReminders = flat(queryClient.getQueryData(queryKey));
 
-      queryClient.setQueryData<InfiniteData<DbReminder[]>>(['reminders'], (oldData) => ({
+      queryClient.setQueryData<InfiniteData<DbReminder[]>>(queryKey, (oldData) => ({
         ...oldData,
         pageParams: [...(oldData?.pageParams || []), { cursor: newReminder.id }],
         pages: oldData
@@ -38,23 +47,32 @@ export const useQueryCreate = () => {
     onError: (err, newReminder, context) => {
       // inferring context type in the arguments breaks the overload
       const tempContext = context as ContextType;
-      queryClient.setQueryData(['reminders'], tempContext.previousReminders);
-      toast.error(`Was not able to create reminder: ${JSON.stringify(newReminder.title)} \n Got ${err}`);
+      queryClient.setQueryData(queryKey, tempContext.previousReminders);
+      toast.error(
+        `Was not able to create ${newReminder.parentID ? 'sub' : ''}reminder: ${JSON.stringify(
+          newReminder.title
+        )} \n Got ${err}`
+      );
     }
   });
 };
 
 export const useQueryUpdate = () => {
   const queryClient = useQueryClient();
+  let queryKey: string[] = [];
 
   return useMutation({
-    mutationFn: (variables: MutationVariables) => updateReminderDebounce(variables),
+    mutationFn: (variables: MutationVariables) =>
+      variables.parentID ? updateReminder(variables) : updateReminderDebounce(variables),
 
     onMutate: async (updatedReminderWithReq) => {
       const { req, ...updatedReminder } = updatedReminderWithReq;
-      await queryClient.cancelQueries({ queryKey: ['reminders'] });
-      const outDatedReminderList = queryClient.getQueryData(['reminders']) as DbReminder[];
-      queryClient.setQueryData<InfiniteData<DbReminder[]>>(['reminders'], (oldData) => ({
+      queryKey = updatedReminder.parentID ? ['subreminders', updatedReminder.parentID] : ['reminders'];
+      if (!updatedReminder.parentID) {
+        await queryClient.cancelQueries({ queryKey: queryKey });
+      }
+      const outDatedReminderList = queryClient.getQueryData(queryKey) as DbReminder[];
+      queryClient.setQueryData<InfiniteData<DbReminder[]>>(queryKey, (oldData) => ({
         ...oldData,
         pageParams: oldData?.pageParams || [],
         pages: oldData
@@ -68,20 +86,26 @@ export const useQueryUpdate = () => {
     },
 
     onError: (err, updatedReminder, context) => {
-      toast.error(`Was not able to update reminder with data: ${JSON.stringify(updatedReminder.title)} \n Got ${err}`);
-      queryClient.setQueryData(['reminders'], context?.outDatedReminderList);
+      toast.error(
+        `Was not able to update ${updatedReminder.parentID ? 'sub' : ''}reminder with data: ${JSON.stringify(
+          updatedReminder.title
+        )} \n Got ${err}`
+      );
+      queryClient.setQueryData(queryKey, context?.outDatedReminderList);
     }
   });
 };
 
 export const useQueryDelete = () => {
+  let queryKey: (string | null)[] = [];
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (variables: MutationVariables) => deleteReminder(variables),
     onMutate: async (reminderToDelete) => {
-      await queryClient.cancelQueries({ queryKey: ['reminders'] });
-      const previousReminders = flat(queryClient.getQueryData(['reminders']));
-      queryClient.setQueryData<InfiniteData<DbReminder[]>>(['reminders'], (oldData) => ({
+      queryKey = ['subreminders', reminderToDelete.parentID];
+      await queryClient.cancelQueries({ queryKey: queryKey });
+      const previousReminders = flat(queryClient.getQueryData(queryKey));
+      queryClient.setQueryData<InfiniteData<DbReminder[]>>(queryKey, (oldData) => ({
         ...oldData,
         pageParams: oldData?.pageParams || [],
         pages: oldData
@@ -92,8 +116,8 @@ export const useQueryDelete = () => {
       return { previousReminders };
     },
     onError: (err, reminderToDelete, context) => {
-      queryClient.setQueryData(['reminders'], context?.previousReminders);
-      toast.error(`Was not able to delete reminder: ${JSON.stringify(reminderToDelete.title)} \n Got ${err}`);
+      queryClient.setQueryData(queryKey, context?.previousReminders);
+      toast.error(`Was not able to delete subreminder: ${JSON.stringify(reminderToDelete.title)} \n Got ${err}`);
     }
   });
 };
@@ -143,8 +167,12 @@ export const useDebouncedRemindersDeletion = () => {
   const useQueryDeleteWithoutOptimistic = () => {
     return useMutation({
       mutationFn: (variables: MutationVariables) => deleteReminder(variables),
-      onError: (variables, err) => {
-        toast.error(`Was not able to delete reminder: ${JSON.stringify(variables)} \n Got ${err}`);
+      onError: (variables: MutationVariables, err) => {
+        toast.error(
+          `Was not able to delete ${variables.parentID ? 'sub' : ''}reminder: ${JSON.stringify(
+            variables
+          )} \n Got ${err}`
+        );
       }
     });
   };
@@ -157,8 +185,9 @@ export const useDebouncedRemindersDeletion = () => {
   const addReminderToDelete = useCallback(
     // optimitstic update outside of mutation
     async (reminderToDelete: DbReminder) => {
-      await queryClient.cancelQueries({ queryKey: ['reminders'] });
-      queryClient.setQueryData<InfiniteData<DbReminder[]>>(['reminders'], (oldData) => ({
+      const queryKey = reminderToDelete.parentID ? ['subreminders', reminderToDelete.parentID] : ['reminders'];
+      await queryClient.cancelQueries({ queryKey: queryKey });
+      queryClient.setQueryData<InfiniteData<DbReminder[]>>(queryKey, (oldData) => ({
         ...oldData,
         pageParams: oldData?.pageParams || [],
         pages: oldData

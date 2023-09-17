@@ -2,26 +2,29 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 import { OptionWrapper } from '../OptionWrapper/OptionWrapper';
 import { useCurrentReminderContext } from '../../../../routes/ReminderWrapper/hooks/useCurrentReminderContext';
-import { useDebouncedRemindersDeletion } from '../../../../api/reactQueryMutations';
-import { useQuery, useQueryClient } from 'react-query';
-import { toast } from 'react-hot-toast';
+import { useDebouncedRemindersDeletion, useQueryDelete } from '../../../../api/reactQueryMutations';
+import { flat } from '../../../../routes/ReminderWrapper/utils/ReminderWrapper.util';
+import { useQueryClient } from 'react-query';
 
-type DeleteReminderProps = {
-  subReminderIds: string[];
-};
+interface DeleteReminder {
+  isChild?: boolean;
+  setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
 
-export const DeleteReminder: React.FC<DeleteReminderProps> = ({ subReminderIds }) => {
-  // const mutation = useQueryDelete();
-  // const queryClient = useQueryClient();
+export const DeleteReminder: React.FC<DeleteReminder> = ({ isChild, setParentID }) => {
+  const queryClient = useQueryClient();
+  const subReminderDeleteMutation = useQueryDelete();
   const addReminderToDelete = useDebouncedRemindersDeletion();
   const { id, ...restOfCurrentReminder } = useCurrentReminderContext();
 
   const deletehandler = async () => {
     // first delete sub reminders
-    // subReminderIds.forEach((sub) => mutation.mutate({id,...restOfCurrentReminder,req:{ id: sub }}));
-    // mutation.mutate({ id, ...restOfCurrentReminder });
+    if (!isChild) {
+      const subreminders = flat(queryClient.getQueryData(['subreminders', id]));
+      subreminders.length > 0 && subreminders.forEach((subreminder) => subReminderDeleteMutation.mutate(subreminder));
+    }
     await addReminderToDelete({ id, ...restOfCurrentReminder });
-    toast.success(`reminder ${restOfCurrentReminder.title} deleted :D`);
+    setParentID(undefined);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTheme } from '@mui/material';
 
 import type { TodoProps } from './Todo.types';
@@ -19,45 +19,49 @@ import { ReminderOptions } from './components/ReminderOptions/ReminderOptions';
 import { Tags } from './components/Tags/Tags';
 import { InputText } from './components/InputText/InputText';
 import { Draggable } from '@hello-pangea/dnd';
+import { useQueryClient } from 'react-query';
+import { flat } from '../../routes/ReminderWrapper/utils/ReminderWrapper.util';
 
 export const Todo: React.FC<TodoProps> = ({
   done,
-  description,
-  parentID,
   reminderIndex,
   handleReminderClick,
   selectedIndex,
-  childrenReminders,
   lastElementRef,
-  tags,
-  title,
   draggableId,
   setDraggableId,
   isChild,
-  ...restOfReminderProps
+  ...reminderOptionParams
 }) => {
+  const queryClient = useQueryClient();
   const theme = useTheme();
-  const [subReminderIds, setSubReminderIds] = useState<string[]>([]);
   const mutation = useQueryUpdate();
-  const currentReminder = useCurrentReminderContext();
-  const { setParentID } = restOfReminderProps;
+  const currentDbReminder = useCurrentReminderContext();
   const focusableDiv = useRef<HTMLDivElement>(null);
+  const { id } = currentDbReminder;
 
   const doneHandler = () => {
-    // subReminderIds?.map((sub) => mutation?.mutate({ id: sub, req: { done: !done } }));
-    const { done: _, ...restOfCurrentReminder } = currentReminder;
-    mutation?.mutate({ ...restOfCurrentReminder, done: !done, req: { done: !done } });
+    if (!isChild) {
+      const subreminders = flat(queryClient.getQueryData(['subreminders', id]));
+      subreminders.length > 0 &&
+        subreminders.forEach((subreminder) => {
+          const { done: subDone, ...restOfSubReminder } = subreminder;
+          mutation?.mutate({ ...restOfSubReminder, done: !subDone, req: { done: !subDone } });
+        });
+    }
+    const { done: _, ...restOfCurrentDbReminder } = currentDbReminder;
+    mutation?.mutate({ ...restOfCurrentDbReminder, done: !done, req: { done: !done } });
   };
 
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleReminderClick(e, reminderIndex);
-    !isChild && setParentID(currentReminder.id);
+    !isChild && reminderOptionParams.setParentID(id);
   };
 
   const isSelected = useMemo(() => selectedIndex === reminderIndex, [selectedIndex, reminderIndex]);
 
   useEffect(() => {
-    currentReminder.id === draggableId && focusableDiv.current?.scrollIntoView({ behavior: 'instant' });
+    id === draggableId && focusableDiv.current?.scrollIntoView({ behavior: 'instant' });
     setDraggableId('');
   }, [draggableId]);
 
@@ -65,8 +69,8 @@ export const Todo: React.FC<TodoProps> = ({
     <Root ref={lastElementRef}>
       <StyledFocusableDiv ref={focusableDiv}>
         <Draggable
-          key={currentReminder.id}
-          draggableId={currentReminder.id}
+          key={id}
+          draggableId={id}
           index={reminderIndex}
         >
           {(provided) => (
@@ -79,10 +83,7 @@ export const Todo: React.FC<TodoProps> = ({
               disableGutters
               secondaryAction={
                 <ReminderOptions
-                  {...restOfReminderProps}
-                  title={title}
-                  subReminderIds={subReminderIds}
-                  setSubReminderIds={setSubReminderIds}
+                  {...reminderOptionParams}
                   isSelected={isSelected}
                   isChild={isChild}
                 />
@@ -110,14 +111,11 @@ export const Todo: React.FC<TodoProps> = ({
                         theme={theme}
                       />
                     </ListItemIcon>
-                    <InputText
-                      currentReminder={currentReminder}
-                      isTitle
-                    />
+                    <InputText isTitle />
                   </StyledDiv>
                   <StyledDiv orientation="column">
                     <StyledListItemText isSelected={isSelected}>
-                      <InputText currentReminder={currentReminder} />
+                      <InputText />
                     </StyledListItemText>
                     <StyledTagsWrapper isSelected={isSelected}>
                       <Tags isSelected={isSelected} />

@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuidv4 } from 'uuid';
 import { ArrowTooltip } from '../../../../components/ArrowTooltip/ArrowTooltip';
 import { HeaderButton } from '../../../../components/HeaderButton/HeaderButton';
+import { DbReminder } from '../../ReminderWrapper.types';
 
 interface NewReminderProps {
   noReminders?: boolean;
@@ -24,21 +25,22 @@ export const NewReminder: React.FC<NewReminderProps> = ({ noReminders, isChild, 
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [newReminderOpen, setNewReminderOpen] = useState(false);
+  const newPayload: DbReminder = {
+    id: uuidv4(),
+    title,
+    createdDate: String(Date.now()),
+    orderID: String(Date.now()),
+    parentID: isChild && parentID ? parentID : null,
+    done: false,
+    description: '',
+    important: false,
+    tags: '[]',
+    date: null
+  };
 
   const handleSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-    mutation.mutate({
-      id: uuidv4(),
-      title,
-      createdDate: String(Date.now()),
-      orderID: String(Date.now()),
-      parentID: null,
-      done: false,
-      description: '',
-      important: false,
-      tags: '[]',
-      date: null
-    });
+    mutation.mutate(newPayload);
     setTitle('');
   };
 

@@ -1,37 +1,38 @@
-import { ClickAwayListener } from '@mui/material';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { ClickAwayListener } from '@mui/material';
 
-import { Root, StyledDroppableWrapper } from './ReminderListSub.styles';
+import { useInfiniteQuery } from 'react-query';
+import { useIntersection } from '@mantine/hooks';
+import { Droppable } from '@hello-pangea/dnd';
+import { DroppableList } from '../DroppableList/DroppableList';
 import { CurrentReminderProvider } from '../CurrentReminderProvider/CurrentReminderProvider';
 import { Todo } from '../../../../components/Todo/Todo';
 import { DbReminder } from '../../ReminderWrapper.types';
 import { paginationPageLength } from '../../../../common/values';
-import { Droppable } from '@hello-pangea/dnd';
-import { DroppableList } from '../DroppableList/DroppableList';
 import { NewReminder } from '../NewReminder/NewReminder';
-import { useInfiniteQuery } from 'react-query';
 import { fetchSubreminders } from '../../../../api/reminders';
-import { useIntersection } from '@mantine/hooks';
 import { filteredAndSearchedData } from '../../utils/ReminderWrapper.util';
+import { ReminderListProps } from '../ReminderListParent/ReminderListParent';
+import { Root, StyledDroppableWrapper } from '../ReminderListParent/ReminderListParent.styles.ts';
 
-interface ReminderListSubProps {
-  searchQuery: string;
-  filtersArr: string[];
-  draggableId: string;
-  setDraggableId: React.Dispatch<React.SetStateAction<string>>;
-  sharedListsData: {
-    parentID?: string;
-    setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
-    setClickAwayShouldHide: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}
+// interface ReminderListProps {
+//   searchQuery: string;
+//   filtersArr: string[];
+//   draggableId: string;
+//   setDraggableId: React.Dispatch<React.SetStateAction<string>>;
+//   sharedListsData: {
+//     parentID?: string;
+//     setParentID: React.Dispatch<React.SetStateAction<string | undefined>>;
+//     setClickAwayShouldHide: React.Dispatch<React.SetStateAction<boolean>>;
+//   };
+// }
 
-export const ReminderListSub: React.FC<ReminderListSubProps> = ({
+export const ReminderListSub: React.FC<ReminderListProps> = ({
+  searchQuery,
+  filtersArr,
   draggableId,
   setDraggableId,
-  sharedListsData,
-  searchQuery,
-  filtersArr
+  sharedListsData
 }) => {
   const { parentID, setParentID, setClickAwayShouldHide } = sharedListsData;
   const lastReminderRef = useRef<HTMLDivElement>(null);
@@ -63,7 +64,6 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
     setClickAwayShouldHide(false);
     setSelectedIndex(index);
   };
-  // unselects any selected reminder on clickaway of entire list
   const handleClickAway = () => {
     setSelectedIndex(-1);
     setClickAwayShouldHide(true);
@@ -85,7 +85,7 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
                 {...provided.droppableProps}
               >
                 {filteredAndSearchedDataSubData?.map((reminder, i) => {
-                  const { tags, createdDate, date, parentID: reminderParentID, ...otherReminderProps } = reminder;
+                  const { tags, createdDate, date, parentID: reminderParentID, id, ...otherReminderProps } = reminder;
                   const convertedProps = {
                     parentID: reminderParentID ? reminderParentID : undefined,
                     tags: JSON.parse(tags),
@@ -109,8 +109,6 @@ export const ReminderListSub: React.FC<ReminderListSubProps> = ({
                       <Fragment key={reminder.id}>
                         <CurrentReminderProvider {...reminder}>
                           <Todo
-                            // if this is the last reminder from the ones that were rendered, send a ref...
-                            // ... which will trigger loading of more reminders
                             lastElementRef={lastElementRef}
                             {...bundledProps}
                           />

@@ -14,7 +14,8 @@ export const Root = styled.div<StyledListItemTextProps>(
 );
 
 export const StyledTextInput = styled.input`
-  width: 35ch;
+  width: fit-content;
+  max-width: 35ch;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
